@@ -22,9 +22,9 @@ namespace ProjCity2.Objects
 
         #region Methods.
 
-        public void AddDocument(Dictionary<string, Dictionary<string, int>> globalPolyurethaneSheetsDictionary, Dictionary<string, Dictionary<string, int>> globalPolyurethaneForPerimetrsDictionary, Dictionary<string, Dictionary<string, int>> globalMainCompositionsDictionary, Dictionary<string, Dictionary<string, int>> globalCutsDictionary, Dictionary<string, Dictionary<string, int>> globalBurletsDictionary)
+        public void AddDocument(Dictionary<string, Dictionary<string, int>> globalPolyurethaneSheetsDictionary, Dictionary<string, Dictionary<string, int>> globalPolyurethaneForPerimetrsDictionary, List<string> globalPerimetrsMaterialsList, Dictionary<string, Dictionary<string, int>> globalMainCompositionsDictionary, Dictionary<string, Dictionary<string, int>> globalCutsDictionary, Dictionary<string, Dictionary<string, int>> globalBurletsDictionary)
         {
-           
+            docksList.Add(new DocumentObject(wordApp, globalPolyurethaneSheetsDictionary, globalPolyurethaneForPerimetrsDictionary, globalPerimetrsMaterialsList, globalMainCompositionsDictionary, globalCutsDictionary, globalBurletsDictionary));
         }
 
         #endregion

@@ -51,7 +51,14 @@ namespace ProjCity2
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                CreateDocument();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void cmbSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)

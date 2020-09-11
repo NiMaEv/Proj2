@@ -16,7 +16,10 @@ namespace ProjCity2
         private List<MattressObject> globalTypesList;
 
         private Dictionary<string, Dictionary<string, int>> globalPolyurethaneSheetsDictionary;
+
         private Dictionary<string, Dictionary<string, int>> globalPolyurethaneForPerimetrsDictionary;
+        private List<string> globalPerimetrsMaterialsList;
+
         private Dictionary<string, Dictionary<string, int>> globalMainCompositionsDictionary;
         private Dictionary<string, Dictionary<string, int>> globalCutsDictionary;
         private Dictionary<string, Dictionary<string, int>> globalBurletsDictionary;
@@ -94,6 +97,8 @@ namespace ProjCity2
                 globalPolyurethaneSheetsDictionary = new Dictionary<string, Dictionary<string, int>>();
             if (globalPolyurethaneForPerimetrsDictionary == null)
                 globalPolyurethaneForPerimetrsDictionary = new Dictionary<string, Dictionary<string, int>>();
+            if (globalPerimetrsMaterialsList == null)
+                globalPerimetrsMaterialsList = new List<string>();
             if (globalMainCompositionsDictionary == null)
                 globalMainCompositionsDictionary = new Dictionary<string, Dictionary<string, int>>();
             if (globalCutsDictionary == null)
@@ -122,11 +127,20 @@ namespace ProjCity2
                 foreach (var dict in obj.dictPolyurethaneForPerimetr)
                 {
                     if (!globalPolyurethaneForPerimetrsDictionary.ContainsKey(dict.Key))
+                    {
                         globalPolyurethaneForPerimetrsDictionary.Add(dict.Key, dict.Value);
+
+                        foreach (var item in dict.Value)
+                            if (!globalPerimetrsMaterialsList.Contains(item.Key))
+                                globalPerimetrsMaterialsList.Add(item.Key);
+                    }   
                     else
                     {
                         foreach (var item in dict.Value)
                         {
+                            if (!globalPerimetrsMaterialsList.Contains(item.Key))
+                                globalPerimetrsMaterialsList.Add(item.Key);
+
                             if (!globalPolyurethaneForPerimetrsDictionary[dict.Key].ContainsKey(item.Key))
                                 globalPolyurethaneForPerimetrsDictionary[dict.Key].Add(item.Key, item.Value);
                             else
@@ -186,7 +200,23 @@ namespace ProjCity2
 
             wordApp = new WordApp();
 
-            wordApp.AddDocument(globalPolyurethaneSheetsDictionary, globalPolyurethaneForPerimetrsDictionary, globalMainCompositionsDictionary, globalCutsDictionary, globalBurletsDictionary);
+            wordApp.AddDocument(globalPolyurethaneSheetsDictionary, globalPolyurethaneForPerimetrsDictionary, globalPerimetrsMaterialsList, globalMainCompositionsDictionary, globalCutsDictionary, globalBurletsDictionary);
+
+            globalPolyurethaneSheetsDictionary.Clear();
+            globalPolyurethaneForPerimetrsDictionary.Clear();
+            globalMainCompositionsDictionary.Clear();
+            globalCutsDictionary.Clear();
+            globalBurletsDictionary.Clear();
+
+            globalTypesList.Clear();
+            listBoxTypesList.Items.Clear();
+
+            txtCustomLenght.Clear();
+            txtCustomWidth.Clear();
+            txtNumbers.Clear();
+
+            listBoxMattressList.SelectedItem = null;
+            cmbSizes.SelectedItem = null;
         }
 
         #endregion
