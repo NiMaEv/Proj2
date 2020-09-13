@@ -69,7 +69,7 @@ namespace ProjCity2
                     dictPolyurethaneSheet = UnitDictionaries(dictPolyurethaneSheet, tempDict, Size);
                 }
 
-                if (context.Perimetrs.Find(mattress.perimetrId).reinforcmentMattressMaterialName != null || context.Perimetrs.Find(mattress.perimetrId).reinforcmentBlockMaterialName != null)
+                if (mattress.perimetrId != null && (context.Perimetrs.Find(mattress.perimetrId).reinforcmentMattressMaterialName != null || context.Perimetrs.Find(mattress.perimetrId).reinforcmentBlockMaterialName != null))
                 {
                     string xLenght = $"l={lenght}";
                     string yLenght = $"l={width - ((int)context.Perimetrs.Find(mattress.perimetrId).reinforcmentMaterialWidth * 2)}";
@@ -127,6 +127,8 @@ namespace ProjCity2
                     }
                 }
 
+                
+
                 if (context.Cuts.Find(mattress.cutId).topSideCompositionId == context.Cuts.Find(mattress.cutId).botSideCompositionId)
                 {
                     dictCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
@@ -153,6 +155,7 @@ namespace ProjCity2
                             }
                         }
                     }
+
 
                 if (mattress.burletId != null)
                 {

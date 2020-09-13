@@ -149,7 +149,7 @@ namespace ProjCity2
                     }
                 }
 
-                foreach (var dict in obj.dictPolyurethaneForPerimetr)
+                foreach (var dict in obj.dictMainComposition)
                 {
                     if (!globalMainCompositionsDictionary.ContainsKey(dict.Key))
                         globalMainCompositionsDictionary.Add(dict.Key, dict.Value);
@@ -165,7 +165,7 @@ namespace ProjCity2
                     }
                 }
 
-                foreach (var dict in obj.dictPolyurethaneForPerimetr)
+                foreach (var dict in obj.dictCut)
                 {
                     if (!globalCutsDictionary.ContainsKey(dict.Key))
                         globalCutsDictionary.Add(dict.Key, dict.Value);
@@ -181,7 +181,7 @@ namespace ProjCity2
                     }
                 }
 
-                foreach (var dict in obj.dictPolyurethaneForPerimetr)
+                foreach (var dict in obj.dictBurlet)
                 {
                     if (!globalBurletsDictionary.ContainsKey(dict.Key))
                         globalBurletsDictionary.Add(dict.Key, dict.Value);
