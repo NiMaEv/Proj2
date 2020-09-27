@@ -28,10 +28,12 @@ namespace ProjCity2
 
         public Dictionary<string, Dictionary<string, int>> dictMainComposition { get; }
 
-        public Dictionary<string, Dictionary<string, int>> dictCut { get; }
-
         public Dictionary<string, Dictionary<string, int>> dictBurlet { get; }
 
+        public Dictionary<string, Dictionary<string, int>> dictUltrCut { get; }
+        public Dictionary<string, Dictionary<string, int>> dictKaterCut { get; }
+        public Dictionary<string, Dictionary<string, int>> dictV16Cut { get; }
+        public Dictionary<string, Dictionary<string, int>> dictNotStegCut { get; }
         #endregion
 
         public MattressObject(Mattresses mattress, Sizes size, int? customLenght, int? customWidth, int numbers)
@@ -39,7 +41,6 @@ namespace ProjCity2
             dictPolyurethaneSheet = new Dictionary<string, Dictionary<string, int>>();
             dictPolyurethaneForPerimetr = new Dictionary<string, Dictionary<string, int>>();
             dictMainComposition = new Dictionary<string, Dictionary<string, int>>();
-            dictCut = new Dictionary<string, Dictionary<string, int>>();
             dictBurlet = new Dictionary<string, Dictionary<string, int>>();
 
             using (PgContext context = new PgContext())
@@ -74,9 +75,20 @@ namespace ProjCity2
                     string xLenght = $"l={lenght}";
                     string yLenght = $"l={width - ((int)context.Perimetrs.Find(mattress.perimetrId).reinforcmentMaterialWidth * 2)}";
 
+                    string tempCompositionTopSide = null;
+                    string tempCompositionBotSide = null;
+                    string tempGeneralComposition = null;
+
+                    if (context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId != null)
+                        tempCompositionTopSide = context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId).composition;
+                    if (context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId != null)
+                        tempCompositionBotSide = context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId).composition;
+                    if (context.MtrsCompositions.Find(mattress.compositionId).generalComposition != null)
+                        tempGeneralComposition = context.MtrsCompositions.Find(mattress.compositionId).generalComposition;
+
                     if (context.Perimetrs.Find(mattress.perimetrId).reinforcmentMattressMaterialName != null)
                     {
-                        Dictionary<string, int> tempDict = new Dictionary<string, int>() { { context.Perimetrs.Find(mattress.perimetrId).reinforcmentMattressMaterialName + " h=" + GetMattressHeight(mattress, context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId).composition + context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId).composition + context.MtrsCompositions.Find(mattress.compositionId).generalComposition), Numbers * 2 } };
+                        Dictionary<string, int> tempDict = new Dictionary<string, int>() { { context.Perimetrs.Find(mattress.perimetrId).reinforcmentMattressMaterialName + " h=" + GetMattressHeight(mattress, tempCompositionTopSide + tempCompositionBotSide + tempGeneralComposition)/10, Numbers * 2 } };
 
                         dictPolyurethaneForPerimetr.Add(xLenght, tempDict);
                         dictPolyurethaneForPerimetr.Add(yLenght, tempDict);
@@ -86,13 +98,13 @@ namespace ProjCity2
                     {
                         if (context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId != null)
                         {
-                            Dictionary<string, int> tempDict1 = new Dictionary<string, int>() { { context.Perimetrs.Find(mattress.perimetrId).reinforcmentBlockMaterialName + " h=" + context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId).blockHeight, Numbers * 2 } };
+                            Dictionary<string, int> tempDict1 = new Dictionary<string, int>() { { context.Perimetrs.Find(mattress.perimetrId).reinforcmentBlockMaterialName + " h=" + context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId).blockHeight/10, Numbers * 2 } };
 
                             dictPolyurethaneForPerimetr = UnitDictionaries(dictPolyurethaneForPerimetr, tempDict1, xLenght);
                             dictPolyurethaneForPerimetr = UnitDictionaries(dictPolyurethaneForPerimetr, tempDict1, yLenght);
                         }
 
-                        Dictionary<string, int> tempDict2 = new Dictionary<string, int>() { { context.Perimetrs.Find(mattress.perimetrId).reinforcmentBlockMaterialName + " h=" + context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).blockId).blockHeight, Numbers * 2 } };
+                        Dictionary<string, int> tempDict2 = new Dictionary<string, int>() { { context.Perimetrs.Find(mattress.perimetrId).reinforcmentBlockMaterialName + " h=" + context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).blockId).blockHeight/10, Numbers * 2 } };
 
                         dictPolyurethaneForPerimetr = UnitDictionaries(dictPolyurethaneForPerimetr, tempDict2, xLenght);
                         dictPolyurethaneForPerimetr = UnitDictionaries(dictPolyurethaneForPerimetr, tempDict2, yLenght);
@@ -127,35 +139,70 @@ namespace ProjCity2
                     }
                 }
 
-                
-
-                if (context.Cuts.Find(mattress.cutId).topSideCompositionId == context.Cuts.Find(mattress.cutId).botSideCompositionId)
+                if(context.Cuts.Find(mattress.cutId).topSideCompositionId == context.Cuts.Find(mattress.cutId).botSideCompositionId)
                 {
-                    dictCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
+                    switch(context.Cuts.Find(mattress.cutId).sectorName)
+                    {
+                        case "Ультразвук":
+                            dictUltrCut = new Dictionary<string, Dictionary<string, int>>();
+                            dictUltrCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
+                            DistributeDictionary(dictUltrCut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictUltrCut);
+                            break;
+                        case "V-16":
+                            dictV16Cut = new Dictionary<string, Dictionary<string, int>>();
+                            dictV16Cut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
+                            DistributeDictionary(dictV16Cut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictV16Cut);
+                            break;
+                        case "Катерман":
+                            dictKaterCut = new Dictionary<string, Dictionary<string, int>>();
+                            dictKaterCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
+                            DistributeDictionary(dictKaterCut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictKaterCut);
+                            break;
+                        case "Не стегается":
+                            dictNotStegCut = new Dictionary<string, Dictionary<string, int>>();
+                            dictNotStegCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
+                            DistributeDictionary(dictNotStegCut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut);
+                            break;
+                    }
                 }
                 else
                 {
-                    dictCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
-                    dictCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).botSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
-                }
-
-                foreach(var item in dictMainComposition)
-                    foreach(var itemIn in item.Value)
+                    switch (context.Cuts.Find(mattress.cutId).sectorName)
                     {
-                        if (context.Materials.Find(item.Key) != null && context.Materials.Find(item.Key).sectorName.Equals("Крой"))
-                        {
-                            if (!dictCut.ContainsKey(item.Key))
-                                dictCut.Add(item.Key, item.Value);
-                            else
-                            {
-                                if (!dictCut[item.Key].ContainsKey(itemIn.Key))
-                                    dictCut[item.Key].Add(itemIn.Key, itemIn.Value);
-                                else
-                                    dictCut[item.Key][itemIn.Key] += itemIn.Value;
-                            }
-                        }
+                        case "Ультразвук":
+                            dictUltrCut = new Dictionary<string, Dictionary<string, int>>();
+                            dictUltrCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            dictUltrCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).botSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            DistributeDictionary(dictUltrCut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictUltrCut);
+                            break;
+                        case "V-16":
+                            dictV16Cut = new Dictionary<string, Dictionary<string, int>>();
+                            dictV16Cut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            dictV16Cut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).botSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            DistributeDictionary(dictV16Cut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictV16Cut);
+                            break;
+                        case "Катерман":
+                            dictKaterCut = new Dictionary<string, Dictionary<string, int>>();
+                            dictKaterCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            dictKaterCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).botSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            DistributeDictionary(dictKaterCut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictKaterCut);
+                            break;
+                        case "Не стегается":
+                            dictNotStegCut = new Dictionary<string, Dictionary<string, int>>();
+                            dictNotStegCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).topSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            dictNotStegCut.Add(context.CutCompositionSides.Find(context.Cuts.Find(mattress.cutId).botSideCompositionId).composition, new Dictionary<string, int>() { { Size, Numbers } });
+                            DistributeDictionary(dictNotStegCut);
+                            dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut);
+                            break;
                     }
-
+                }
 
                 if (mattress.burletId != null)
                 {
@@ -164,27 +211,12 @@ namespace ProjCity2
 
                 dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet);
 
-                dictMainComposition = DictionaryClear(dictMainComposition, dictCut);
-
-                //foreach (var item in dictMainComposition)
-                //    foreach (var itemIn in item.Value)
-                //        MessageBox.Show(item.Key + "\n" + itemIn.Key + "\n" + itemIn.Value, "Состав");
-
-                //foreach (var item in dictCut)
-                //    if (dictMainComposition.ContainsKey(item.Key))
-                //        dictMainComposition.Remove(item.Key);
-
-                //foreach (var item in dictPolyurethaneSheet)
-                //    foreach (var itemIn in item.Value)
-                //        MessageBox.Show(item.Key + "\n" + itemIn.Key + "\n" + itemIn.Value, "Листы");
-
-                //foreach (var item in dictMainComposition)
-                //    foreach (var itemIn in item.Value)
-                //        MessageBox.Show(item.Key + "\n" + itemIn.Key + "\n" + itemIn.Value, "Состав");
-
-                //foreach (var item in dictCut)
-                //    foreach (var itemIn in item.Value)
-                //        MessageBox.Show(item.Key + "\n" + itemIn.Key + "\n" + itemIn.Value, "Крой");
+                if(dictPolyurethaneForPerimetr.Count!=0)
+                {
+                    foreach (var item in dictPolyurethaneForPerimetr)
+                        foreach (var itemIn in item.Value)
+                            MessageBox.Show(itemIn.Key + " || " + itemIn.Value, item.Key);
+                }
             }
             // PgContext end.
         }
@@ -207,7 +239,7 @@ namespace ProjCity2
                             tempStr += i;
                         else
                         {
-                            if (context.Materials.Find(tempStr).sectorName.Equals("ППУ"))
+                            if (context.Materials.Find(tempStr) != null && context.Materials.Find(tempStr).sectorName.Equals("ППУ"))
                             {
                                 if (!tempDictionary.ContainsKey(tempStr))
                                     tempDictionary.Add(tempStr, Numbers);
@@ -320,6 +352,29 @@ namespace ProjCity2
         }
         //
 
+        private void DistributeDictionary(Dictionary<string, Dictionary<string, int>> cutDict)
+        {
+            using (PgContext context = new PgContext())
+            {
+                foreach (var item in dictMainComposition)
+                    foreach (var itemIn in item.Value)
+                    {
+                        if (context.Materials.Find(item.Key) != null && context.Materials.Find(item.Key).sectorName.Equals("Крой"))
+                        {
+                            if (!cutDict.ContainsKey(item.Key))
+                                cutDict.Add(item.Key, item.Value);
+                            else
+                            {
+                                if (!cutDict[item.Key].ContainsKey(itemIn.Key))
+                                    cutDict[item.Key].Add(itemIn.Key, itemIn.Value);
+                                else
+                                    cutDict[item.Key][itemIn.Key] += itemIn.Value;
+                            }
+                        }
+                    }
+            }
+        }
+
         private int GetMattressHeight(Mattresses mattress, string compositionStr)
         {
             int height = 0;
@@ -334,14 +389,15 @@ namespace ProjCity2
                         tempStr += i;
                     else
                     {
-                        if (context.Materials.Find(tempStr).materialHeight != null)
+                        if (context.Materials.Find(tempStr)!=null && context.Materials.Find(tempStr).materialHeight != null)
                             height += (int)context.Materials.Find(tempStr).materialHeight;
-                        if (context.MtrsCompositions.Find(mattress.compositionId).blockId != null)
-                            height += (int)context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).blockId).blockHeight;
-                        if (context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId != null)
-                            height += (int)context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId).blockHeight;
+                        tempStr = null;
                     }
                 }
+                if (context.MtrsCompositions.Find(mattress.compositionId).blockId != null)
+                    height += (int)context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).blockId).blockHeight;
+                if (context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId != null)
+                    height += (int)context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId).blockHeight;
             }
 
             return height;

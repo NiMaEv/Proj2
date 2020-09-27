@@ -76,8 +76,8 @@ namespace EntityModels
                     if (context.Perimetrs.Find(perimetrId).reinforcmentBlockMaterialName != null)
                         tempStr += $"{context.Perimetrs.Find(perimetrId).reinforcmentBlockMaterialName}";
                     tempStr += $"/{context.Perimetrs.Find(perimetrId).composition}";
-                    tempStr += $"\n*********************************************************************************************************************************************************************";
                 }
+                tempStr += $"\n*********************************************************************************************************************************************************************";
 
                 return tempStr;
             }

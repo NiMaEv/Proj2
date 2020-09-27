@@ -21,7 +21,12 @@ namespace ProjCity2
         private List<string> globalPerimetrsMaterialsList;
 
         private Dictionary<string, Dictionary<string, int>> globalMainCompositionsDictionary;
-        private Dictionary<string, Dictionary<string, int>> globalCutsDictionary;
+
+        private Dictionary<string, Dictionary<string, int>> globalUltrCutsDictionary;
+        private Dictionary<string, Dictionary<string, int>> globalV16CutsDictionary;
+        private Dictionary<string, Dictionary<string, int>> globalKaterCutsDictionary;
+        private Dictionary<string, Dictionary<string, int>> globalNotStegCutsDictionary;
+
         private Dictionary<string, Dictionary<string, int>> globalBurletsDictionary;
 
         public MainWindow()
@@ -101,8 +106,6 @@ namespace ProjCity2
                 globalPerimetrsMaterialsList = new List<string>();
             if (globalMainCompositionsDictionary == null)
                 globalMainCompositionsDictionary = new Dictionary<string, Dictionary<string, int>>();
-            if (globalCutsDictionary == null)
-                globalCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
             if (globalBurletsDictionary == null)
                 globalBurletsDictionary = new Dictionary<string, Dictionary<string, int>>();
 
@@ -165,20 +168,96 @@ namespace ProjCity2
                     }
                 }
 
-                foreach (var dict in obj.dictCut)
+                if (obj.dictUltrCut != null)
                 {
-                    if (!globalCutsDictionary.ContainsKey(dict.Key))
-                        globalCutsDictionary.Add(dict.Key, dict.Value);
-                    else
+                    globalUltrCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+
+                    foreach (var dict in obj.dictUltrCut)
                     {
-                        foreach (var item in dict.Value)
+                        if (!globalUltrCutsDictionary.ContainsKey(dict.Key))
+                            globalUltrCutsDictionary.Add(dict.Key, dict.Value);
+                        else
                         {
-                            if (!globalCutsDictionary[dict.Key].ContainsKey(item.Key))
-                                globalCutsDictionary[dict.Key].Add(item.Key, item.Value);
-                            else
-                                globalCutsDictionary[dict.Key][item.Key] += item.Value;
+                            foreach (var item in dict.Value)
+                            {
+                                if (!globalUltrCutsDictionary[dict.Key].ContainsKey(item.Key))
+                                    globalUltrCutsDictionary[dict.Key].Add(item.Key, item.Value);
+                                else
+                                    globalUltrCutsDictionary[dict.Key][item.Key] += item.Value;
+                            }
                         }
                     }
+                    //foreach (var item in globalUltrCutsDictionary)
+                    //    MessageBox.Show(item.Key,"Ультразвук");
+                }
+
+                if (obj.dictV16Cut != null)
+                {
+                    globalV16CutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+
+                    foreach(var dict in obj.dictV16Cut)
+                    {
+                        if (!globalV16CutsDictionary.ContainsKey(dict.Key))
+                            globalV16CutsDictionary.Add(dict.Key, dict.Value);
+                        else
+                        {
+                            foreach (var item in dict.Value)
+                            {
+                                if (!globalV16CutsDictionary[dict.Key].ContainsKey(item.Key))
+                                    globalV16CutsDictionary[dict.Key].Add(item.Key, item.Value);
+                                else
+                                    globalV16CutsDictionary[dict.Key][item.Key] += item.Value;
+                            }
+                        }
+                    }
+                    //foreach (var item in globalV16CutsDictionary)
+                    //    MessageBox.Show(item.Key,"V-16");
+                }
+
+                if (obj.dictKaterCut != null)
+                {
+                    globalKaterCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+
+                    foreach (var dict in obj.dictKaterCut)
+                    {
+                        if (!globalKaterCutsDictionary.ContainsKey(dict.Key))
+                            globalKaterCutsDictionary.Add(dict.Key, dict.Value);
+                        else
+                        {
+                            foreach (var item in dict.Value)
+                            {
+                                if (!globalKaterCutsDictionary[dict.Key].ContainsKey(item.Key))
+                                    globalKaterCutsDictionary[dict.Key].Add(item.Key, item.Value);
+                                else
+                                    globalKaterCutsDictionary[dict.Key][item.Key] += item.Value;
+                            }
+                        }
+                    }
+                    //foreach (var item in globalKaterCutsDictionary)
+                    //    MessageBox.Show(item.Key,"Катерман");
+                }
+
+                if(obj.dictNotStegCut != null)
+                {
+                    globalNotStegCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+
+                    foreach (var dict in obj.dictNotStegCut)
+                    {
+                        if (!globalNotStegCutsDictionary.ContainsKey(dict.Key))
+                            globalNotStegCutsDictionary.Add(dict.Key, dict.Value);
+                        else
+                        {
+                            foreach (var item in dict.Value)
+                            {
+                                if (!globalNotStegCutsDictionary[dict.Key].ContainsKey(item.Key))
+                                    globalNotStegCutsDictionary[dict.Key].Add(item.Key, item.Value);
+                                else
+                                    globalNotStegCutsDictionary[dict.Key][item.Key] += item.Value;
+                            }
+                        }
+                    }
+                    //foreach (var item in globalNotStegCutsDictionary)
+                    //    MessageBox.Show(item.Key,"Не стегается");
                 }
 
                 foreach (var dict in obj.dictBurlet)
@@ -200,12 +279,17 @@ namespace ProjCity2
 
             wordApp = new WordApp();
 
-            wordApp.AddDocument(globalPolyurethaneSheetsDictionary, globalPolyurethaneForPerimetrsDictionary, globalPerimetrsMaterialsList, globalMainCompositionsDictionary, globalCutsDictionary, globalBurletsDictionary);
+            wordApp.AddDocument(globalPolyurethaneSheetsDictionary, globalPolyurethaneForPerimetrsDictionary, globalPerimetrsMaterialsList, globalMainCompositionsDictionary, globalUltrCutsDictionary, globalV16CutsDictionary, globalKaterCutsDictionary, globalNotStegCutsDictionary, globalBurletsDictionary);
 
             globalPolyurethaneSheetsDictionary.Clear();
             globalPolyurethaneForPerimetrsDictionary.Clear();
             globalMainCompositionsDictionary.Clear();
-            globalCutsDictionary.Clear();
+
+            globalUltrCutsDictionary?.Clear();
+            globalV16CutsDictionary?.Clear();
+            globalKaterCutsDictionary?.Clear();
+            globalNotStegCutsDictionary?.Clear();
+
             globalBurletsDictionary.Clear();
 
             globalTypesList.Clear();

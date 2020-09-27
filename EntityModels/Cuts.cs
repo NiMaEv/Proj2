@@ -29,6 +29,9 @@ namespace EntityModels
         [StringLength(500)]
         public string desciption { get; set; }
 
+        [StringLength(500)]
+        public string sectorName { get; set; }
+
         public virtual CutCompositionSides CutCompositionSides { get; set; }
 
         public virtual CutCompositionSides CutCompositionSides1 { get; set; }
