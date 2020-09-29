@@ -96,7 +96,7 @@ namespace ProjCity2
 
         }
 
-        private void CreateDocument()
+        private void CreateDocument(string orderId)
         {
             if (globalPolyurethaneSheetsDictionary == null)
                 globalPolyurethaneSheetsDictionary = new Dictionary<string, Dictionary<string, int>>();
@@ -170,12 +170,13 @@ namespace ProjCity2
 
                 if (obj.dictUltrCut != null)
                 {
-                    globalUltrCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+                    if (globalUltrCutsDictionary == null)
+                        globalUltrCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
 
                     foreach (var dict in obj.dictUltrCut)
                     {
                         if (!globalUltrCutsDictionary.ContainsKey(dict.Key))
-                            globalUltrCutsDictionary.Add(dict.Key, dict.Value);
+                            globalUltrCutsDictionary.Add(dict.Key, dict.Value);                      
                         else
                         {
                             foreach (var item in dict.Value)
@@ -187,13 +188,12 @@ namespace ProjCity2
                             }
                         }
                     }
-                    //foreach (var item in globalUltrCutsDictionary)
-                    //    MessageBox.Show(item.Key,"Ультразвук");
                 }
 
                 if (obj.dictV16Cut != null)
                 {
-                    globalV16CutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+                    if(globalV16CutsDictionary == null)
+                        globalV16CutsDictionary = new Dictionary<string, Dictionary<string, int>>();
 
                     foreach(var dict in obj.dictV16Cut)
                     {
@@ -210,13 +210,12 @@ namespace ProjCity2
                             }
                         }
                     }
-                    //foreach (var item in globalV16CutsDictionary)
-                    //    MessageBox.Show(item.Key,"V-16");
                 }
 
                 if (obj.dictKaterCut != null)
                 {
-                    globalKaterCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+                    if(globalKaterCutsDictionary == null)
+                        globalKaterCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
 
                     foreach (var dict in obj.dictKaterCut)
                     {
@@ -233,13 +232,12 @@ namespace ProjCity2
                             }
                         }
                     }
-                    //foreach (var item in globalKaterCutsDictionary)
-                    //    MessageBox.Show(item.Key,"Катерман");
                 }
 
                 if(obj.dictNotStegCut != null)
                 {
-                    globalNotStegCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
+                    if(globalNotStegCutsDictionary == null)
+                        globalNotStegCutsDictionary = new Dictionary<string, Dictionary<string, int>>();
 
                     foreach (var dict in obj.dictNotStegCut)
                     {
@@ -256,8 +254,6 @@ namespace ProjCity2
                             }
                         }
                     }
-                    //foreach (var item in globalNotStegCutsDictionary)
-                    //    MessageBox.Show(item.Key,"Не стегается");
                 }
 
                 foreach (var dict in obj.dictBurlet)
@@ -279,7 +275,7 @@ namespace ProjCity2
 
             wordApp = new WordApp();
 
-            wordApp.AddDocument(globalPolyurethaneSheetsDictionary, globalPolyurethaneForPerimetrsDictionary, globalPerimetrsMaterialsList, globalMainCompositionsDictionary, globalUltrCutsDictionary, globalV16CutsDictionary, globalKaterCutsDictionary, globalNotStegCutsDictionary, globalBurletsDictionary);
+            wordApp.AddDocument(orderId, globalPolyurethaneSheetsDictionary, globalPolyurethaneForPerimetrsDictionary, globalPerimetrsMaterialsList, globalMainCompositionsDictionary, globalUltrCutsDictionary, globalV16CutsDictionary, globalKaterCutsDictionary, globalNotStegCutsDictionary, globalBurletsDictionary);
 
             globalPolyurethaneSheetsDictionary.Clear();
             globalPolyurethaneForPerimetrsDictionary.Clear();

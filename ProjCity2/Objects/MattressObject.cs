@@ -211,12 +211,6 @@ namespace ProjCity2
 
                 dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet);
 
-                if(dictPolyurethaneForPerimetr.Count!=0)
-                {
-                    foreach (var item in dictPolyurethaneForPerimetr)
-                        foreach (var itemIn in item.Value)
-                            MessageBox.Show(itemIn.Key + " || " + itemIn.Value, item.Key);
-                }
             }
             // PgContext end.
         }

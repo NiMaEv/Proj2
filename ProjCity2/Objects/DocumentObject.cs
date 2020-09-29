@@ -12,7 +12,7 @@ namespace ProjCity2
     {
         public Document document { get; }
 
-        public DocumentObject(Microsoft.Office.Interop.Word.Application wordApp, Dictionary<string, Dictionary<string, int>> globalPolyurethaneSheetsDictionary, Dictionary<string, Dictionary<string, int>> globalPolyurethaneForPerimetrsDictionary, List<string> globalPerimetrsMaterialsList, Dictionary<string, Dictionary<string, int>> globalMainCompositionsDictionary, Dictionary<string, Dictionary<string, int>> globalUltrCutsDictionary, Dictionary<string, Dictionary<string, int>> globalV16CutsDictionary, Dictionary<string, Dictionary<string, int>> globalKaterCutsDictionary, Dictionary<string, Dictionary<string, int>> globalNotStegCutsDictionary, Dictionary<string, Dictionary<string, int>> globalBurletsDictionary)
+        public DocumentObject(Microsoft.Office.Interop.Word.Application wordApp, string orderId, Dictionary<string, Dictionary<string, int>> globalPolyurethaneSheetsDictionary, Dictionary<string, Dictionary<string, int>> globalPolyurethaneForPerimetrsDictionary, List<string> globalPerimetrsMaterialsList, Dictionary<string, Dictionary<string, int>> globalMainCompositionsDictionary, Dictionary<string, Dictionary<string, int>> globalUltrCutsDictionary, Dictionary<string, Dictionary<string, int>> globalV16CutsDictionary, Dictionary<string, Dictionary<string, int>> globalKaterCutsDictionary, Dictionary<string, Dictionary<string, int>> globalNotStegCutsDictionary, Dictionary<string, Dictionary<string, int>> globalBurletsDictionary)
         {
             object docObj = System.Reflection.Missing.Value;
             document = wordApp.Documents.Add(ref docObj, ref docObj, ref docObj, ref docObj);
@@ -21,6 +21,7 @@ namespace ProjCity2
 
             #region Polyurethane Sheets Page.
             Range startPolyurethaneSheetsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
+            startPolyurethaneSheetsPageRange.Text = $"{orderId}: Листы ППУ" + Environment.NewLine;
             object endContent = startPolyurethaneSheetsPageRange.End;
 
             int rowPos = 2;
@@ -56,7 +57,7 @@ namespace ProjCity2
             if (globalPolyurethaneForPerimetrsDictionary.Count != 0 && globalPerimetrsMaterialsList.Count != 0)
             {
                 Range startPolyurethaneForPerimetrsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
-                startPolyurethaneForPerimetrsPageRange.Text = "Раскрой: ППУ - периметр.";
+                startPolyurethaneForPerimetrsPageRange.Text = $"{orderId}: Периметр ППУ"; ;
 
                 object perimetrsTablePosition = startPolyurethaneForPerimetrsPageRange.End;
                 object perimetrsTableDefaultBehavior = WdDefaultTableBehavior.wdWord9TableBehavior;
@@ -89,6 +90,7 @@ namespace ProjCity2
 
             #region Main Composition Page.
             Range startMainCompositionsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
+            startMainCompositionsPageRange.Text = $"{orderId}: Составы" + Environment.NewLine;
             endContent = startMainCompositionsPageRange.End;
 
             rowPos = 2;
@@ -131,6 +133,7 @@ namespace ProjCity2
             if (globalUltrCutsDictionary != null && globalUltrCutsDictionary.Count != 0)
             {
                 Range startUltrCutsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
+                startUltrCutsPageRange.Text = $"{orderId}: Крой(Ультразвук)" + Environment.NewLine;
                 endContent = startUltrCutsPageRange.End;
 
                 rowPos = 2;
@@ -171,6 +174,7 @@ namespace ProjCity2
             if (globalV16CutsDictionary != null && globalV16CutsDictionary.Count != 0)
             {
                 Range startV16CutsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
+                startV16CutsPageRange.Text = $"{orderId}: Крой(V-16)" + Environment.NewLine;
                 endContent = startV16CutsPageRange.End;
 
                 rowPos = 2;
@@ -211,6 +215,7 @@ namespace ProjCity2
             if (globalKaterCutsDictionary != null && globalKaterCutsDictionary.Count != 0)
             {
                 Range startKaterCutsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
+                startKaterCutsPageRange.Text = $"{orderId}: Крой(Катерман)" + Environment.NewLine;
                 endContent = startKaterCutsPageRange.End;
 
                 rowPos = 2;
@@ -251,10 +256,11 @@ namespace ProjCity2
             if (globalNotStegCutsDictionary != null && globalNotStegCutsDictionary.Count != 0)
             {
                 Range startNotStegCutsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
+                startNotStegCutsPageRange.Text = $"{orderId}: Крой(Не стегается)" + Environment.NewLine;
                 endContent = startNotStegCutsPageRange.End;
 
                 rowPos = 2;
-                foreach (var dict in globalUltrCutsDictionary)
+                foreach (var dict in globalNotStegCutsDictionary)
                 {
                     Range contentRange = document.Range(ref endContent, ref endContent);
                     contentRange.Text = dict.Key;
@@ -293,6 +299,7 @@ namespace ProjCity2
             if (globalBurletsDictionary.Count != 0) 
             {
                 Range startBurletsPageRange = document.Range(ref startEverythingPages, ref startEverythingPages);
+                startBurletsPageRange.Text = $"{orderId}: Бурлеты" + Environment.NewLine;
                 endContent = startBurletsPageRange.End;
 
                 rowPos = 2;

@@ -43,6 +43,8 @@
                         <Label Content="Линия:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" FontSize="20"  Foreground="White"/>
                         <ComboBox Name="cmbSeries" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="90,0" Width="150" FontSize="17" SelectionChanged="cmbSeries_SelectionChanged"/>
                     </Grid>
+                    <Label Content="Код заказа:" VerticalAlignment="Center" FontSize="20" Foreground="White"/>
+                    <TextBox x:Name="txtOrderId" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="500" FontSize="17"/>
                 </DockPanel>
                 <Grid>
                     <ListBox x:Name="listBoxMattressList" FontSize="15" Background="White" MaxHeight="745" ScrollViewer.VerticalScrollBarVisibility="Hidden" MinWidth="1000" MaxWidth="1600" MouseDoubleClick="listBoxMattressList_MouseDoubleClick"/>

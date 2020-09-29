@@ -53,7 +53,7 @@ namespace ProjCity2
         {
             try
             {
-                CreateDocument();
+                CreateDocument(txtOrderId.Text);
             }
             catch (Exception ex)
             {
