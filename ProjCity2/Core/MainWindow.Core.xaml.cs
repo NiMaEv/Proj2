@@ -65,37 +65,25 @@ namespace ProjCity2
 
         private void TablesCBInsert(Tables table) => cmbTables.Items.Add(table);
 
-        private void AddMattressObject(Mattresses mattress, Sizes size, string customLenght, string customWidth, string numbers, string orderId, string dateOfOrder, Tables table)
+        private void AddMattressObject()
         {
-            int tempNumbers;
-            try
-            {
-                tempNumbers = Convert.ToInt32(numbers);
-            }
-            catch
-            {
-                tempNumbers = 1;
-            }
+            int tempNumbers = 1;
+            if (txtNumbers.Text.Length != 0)
+                tempNumbers = Convert.ToInt32(txtNumbers.Text);
+            if (tempNumbers == 0)
+                throw new Exception();
 
             int? tempLenght = null, tempWidth = null;
-            if(size == null)
+            if (txtCustomLenght.Text.Length != 0 & txtCustomWidth.Text.Length != 0)
             {
-                try
-                {
-                    tempLenght = Convert.ToInt32(customLenght);
-                    tempWidth = Convert.ToInt32(customWidth);
-                }
-                catch
-                {
-                    tempLenght = null;
-                    tempWidth = null;
-                }
+                tempLenght = Convert.ToInt32(txtCustomLenght.Text);
+                tempWidth = Convert.ToInt32(txtCustomWidth.Text);
             }
 
             if (globalTypesList == null)
                 globalTypesList = new List<MattressObject>();
 
-            MattressObject tempMattressObject = new MattressObject(mattress, size, tempLenght, tempWidth, tempNumbers, orderId + " " + dateOfOrder, table);
+            MattressObject tempMattressObject = new MattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, tempLenght, tempWidth, tempNumbers, txtOrderId.Text+" : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem);
 
             if (globalTypesList.Count != 0)
             {
@@ -105,7 +93,7 @@ namespace ProjCity2
                     {
                         tempNumbers += item.Numbers;
                         globalTypesList.Remove(item);
-                        tempMattressObject = new MattressObject(mattress, size, tempLenght, tempWidth, tempNumbers, orderId + " " + dateOfOrder, table);
+                        tempMattressObject = new MattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, tempLenght, tempWidth, tempNumbers, txtOrderId.Text + " : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem);
                         break;
                     }
                 }
@@ -116,7 +104,6 @@ namespace ProjCity2
             listBoxTypesList.Items.Clear();
             foreach (MattressObject obj in globalTypesList)
                 listBoxTypesList.Items.Add(obj);
-
         }
 
         private void CreateDocument()
@@ -324,7 +311,7 @@ namespace ProjCity2
                                 }
                                 else
                                 {
-                                    foreach (var item in dict.Value)//Error
+                                    foreach (var item in dict.Value)
                                     {
                                         if (!globalPerimetrsMaterialsList4D[obj.OrderInfo][obj.TableName].Contains(item.Key))
                                             globalPerimetrsMaterialsList4D[obj.OrderInfo][obj.TableName].Add(item.Key);

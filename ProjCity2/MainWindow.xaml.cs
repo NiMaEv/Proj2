@@ -21,6 +21,7 @@ namespace ProjCity2
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Events Of Window.
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             using (PgContext context = new PgContext())
@@ -40,6 +41,7 @@ namespace ProjCity2
         {
 
         }
+        #endregion
 
         private void cmbSizes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -51,40 +53,54 @@ namespace ProjCity2
 
         }
 
-        private void btnCheck_Click(object sender, RoutedEventArgs e)
-        {
-            //try
-            //{
-            //    CreateDocument();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-            CreateDocument();
-        }
-
         private void cmbSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
+        private void btnCheck_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CreateDocument();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #region Events Of Adding.
         private void listBoxMattressList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //MattressObject obj = new MattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, null, null, 1);
+            try
+            {
+                AddMattressObject();
+            }
+            catch
+            {
+                MessageBox.Show("Проверьте вводимые данные.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                txtCustomLenght.Clear();
+                txtCustomWidth.Clear();
+                txtNumbers.Clear();
+            }
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                AddMattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, txtCustomLenght.Text, txtCustomWidth.Text, txtNumbers.Text, txtOrderId.Text, txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem);
+                AddMattressObject();
             }
             catch
             {
-                MessageBox.Show("Матрас или размер не выбраны.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Проверьте вводимые данные.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                txtCustomLenght.Clear();
+                txtCustomWidth.Clear();
+                txtNumbers.Clear();
             }
         }
+        #endregion
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {

@@ -52,7 +52,8 @@ namespace ProjCity2
                         CreatePage(orderId, "Листы ППУ", globalPolyurethaneForPerimetrsDictionary3D[orderId], true);
                 }
                 if (globalPolyurethaneForPerimetrsDictionary3D.ContainsKey(orderId) & globalPerimetrsMaterialsList3D.ContainsKey(orderId))
-                    CreatePage(orderId, globalPerimetrsMaterialsList3D[orderId], globalPolyurethaneForPerimetrsDictionary3D[orderId]);
+                    if (globalPolyurethaneForPerimetrsDictionary3D[orderId].Count != 0 & globalPerimetrsMaterialsList3D[orderId].Count != 0)
+                        CreatePage(orderId, globalPerimetrsMaterialsList3D[orderId], globalPolyurethaneForPerimetrsDictionary3D[orderId]);
                 if (globalMainCompositionsDictionary3D.ContainsKey(orderId))
                     CreatePage(orderId, "Составы", globalMainCompositionsDictionary3D[orderId], true);
                 if (globalUltrCutsDictionary3D.ContainsKey(orderId))
@@ -75,8 +76,9 @@ namespace ProjCity2
                         if(globalPolyurethaneSheetsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Листы ППУ", globalPolyurethaneSheetsDictionary4D[dict.Key][item.Key], true);
                     if (globalPolyurethaneForPerimetrsDictionary4D.ContainsKey(dict.Key) & globalPerimetrsMaterialsList4D.ContainsKey(dict.Key))
-                        if(globalPolyurethaneForPerimetrsDictionary4D[dict.Key].ContainsKey(item.Key) & globalPerimetrsMaterialsList4D[dict.Key].ContainsKey(item.Key))
-                            CreatePage(dict.Key + "\n" + item.Key, globalPerimetrsMaterialsList4D[dict.Key][item.Key], globalPolyurethaneForPerimetrsDictionary4D[dict.Key][item.Key]);
+                        if (globalPolyurethaneForPerimetrsDictionary4D[dict.Key].ContainsKey(item.Key) & globalPerimetrsMaterialsList4D[dict.Key].ContainsKey(item.Key))
+                            if (globalPolyurethaneForPerimetrsDictionary4D[dict.Key][item.Key].Count != 0 & globalPerimetrsMaterialsList4D[dict.Key][item.Key].Count != 0)
+                                CreatePage(dict.Key + "\n" + item.Key, globalPerimetrsMaterialsList4D[dict.Key][item.Key], globalPolyurethaneForPerimetrsDictionary4D[dict.Key][item.Key]);
                     if (globalMainCompositionsDictionary4D.ContainsKey(dict.Key))
                         if(globalMainCompositionsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Составы", globalMainCompositionsDictionary4D[dict.Key][item.Key], true);

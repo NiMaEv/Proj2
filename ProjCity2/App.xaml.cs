@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntityModels;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,6 @@ namespace ProjCity2
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

@@ -49,6 +49,8 @@ namespace ProjCity2
 
             using (PgContext context = new PgContext())
             {
+                if (mattress == null)
+                    throw new Exception();
                 Name = mattress.mattressName;
 
                 if (size != null) 
