@@ -32,22 +32,27 @@
                     <Label Content="Количесто" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="17" Foreground="White"/>
                     <TextBox x:Name="txtNumbers" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="150" FontSize="17"/>
                 </StackPanel>
-
+                <StackPanel>
+                    <Label Content="Стол" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="17" Foreground="White"/>
+                    <ComboBox Name="cmbTables" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="15" Width="150"/>
+                </StackPanel>
             </StackPanel>
-            <Button Height="30" Width="150" Content="Check" x:Name="btnCheck" Click="btnCheck_Click"/>
+            <Button VerticalAlignment="Bottom" Height="30" Width="150" Content="Check" x:Name="btnCheck" Click="btnCheck_Click"/>
         </Grid>
         <Grid>
-            <StackPanel MinWidth="1000" MaxWidth="1600" HorizontalAlignment="Left">
+            <StackPanel MinWidth="1000" MaxWidth="1500" HorizontalAlignment="Left">
                 <DockPanel Height="50" Margin="1,0" VerticalAlignment="Top" Background="#FF353535">
                     <Grid>
                         <Label Content="Линия:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" FontSize="20"  Foreground="White"/>
                         <ComboBox Name="cmbSeries" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="90,0" Width="150" FontSize="17" SelectionChanged="cmbSeries_SelectionChanged"/>
                     </Grid>
-                    <Label Content="Код заказа:" VerticalAlignment="Center" FontSize="20" Foreground="White"/>
-                    <TextBox x:Name="txtOrderId" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="500" FontSize="17"/>
+                    <Label Content="Код заказа:" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="20" Foreground="White"/>
+                    <TextBox x:Name="txtOrderId" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="300" FontSize="17"/>
+                    <Label Content="Дата:" VerticalAlignment="Center" Margin="10,0" FontSize="20" Foreground="White"/>
+                    <TextBox x:Name="txtDateOfOrder" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Width="150" FontSize="17"/>
                 </DockPanel>
                 <Grid>
-                    <ListBox x:Name="listBoxMattressList" FontSize="15" Background="White" MaxHeight="745" ScrollViewer.VerticalScrollBarVisibility="Hidden" MinWidth="1000" MaxWidth="1600" MouseDoubleClick="listBoxMattressList_MouseDoubleClick"/>
+                    <ListBox x:Name="listBoxMattressList" FontSize="15" Background="White" MaxHeight="745" ScrollViewer.VerticalScrollBarVisibility="Auto" MinWidth="1000" MaxWidth="1600" MouseDoubleClick="listBoxMattressList_MouseDoubleClick"/>
                 </Grid>
             </StackPanel>
         </Grid>
@@ -55,7 +60,7 @@
             <StackPanel>
                 <Label Content="Документ" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,10" FontSize="25" Foreground="White"/>
                 <Grid VerticalAlignment="Top"  Height="500" Width="270" Background="White">
-                    <ListBox x:Name="listBoxTypesList" FontSize="15" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                    <ListBox x:Name="listBoxTypesList" FontSize="15" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
                 </Grid>
                 <StackPanel VerticalAlignment="Bottom" Height="150">
                     <StackPanel Margin="0,10">

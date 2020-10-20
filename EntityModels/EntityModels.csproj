@@ -104,6 +104,7 @@
     <Compile Include="Series.cs" />
     <Compile Include="Series.Methodds.cs" />
     <Compile Include="Sizes.cs" />
+    <Compile Include="Tables.cs" />
     <Compile Include="TopperCompositions.cs" />
     <Compile Include="TopperCutCompositiont.cs" />
     <Compile Include="TopperCuts.cs" />

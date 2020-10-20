@@ -23,6 +23,7 @@ namespace EntityModels
         public virtual DbSet<Perimetrs> Perimetrs { get; set; }
         public virtual DbSet<Series> Series { get; set; }
         public virtual DbSet<Sizes> Sizes { get; set; }
+        public virtual DbSet<Tables> Tables { get; set; }
         public virtual DbSet<TopperCompositions> TopperCompositions { get; set; }
         public virtual DbSet<TopperCutCompositiont> TopperCutCompositiont { get; set; }
         public virtual DbSet<TopperCuts> TopperCuts { get; set; }

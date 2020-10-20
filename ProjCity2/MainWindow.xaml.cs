@@ -31,6 +31,8 @@ namespace ProjCity2
                     SizesCBInsert(size);
                 foreach (Series series in context.Series)
                     SeriesCBInsert(series);
+                foreach (Tables table in context.Tables)
+                    TablesCBInsert(table);
             }
         }
 
@@ -51,14 +53,15 @@ namespace ProjCity2
 
         private void btnCheck_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                CreateDocument(txtOrderId.Text);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            //try
+            //{
+            //    CreateDocument();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
+            CreateDocument();
         }
 
         private void cmbSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -68,14 +71,14 @@ namespace ProjCity2
 
         private void listBoxMattressList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MattressObject obj = new MattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, null, null, 1);
+            //MattressObject obj = new MattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, null, null, 1);
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                AddMattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, txtCustomLenght.Text, txtCustomWidth.Text, txtNumbers.Text);
+                AddMattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, txtCustomLenght.Text, txtCustomWidth.Text, txtNumbers.Text, txtOrderId.Text, txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem);
             }
             catch
             {

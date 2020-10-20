@@ -21,6 +21,10 @@ namespace ProjCity2
         
         public int Numbers { get; }
 
+        public string OrderInfo { get; }
+
+        public string TableName { get; }
+
         #region Dictionaries.
 
         public Dictionary<string, Dictionary<string, int>> dictPolyurethaneSheet { get; }
@@ -36,7 +40,7 @@ namespace ProjCity2
         public Dictionary<string, Dictionary<string, int>> dictNotStegCut { get; }
         #endregion
 
-        public MattressObject(Mattresses mattress, Sizes size, int? customLenght, int? customWidth, int numbers)
+        public MattressObject(Mattresses mattress, Sizes size, int? customLenght, int? customWidth, int numbers, string orderInfo, Tables table)
         {
             dictPolyurethaneSheet = new Dictionary<string, Dictionary<string, int>>();
             dictPolyurethaneForPerimetr = new Dictionary<string, Dictionary<string, int>>();
@@ -59,6 +63,9 @@ namespace ProjCity2
                 }
 
                 Numbers = numbers;
+
+                OrderInfo = orderInfo;
+                TableName = table.tableName;
 
                 if ((context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId != null && context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId != null) || context.MtrsCompositions.Find(mattress.compositionId).generalComposition != null)
                 {
@@ -397,20 +404,17 @@ namespace ProjCity2
             return height;
         }
 
-        public override string ToString() => $"{Name}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";
+        public override string ToString() => $"{Name}\nЗаказ: {OrderInfo} \nСтол:{TableName}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";
 
         public override bool Equals(object obj)
         {
             if (obj is MattressObject)
             {
                 MattressObject tempObj = (MattressObject)obj;
-                if (tempObj.Name.Equals(this.Name) && tempObj.Size.Equals(this.Size))
+                if (tempObj.Name.Equals(this.Name) & tempObj.Size.Equals(this.Size) & tempObj.OrderInfo.Equals(this.OrderInfo) & tempObj.TableName.Equals(this.TableName))
                     return true;
-                else
-                    return false;
             }
-            else
-                return false;
+            return false;
         }
 
         #endregion
