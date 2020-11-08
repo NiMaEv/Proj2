@@ -77,12 +77,12 @@ namespace ProjCity2
             {
                 AddMattressObject();
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Проверьте вводимые данные.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                txtCustomLenght.Clear();
-                txtCustomWidth.Clear();
-                txtNumbers.Clear();
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //txtCustomLenght.Clear();
+                //txtCustomWidth.Clear();
+                //txtNumbers.Clear();
             }
         }
 
@@ -92,12 +92,12 @@ namespace ProjCity2
             {
                 AddMattressObject();
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Проверьте вводимые данные.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                txtCustomLenght.Clear();
-                txtCustomWidth.Clear();
-                txtNumbers.Clear();
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //txtCustomLenght.Clear();
+                //txtCustomWidth.Clear();
+                //txtNumbers.Clear();
             }
         }
         #endregion
@@ -114,7 +114,19 @@ namespace ProjCity2
 
         private void btnPrint_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                CreateDocument();
+                wordApp.Print();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                wordApp.CloseWord();
+            }
         }
     }
 }

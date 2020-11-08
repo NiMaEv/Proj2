@@ -58,6 +58,26 @@ namespace ProjCity2.Objects
                 globalNotStegCutsDictionary4D, globalBurletsDictioneary4D));
         }
 
+        public void Print()
+        {
+            object copies = "1";
+            object pages = "";
+            object range = WdPrintOutRange.wdPrintAllDocument;
+            object items = WdPrintOutItem.wdPrintDocumentContent;
+            object pageType = WdPrintOutPages.wdPrintAllPages;
+            object oTrue = true;
+            object oFalse = false;
+            object missing = docksListV2.First().docObj;
+
+            docksListV2.First().document.PrintOut(ref oTrue, ref oFalse, ref range, ref missing, ref missing, ref missing,
+            ref items, ref copies, ref pages, ref pageType, ref oFalse, ref oTrue,
+            ref missing, ref oFalse, ref missing, ref missing, ref missing, ref missing);
+        }
+
+        public void CloseWord()
+        {
+            wordApp.Quit();
+        }
         #endregion
     }
 }

@@ -29,5 +29,7 @@ namespace EntityModels
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MtrsCompositions> MtrsCompositions1 { get; set; }
+
+        public bool CompareTo(MtrsCompositionSides mcsObj) => (mcsObj.compositionId == this.compositionId & mcsObj.composition.Equals(this.composition)) ? true : false;
     }
 }

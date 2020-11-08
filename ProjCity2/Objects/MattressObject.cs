@@ -50,7 +50,7 @@ namespace ProjCity2
             using (PgContext context = new PgContext())
             {
                 if (mattress == null)
-                    throw new Exception();
+                    throw new Exception("Не выбран элемент в списке матрасов.");
                 Name = mattress.mattressName;
 
                 if (size != null) 

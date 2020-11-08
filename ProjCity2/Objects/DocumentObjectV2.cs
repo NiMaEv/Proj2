@@ -11,7 +11,7 @@ namespace ProjCity2
     {
         public Document document { get; }
 
-        private object docObj;
+        public object docObj;
         private object startEvrethingPage = 0;
         private object tableDefaultBehavior = WdDefaultTableBehavior.wdWord9TableBehavior;
         private object tableAutoFitBehavior = WdAutoFitBehavior.wdAutoFitWindow;

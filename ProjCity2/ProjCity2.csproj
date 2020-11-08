@@ -119,6 +119,7 @@
     <Compile Include="Objects\DocumentObject.cs" />
     <Compile Include="Objects\DocumentObjectV2.cs" />
     <Compile Include="Objects\MattressObject.cs" />
+    <Compile Include="Objects\MattressObjectV2.cs" />
     <Compile Include="Objects\WordApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
