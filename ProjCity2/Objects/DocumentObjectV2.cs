@@ -22,6 +22,7 @@ namespace ProjCity2
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalPolyurethaneForPerimetrsDictionary3D,
             Dictionary<string, List<string>> globalPerimetrsMaterialsList3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalMainCompositionsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBlocksDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalUltrCutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCutsDictionary3D,
@@ -33,6 +34,7 @@ namespace ProjCity2
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalPolyurethaneForPerimetrsDictionary4D,
             Dictionary<string, Dictionary<string, List<string>>> globalPerimetrsMaterialsList4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalMainCompositionsDictionary4D,
+            Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalBlocksDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalUltrCutsDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalV16CutsDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalKaterCutsDictionary4D,
@@ -56,6 +58,8 @@ namespace ProjCity2
                         CreatePage(orderId, globalPerimetrsMaterialsList3D[orderId], globalPolyurethaneForPerimetrsDictionary3D[orderId]);
                 if (globalMainCompositionsDictionary3D.ContainsKey(orderId))
                     CreatePage(orderId, "Составы", globalMainCompositionsDictionary3D[orderId], true);
+                if (globalBlocksDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Пружинные блоки", globalBlocksDictionary3D[orderId], true);
                 if (globalUltrCutsDictionary3D.ContainsKey(orderId))
                     CreatePage(orderId, "Крой(Ультразвук)", globalUltrCutsDictionary3D[orderId], true);
                 if (globalV16CutsDictionary3D.ContainsKey(orderId))
@@ -82,6 +86,9 @@ namespace ProjCity2
                     if (globalMainCompositionsDictionary4D.ContainsKey(dict.Key))
                         if(globalMainCompositionsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Составы", globalMainCompositionsDictionary4D[dict.Key][item.Key], true);
+                    if (globalBlocksDictionary4D.ContainsKey(dict.Key))
+                        if (globalBlocksDictionary4D[dict.Key].ContainsKey(item.Key))
+                            CreatePage(dict.Key + "\n" + item.Key, "Пружинные блоки", globalBlocksDictionary4D[dict.Key][item.Key], true);
                     if (globalUltrCutsDictionary4D.ContainsKey(dict.Key))
                         if(globalUltrCutsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Крой(Ультразвук)", globalUltrCutsDictionary4D[dict.Key][item.Key], true);

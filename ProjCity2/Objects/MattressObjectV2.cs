@@ -107,7 +107,7 @@ namespace ProjCity2
                         } 
                         if (perimetr.reinforcmentMattressMaterialName != null)
                         {
-                            SizeForBlocks = SizeForComponents = $"{lenght - perimetr.reinforcmentMaterialWidth}*{width - perimetr.reinforcmentMaterialWidth}";
+                            SizeForBlocks = SizeForComponents = $"{lenght - perimetr.reinforcmentMaterialWidth * 2}*{width - perimetr.reinforcmentMaterialWidth * 2}";
 
                             Dictionary<string, int> tempDict = new Dictionary<string, int>() { { perimetr.reinforcmentMattressMaterialName +
                                     "h=" + GetMattressHeight(mattress) / 10, Numbers * 2} };
@@ -263,16 +263,6 @@ namespace ProjCity2
                 if (dictPolyurethaneSheet != null)
                     dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet);
             }
-
-            //foreach (var item in dictMainComposition)
-            //    foreach (var innerItem in item.Value)
-            //        MessageBox.Show($"{innerItem.Key} || {innerItem.Value}", "Состав: " + item.Key);
-
-            //if (dictPolyurethaneSheet != null)
-            //    if (dictPolyurethaneSheet.Count != 0)
-            //        foreach (var item in dictPolyurethaneSheet)
-            //            foreach (var innerItem in item.Value)
-            //                MessageBox.Show($"{innerItem.Key} || {innerItem.Value}", "ППУ: " + item.Key);
         }
 
         #region Methods.

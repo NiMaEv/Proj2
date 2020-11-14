@@ -204,7 +204,7 @@ namespace ProjCity2
                 Dictionary<string, Dictionary<string, int>> tempPolyurethaneDict = obj.GetPolyurethaneSheetsDictionary();
 
                 if (!globalPolyurethaneSheetsDictionary3D.ContainsKey(obj.OrderInfo))
-                    globalPolyurethaneSheetsDictionary3D.Add(obj.OrderInfo, tempPolyurethaneDict); //obj.GetPolyurethaneSheetsDictionary();
+                    globalPolyurethaneSheetsDictionary3D.Add(obj.OrderInfo, obj.GetPolyurethaneSheetsDictionary()); //obj.GetPolyurethaneSheetsDictionary();
                 else
                 {
                     foreach (var dict in tempPolyurethaneDict)
@@ -225,11 +225,11 @@ namespace ProjCity2
                 }
 
                 if (!globalPolyurethaneSheetsDictionary4D.ContainsKey(obj.OrderInfo))
-                    globalPolyurethaneSheetsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempPolyurethaneDict } }); //obj.GetPolyurethaneSheetsDictionary();
+                    globalPolyurethaneSheetsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetPolyurethaneSheetsDictionary() } }); //obj.GetPolyurethaneSheetsDictionary();
                 else
                 {
                     if (!globalPolyurethaneSheetsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                        globalPolyurethaneSheetsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempPolyurethaneDict); //obj.GetPolyurethaneSheetsDictionary();
+                        globalPolyurethaneSheetsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetPolyurethaneSheetsDictionary()); //obj.GetPolyurethaneSheetsDictionary();
                     else
                     {
                         foreach (var dict in tempPolyurethaneDict)
@@ -258,7 +258,7 @@ namespace ProjCity2
 
                     if (!globalPolyurethaneForPerimetrsDictionary3D.ContainsKey(obj.OrderInfo))
                     {
-                        globalPolyurethaneForPerimetrsDictionary3D.Add(obj.OrderInfo, tempPolyurethaneForPerimetrDict); //obj.GetPolyurethaneForPerimetrDictionary();
+                        globalPolyurethaneForPerimetrsDictionary3D.Add(obj.OrderInfo, obj.GetPolyurethaneForPerimetrDictionary()); //obj.GetPolyurethaneForPerimetrDictionary();
 
                         globalPerimetrsMaterialsList3D.Add(obj.OrderInfo, new List<string> { });
                         foreach (var dict in tempPolyurethaneForPerimetrDict)
@@ -296,7 +296,7 @@ namespace ProjCity2
 
                     if (!globalPolyurethaneForPerimetrsDictionary4D.ContainsKey(obj.OrderInfo))
                     {
-                        globalPolyurethaneForPerimetrsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempPolyurethaneForPerimetrDict} }); //obj.GetPolyurethaneForPerimetrDictionary();
+                        globalPolyurethaneForPerimetrsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetPolyurethaneForPerimetrDictionary()} }); //obj.GetPolyurethaneForPerimetrDictionary();
 
                         globalPerimetrsMaterialsList4D.Add(obj.OrderInfo, new Dictionary<string, List<string>> { { obj.TableName, new List<string> { } } });
                         foreach (var dict in tempPolyurethaneForPerimetrDict)
@@ -308,7 +308,7 @@ namespace ProjCity2
                     {
                         if (!globalPolyurethaneForPerimetrsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
                         {
-                            globalPolyurethaneForPerimetrsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempPolyurethaneForPerimetrDict); //obj.GetPolyurethaneForPerimetrDictionary();
+                            globalPolyurethaneForPerimetrsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetPolyurethaneForPerimetrDictionary()); //obj.GetPolyurethaneForPerimetrDictionary();
 
                             globalPerimetrsMaterialsList4D[obj.OrderInfo].Add(obj.TableName, new List<string> { });
                             foreach (var dict in tempPolyurethaneForPerimetrDict)
@@ -347,11 +347,12 @@ namespace ProjCity2
                 }
                 #endregion
 
+                // !!!
                 #region globalMainCompositionsDictionaries.
                 Dictionary<string, Dictionary<string, int>> tempMainCompositionDict = obj.GetMainCompositionDictionary();
 
                 if (!globalMainCompositionsDictionary3D.ContainsKey(obj.OrderInfo))
-                    globalMainCompositionsDictionary3D.Add(obj.OrderInfo, tempMainCompositionDict); //obj.GetMainCompositionDictionary();
+                    globalMainCompositionsDictionary3D.Add(obj.OrderInfo, obj.GetMainCompositionDictionary()); //obj.GetMainCompositionDictionary();
                 else
                 {
                     foreach (var dict in tempMainCompositionDict)
@@ -372,11 +373,11 @@ namespace ProjCity2
                 }
 
                 if (!globalMainCompositionsDictionary4D.ContainsKey(obj.OrderInfo))
-                    globalMainCompositionsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempMainCompositionDict } }); //obj.GetMainCompositionDictionary();
+                    globalMainCompositionsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetMainCompositionDictionary() } }); //obj.GetMainCompositionDictionary();
                 else
                 {
                     if (!globalMainCompositionsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                        globalMainCompositionsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempMainCompositionDict); //obj.GetMainCompositionDictionary();
+                        globalMainCompositionsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetMainCompositionDictionary()); //obj.GetMainCompositionDictionary();
                     else
                     {
                         foreach (var dict in tempMainCompositionDict)
@@ -398,13 +399,12 @@ namespace ProjCity2
                 }
                 #endregion
 
-                //Potential errors.
-                //Add globalBloksDictionaries in DocObj v2.
+                // !!!
                 #region globalBlocksDictionaries. 
                 Dictionary<string, Dictionary<string, int>> tempBlockDict = obj.GetBlocksDictionary();
 
                 if (!globalBlocksDictionary3D.ContainsKey(obj.OrderInfo))
-                    globalBlocksDictionary3D.Add(obj.OrderInfo, tempBlockDict); //obj.GetPolyurethaneSheetsDictionary();
+                    globalBlocksDictionary3D.Add(obj.OrderInfo, obj.GetBlocksDictionary());
                 else
                 {
                     foreach (var dict in tempBlockDict)
@@ -425,11 +425,11 @@ namespace ProjCity2
                 }
 
                 if (!globalBlocksDictionary4D.ContainsKey(obj.OrderInfo))
-                    globalBlocksDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempBlockDict } }); //obj.GetPolyurethaneSheetsDictionary();
+                    globalBlocksDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetBlocksDictionary() } });
                 else
                 {
                     if (!globalBlocksDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                        globalBlocksDictionary4D[obj.OrderInfo].Add(obj.TableName, tempBlockDict); //obj.GetPolyurethaneSheetsDictionary();
+                        globalBlocksDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetBlocksDictionary());
                     else
                     {
                         foreach (var dict in tempBlockDict)
@@ -458,7 +458,7 @@ namespace ProjCity2
                     Dictionary<string, Dictionary<string, int>> tempUltrCutDict = obj.GetUltrCutDictionary();
 
                     if (!globalUltrCutsDictionary3D.ContainsKey(obj.OrderInfo))
-                        globalUltrCutsDictionary3D.Add(obj.OrderInfo, tempUltrCutDict); //obj.GetUltrCutDictionary();
+                        globalUltrCutsDictionary3D.Add(obj.OrderInfo, obj.GetUltrCutDictionary()); //obj.GetUltrCutDictionary();
                     else
                     {
                         foreach (var dict in tempUltrCutDict)
@@ -479,11 +479,11 @@ namespace ProjCity2
                     }
 
                     if (!globalUltrCutsDictionary4D.ContainsKey(obj.OrderInfo))
-                        globalUltrCutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempUltrCutDict } }); //obj.GetUltrCutDictionary();
+                        globalUltrCutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetUltrCutDictionary() } }); //obj.GetUltrCutDictionary();
                     else
                     {
                         if (!globalUltrCutsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                            globalUltrCutsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempUltrCutDict); //obj.GetUltrCutDictionary();
+                            globalUltrCutsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetUltrCutDictionary()); //obj.GetUltrCutDictionary();
                         else
                         {
                             foreach (var dict in tempUltrCutDict)
@@ -512,7 +512,7 @@ namespace ProjCity2
                     Dictionary<string, Dictionary<string, int>> tempV16CutDuct = obj.GetV16CutDictionary();
 
                     if (!globalV16CutsDictionary3D.ContainsKey(obj.OrderInfo))
-                        globalV16CutsDictionary3D.Add(obj.OrderInfo, tempV16CutDuct); //obj.GetV16CutDictionary();
+                        globalV16CutsDictionary3D.Add(obj.OrderInfo, obj.GetV16CutDictionary()); //obj.GetV16CutDictionary();
                     else
                     {
                         foreach (var dict in tempV16CutDuct)
@@ -533,11 +533,11 @@ namespace ProjCity2
                     }
 
                     if (!globalV16CutsDictionary4D.ContainsKey(obj.OrderInfo))
-                        globalV16CutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempV16CutDuct } }); //obj.GetV16CutDictionary();
+                        globalV16CutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetV16CutDictionary() } }); //obj.GetV16CutDictionary();
                     else
                     {
                         if (!globalV16CutsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                            globalV16CutsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempV16CutDuct); //obj.GetV16CutDictionary();
+                            globalV16CutsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetV16CutDictionary()); //obj.GetV16CutDictionary();
                         else
                         {
                             foreach (var dict in tempV16CutDuct)
@@ -566,7 +566,7 @@ namespace ProjCity2
                     Dictionary<string, Dictionary<string, int>> tempKaterCutDict = obj.GetKaterCutDictionary();
 
                     if (!globalKaterCutsDictionary3D.ContainsKey(obj.OrderInfo))
-                        globalKaterCutsDictionary3D.Add(obj.OrderInfo, tempKaterCutDict); //obj.GetKaterCutDictionary();
+                        globalKaterCutsDictionary3D.Add(obj.OrderInfo, obj.GetKaterCutDictionary()); //obj.GetKaterCutDictionary();
                     else
                     {
                         foreach (var dict in tempKaterCutDict)
@@ -587,11 +587,11 @@ namespace ProjCity2
                     }
 
                     if (!globalKaterCutsDictionary4D.ContainsKey(obj.OrderInfo))
-                        globalKaterCutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempKaterCutDict } }); //obj.GetKaterCutDictionary();
+                        globalKaterCutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetKaterCutDictionary() } }); //obj.GetKaterCutDictionary();
                     else
                     {
                         if (!globalKaterCutsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                            globalKaterCutsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempKaterCutDict); //obj.GetKaterCutDictionary();
+                            globalKaterCutsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetKaterCutDictionary()); //obj.GetKaterCutDictionary();
                         else
                         {
                             foreach (var dict in tempKaterCutDict)
@@ -620,7 +620,7 @@ namespace ProjCity2
                     Dictionary<string, Dictionary<string, int>> tempNotStegCutDict = obj.GetNotStegCutDictionary();
 
                     if (!globalNotStegCutsDictionary3D.ContainsKey(obj.OrderInfo))
-                        globalNotStegCutsDictionary3D.Add(obj.OrderInfo, tempNotStegCutDict); //obj.GetNotStegCutDictionary()
+                        globalNotStegCutsDictionary3D.Add(obj.OrderInfo, obj.GetNotStegCutDictionary()); //obj.GetNotStegCutDictionary()
                     else
                     {
                         foreach (var dict in tempNotStegCutDict)
@@ -641,11 +641,11 @@ namespace ProjCity2
                     }
 
                     if (!globalNotStegCutsDictionary4D.ContainsKey(obj.OrderInfo))
-                        globalNotStegCutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempNotStegCutDict } }); //obj.GetNotStegCutDictionary()
+                        globalNotStegCutsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetNotStegCutDictionary() } }); //obj.GetNotStegCutDictionary()
                     else
                     {
                         if (!globalNotStegCutsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                            globalNotStegCutsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempNotStegCutDict); //obj.GetNotStegCutDictionary()
+                            globalNotStegCutsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetNotStegCutDictionary()); //obj.GetNotStegCutDictionary()
                         else
                         {
                             foreach (var dict in tempNotStegCutDict)
@@ -674,7 +674,7 @@ namespace ProjCity2
                 Dictionary<string, Dictionary<string, int>> tempBurletDict = obj.GetBurletDictionary();
 
                 if (!globalBurletsDictionary3D.ContainsKey(obj.OrderInfo))
-                    globalBurletsDictionary3D.Add(obj.OrderInfo, tempBurletDict); //obj.GetBurletDictionary();
+                    globalBurletsDictionary3D.Add(obj.OrderInfo, obj.GetBurletDictionary()); //obj.GetBurletDictionary();
                 else
                 {
                     foreach (var dict in tempBurletDict)
@@ -695,11 +695,11 @@ namespace ProjCity2
                 }
 
                 if (!globalBurletsDictionary4D.ContainsKey(obj.OrderInfo))
-                    globalBurletsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, tempBurletDict } }); //obj.GetBurletDictionary();
+                    globalBurletsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetBurletDictionary() } }); //obj.GetBurletDictionary();
                 else
                 {
                     if (!globalBurletsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
-                        globalBurletsDictionary4D[obj.OrderInfo].Add(obj.TableName, tempBurletDict); //obj.GetBurletDictionary();
+                        globalBurletsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetBurletDictionary()); //obj.GetBurletDictionary();
                     else
                     {
                         foreach (var dict in tempBurletDict)
@@ -725,9 +725,9 @@ namespace ProjCity2
             wordApp = new WordApp();
 
             wordApp.AddDocument(globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D, globalPerimetrsMaterialsList3D,
-                globalMainCompositionsDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D, globalNotStegCutsDictionary3D,
+                globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D, globalNotStegCutsDictionary3D,
                 globalBurletsDictionary3D, globalMattressesDictionary4D, globalPolyurethaneSheetsDictionary4D, globalPolyurethaneForPerimetrsDictionary4D, globalPerimetrsMaterialsList4D,
-                globalMainCompositionsDictionary4D, globalUltrCutsDictionary4D, globalV16CutsDictionary4D, globalKaterCutsDictionary4D, globalNotStegCutsDictionary4D, globalBurletsDictionary4D);
+                globalMainCompositionsDictionary4D, globalBlocksDictionary4D, globalUltrCutsDictionary4D, globalV16CutsDictionary4D, globalKaterCutsDictionary4D, globalNotStegCutsDictionary4D, globalBurletsDictionary4D);
 
             Dictionary<string, int> ToDictionary(Dictionary<string, int> dictionary)
             {
