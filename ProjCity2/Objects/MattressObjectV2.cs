@@ -88,7 +88,7 @@ namespace ProjCity2
                         dictPolyurethaneForPerimetr = new Dictionary<string, Dictionary<string, int>>();
                         if (perimetr.reinforcmentBlockMaterialName != null)
                         {
-                            SizeForBlocks = $"{lenght - perimetr.reinforcmentMaterialWidth}*{width - perimetr.reinforcmentMaterialWidth}";
+                            SizeForBlocks = $"{lenght - perimetr.reinforcmentMaterialWidth * 2}*{width - perimetr.reinforcmentMaterialWidth * 2}";
 
                             Blocks mainBlock = context.Blocks.Find(mainComposition.blockId);
                             Dictionary<string, int> tempDict = new Dictionary<string, int>() { { perimetr.reinforcmentBlockMaterialName +
@@ -198,7 +198,7 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictUltrCut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictUltrCut);
+                        dictMainComposition = DictionaryClear(dictMainComposition, dictUltrCut, Size);
                         break;
                     case "V-16":
                         dictV16Cut = new Dictionary<string, Dictionary<string, int>>();
@@ -214,7 +214,7 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictV16Cut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictV16Cut);
+                        dictMainComposition = DictionaryClear(dictMainComposition, dictV16Cut, Size);
                         break;
                     case "Катерман":
                         dictKaterCut = new Dictionary<string, Dictionary<string, int>>();
@@ -230,7 +230,7 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictKaterCut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictKaterCut);
+                        dictMainComposition = DictionaryClear(dictMainComposition, dictKaterCut, Size);
                         break;
                     case "Не стегается":
                         dictNotStegCut = new Dictionary<string, Dictionary<string, int>>();
@@ -246,7 +246,7 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictNotStegCut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut);
+                        dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut, Size);
                         break;
                 }
                 #endregion
@@ -261,7 +261,7 @@ namespace ProjCity2
                 #endregion
 
                 if (dictPolyurethaneSheet != null)
-                    dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet);
+                    dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet, SizeForComponents);
             }
         }
 
@@ -347,8 +347,8 @@ namespace ProjCity2
 
             return height;
         }
-
-        private Dictionary<string, Dictionary<string, int>> DictionaryClear(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, Dictionary<string, int>> dictionaryOfItemForDelete)
+        //test
+        private Dictionary<string, Dictionary<string, int>> DictionaryClear(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, Dictionary<string, int>> dictionaryOfItemForDelete, string size)
         {
             Dictionary<string, Dictionary<string, int>> returnedDictionary = new Dictionary<string, Dictionary<string, int>>();
             Dictionary<string, Dictionary<string, int>> tempDictionary = CopyDictionary(currentDictionary);
@@ -395,7 +395,10 @@ namespace ProjCity2
                         newStrOfComposition += ".";
                 }
 
-                returnedDictionary.Add(newStrOfComposition, item.Value);
+                if (!returnedDictionary.ContainsKey(newStrOfComposition))
+                    returnedDictionary.Add(newStrOfComposition, item.Value);
+                else
+                    returnedDictionary[newStrOfComposition][size] += item.Value[size];
 
                 newStrOfComposition = null;
             }
