@@ -11,13 +11,13 @@ namespace ProjCity2
 {
     public class MattressObjectV2
     {
-        public string OrderInfo { get; }
-        public string TableName { get; }
-        public string Name { get; }
+        public string OrderInfo { get; } //Attribut 
+        public string TableName { get; } //Attribut
+        public string Name { get; } //Attribute
 
         private int lenght;
         private int width;
-        public string Size { get => $"{lenght}*{width}"; }
+        public string Size { get => $"{lenght}*{width}"; } //Attribute
         private string SizeForComponents { get; }
         private string SizeForBlocks { get; }
         public int Numbers { get; }
@@ -347,7 +347,7 @@ namespace ProjCity2
 
             return height;
         }
-        //test
+
         private Dictionary<string, Dictionary<string, int>> DictionaryClear(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, Dictionary<string, int>> dictionaryOfItemForDelete, string size)
         {
             Dictionary<string, Dictionary<string, int>> returnedDictionary = new Dictionary<string, Dictionary<string, int>>();
@@ -455,10 +455,14 @@ namespace ProjCity2
         public Dictionary<string, Dictionary<string, int>> GetBurletDictionary() => CopyDictionary(dictBurlet);
         #endregion
 
+        #region Base Methods.
         public override string ToString() => $"{Name}\nЗаказ: {OrderInfo} \nСтол:{TableName}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";
 
-        public bool CompareTo(MattressObjectV2 obj) => (this.Name.Equals(obj.Name) & this.OrderInfo.Equals(obj.OrderInfo) &
-            this.TableName.Equals(obj.TableName) & this.Size.Equals(obj.Size)) ? true : false;
+        public override bool Equals(object obj) => obj.GetHashCode().Equals(this.GetHashCode()) ? true : false;
+
+        public override int GetHashCode() => (OrderInfo.GetHashCode() * TableName.GetHashCode() * Name.GetHashCode() * Size.GetHashCode()) / 10000;
+        #endregion
+
         #endregion
     }
 }

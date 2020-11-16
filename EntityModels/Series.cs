@@ -23,5 +23,7 @@ namespace EntityModels
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mattresses> Mattresses { get; set; }
+
+        public override string ToString() => seriesName;
     }
 }

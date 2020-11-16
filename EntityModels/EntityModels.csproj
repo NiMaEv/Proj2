@@ -102,7 +102,6 @@
     <Compile Include="PgContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Series.cs" />
-    <Compile Include="Series.Methodds.cs" />
     <Compile Include="Sizes.cs" />
     <Compile Include="Tables.cs" />
     <Compile Include="TopperCompositions.cs" />

@@ -15,7 +15,6 @@ namespace ProjCity2
     {
         private WordApp wordApp;
 
-        //private List<MattressObject> globalTypesList;
         private List<MattressObjectV2> globalTypesList;
 
         #region Fields of Main Order: 3D-Dictionaries (Order Id str/( Composition str/( Size str/ Numbers)))
@@ -58,18 +57,21 @@ namespace ProjCity2
         public MainWindow()
         {
             InitializeComponent();
+
+            using (PgContext context = new PgContext())
+            {
+                foreach (Mattresses mtrs in context.Mattresses)
+                    listBoxMattressList.Items.Add(mtrs);
+                foreach (Sizes size in context.Sizes)
+                    cmbSizes.Items.Add(size);
+                foreach (Series series in context.Series)
+                    cmbSeries.Items.Add(series);
+                foreach (Tables table in context.Tables)
+                    cmbTables.Items.Add(table);
+            }
         }
 
         #region Methods.
-
-        private void MattressesListInsert(Mattresses mtrs) => listBoxMattressList.Items.Add(mtrs);
-
-        private void SizesCBInsert(Sizes size) => cmbSizes.Items.Add(size);
-
-        private void SeriesCBInsert(Series serie) => cmbSeries.Items.Add(serie);
-
-        private void TablesCBInsert(Tables table) => cmbTables.Items.Add(table);
-
         private void AddMattressObject()
         {
             int tempNumbers = 1;
@@ -92,28 +94,19 @@ namespace ProjCity2
             if (globalTypesList == null)
                 globalTypesList = new List<MattressObjectV2>();
 
-            //MattressObject tempMattressObject = new MattressObject((Mattresses)listBoxMattressList.SelectedItem, (Sizes)cmbSizes.SelectedItem, tempLenght, tempWidth, tempNumbers, txtOrderId.Text+" : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem);
             MattressObjectV2 tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, (Sizes)cmbSizes.SelectedItem, tempNumbers);
 
-            if (globalTypesList.Count != 0)
+            if (globalTypesList.Contains(tempMattressObject))
             {
-                foreach (MattressObjectV2 item in globalTypesList)
-                {
-                    if (item.CompareTo(tempMattressObject))
-                    {
-                        tempNumbers += item.Numbers;
-                        globalTypesList.Remove(item);
-                        tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, (Sizes)cmbSizes.SelectedItem, tempNumbers);
-                        break;
-                    }
-                }
+                tempNumbers += globalTypesList.Find(mattress => mattress.Equals(tempMattressObject)).Numbers;
+                globalTypesList.Remove(tempMattressObject);
+                tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, (Sizes)cmbSizes.SelectedItem, tempNumbers);
             }
 
             globalTypesList.Add(tempMattressObject);
 
             listBoxTypesList.Items.Clear();
-            foreach (MattressObjectV2 obj in globalTypesList)
-                listBoxTypesList.Items.Add(obj);
+            globalTypesList.ForEach(mattress => listBoxTypesList.Items.Add(mattress));
         }
 
         private void CreateDocument()

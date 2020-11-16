@@ -15,15 +15,5 @@ namespace EntityModels
 
         public override string ToString() => tableName;
 
-        public override bool Equals(object obj)
-        {
-            if (obj is Tables)
-            {
-                Tables objTable = (Tables)obj;
-                if (objTable.tableName.Equals(this.tableName))
-                    return true;
-            }
-            return false;
-        }
     }
 }

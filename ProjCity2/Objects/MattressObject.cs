@@ -408,16 +408,19 @@ namespace ProjCity2
 
         public override string ToString() => $"{Name}\nЗаказ: {OrderInfo} \nСтол:{TableName}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";
 
-        public override bool Equals(object obj)
-        {
-            if (obj is MattressObject)
-            {
-                MattressObject tempObj = (MattressObject)obj;
-                if (tempObj.Name.Equals(this.Name) & tempObj.Size.Equals(this.Size) & tempObj.OrderInfo.Equals(this.OrderInfo) & tempObj.TableName.Equals(this.TableName))
-                    return true;
-            }
-            return false;
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj is MattressObject)
+        //    {
+        //        MattressObject tempObj = (MattressObject)obj;
+        //        if (tempObj.Name.Equals(this.Name) & tempObj.Size.Equals(this.Size) & tempObj.OrderInfo.Equals(this.OrderInfo) & tempObj.TableName.Equals(this.TableName))
+        //            return true;
+        //    }
+        //    return false;
+        //}
+        public override bool Equals(object obj) => obj.GetHashCode().Equals(this.GetHashCode()) ? true : false;
+
+        public override int GetHashCode() => (OrderInfo.GetHashCode() * TableName.GetHashCode() * Name.GetHashCode() * Size.GetHashCode()) / 10000;
 
         #endregion
     }

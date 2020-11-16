@@ -21,27 +21,10 @@ namespace ProjCity2
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region Events Of Window.
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            using (PgContext context = new PgContext())
-            {
-                foreach (Mattresses mtrs in context.Mattresses)
-                    MattressesListInsert(mtrs);
-                foreach (Sizes size in context.Sizes)
-                    SizesCBInsert(size);
-                foreach (Series series in context.Series)
-                    SeriesCBInsert(series);
-                foreach (Tables table in context.Tables)
-                    TablesCBInsert(table);
-            }
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
         }
-        #endregion
 
         private void cmbSizes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
