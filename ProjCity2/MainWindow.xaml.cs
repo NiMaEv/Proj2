@@ -16,31 +16,41 @@ using EntityModels;
 
 namespace ProjCity2
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите выйти?", "Выход.", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result != MessageBoxResult.Yes)
+                e.Cancel = true;
         }
 
+        #region Events Of Input.
         private void cmbSizes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            txtCustomLenght.Clear();
+            txtCustomWidth.Clear();
         }
 
         private void LenghtOrWidth_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            cmbSizes.SelectedItem = null;
         }
 
         private void cmbSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            listBoxMattressList.Items.Clear();
+            using (PgContext context = new PgContext())
+                foreach (Mattresses mtrs in context.Mattresses)
+                {
+                    Series selectedSeries = (Series)cmbSeries.SelectedItem;
+                    if (selectedSeries.seriesId.Equals(mtrs.seriesId))
+                        listBoxMattressList.Items.Add(mtrs);
+                }
         }
+        #endregion
 
+        //Temp
         private void btnCheck_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -52,6 +62,7 @@ namespace ProjCity2
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        //Temp
 
         #region Events Of Adding.
         private void listBoxMattressList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -63,9 +74,9 @@ namespace ProjCity2
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                //txtCustomLenght.Clear();
-                //txtCustomWidth.Clear();
-                //txtNumbers.Clear();
+                txtCustomLenght.Clear();
+                txtCustomWidth.Clear();
+                txtNumbers.Clear();
             }
         }
 
@@ -78,21 +89,24 @@ namespace ProjCity2
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                //txtCustomLenght.Clear();
-                //txtCustomWidth.Clear();
-                //txtNumbers.Clear();
+                txtCustomLenght.Clear();
+                txtCustomWidth.Clear();
+                txtNumbers.Clear();
             }
         }
         #endregion
 
+        #region Events Of Function Buttons.
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-
+            EditWindow editWindow = new EditWindow(this, (MattressObjectV2)listBoxTypesList.SelectedItem);
+            editWindow.Show();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            globalTypesList.Remove((MattressObjectV2)listBoxTypesList.SelectedItem);
+            listBoxTypesList.Items.Remove(listBoxTypesList.SelectedItem);
         }
 
         private void btnPrint_Click(object sender, RoutedEventArgs e)
@@ -111,5 +125,6 @@ namespace ProjCity2
                 wordApp.CloseWord();
             }
         }
+        #endregion
     }
 }

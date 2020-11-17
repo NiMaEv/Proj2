@@ -22,6 +22,8 @@ namespace ProjCity2
         private string SizeForBlocks { get; }
         public int Numbers { get; }
 
+        public Mattresses Mattresses { get; }
+
         #region Dictionaryies.
         private Dictionary<string, Dictionary<string, int>> dictPolyurethaneSheet;
         private Dictionary<string, Dictionary<string, int>> dictPolyurethaneForPerimetr;
@@ -40,8 +42,6 @@ namespace ProjCity2
         public MattressObjectV2(string orderInfo, Tables table, Mattresses mattress, int? customLenght, int? customWidth, Sizes size, int numbers)
         {
             #region Initialize of Fields.
-            if (orderInfo.Length == 0)
-                throw new Exception("Поля кода или даты заказа не должны быть пусты.");
             OrderInfo = orderInfo;
             if (table == null)
                 throw new Exception("Не выбран стол сборки.");
@@ -49,6 +49,7 @@ namespace ProjCity2
             if (mattress == null)
                 throw new Exception("Не выбран матрас.");
             Name = mattress.mattressName;
+            Mattresses = mattress;
 
             if ((customLenght == null | customWidth == null) & size == null)
                 throw new Exception("Данные о размере не верны.");
@@ -84,8 +85,6 @@ namespace ProjCity2
                         string xLenght = $"{lenght}";
                         string yLenght = $"{width - (perimetr.reinforcmentMaterialWidth * 2)}";
                         dictPolyurethaneForPerimetr = new Dictionary<string, Dictionary<string, int>>();
-
-                        dictPolyurethaneForPerimetr = new Dictionary<string, Dictionary<string, int>>();
                         if (perimetr.reinforcmentBlockMaterialName != null)
                         {
                             SizeForBlocks = $"{lenght - perimetr.reinforcmentMaterialWidth * 2}*{width - perimetr.reinforcmentMaterialWidth * 2}";
@@ -110,7 +109,7 @@ namespace ProjCity2
                             SizeForBlocks = SizeForComponents = $"{lenght - perimetr.reinforcmentMaterialWidth * 2}*{width - perimetr.reinforcmentMaterialWidth * 2}";
 
                             Dictionary<string, int> tempDict = new Dictionary<string, int>() { { perimetr.reinforcmentMattressMaterialName +
-                                    "h=" + GetMattressHeight(mattress) / 10, Numbers * 2} };
+                                    " h=" + GetMattressHeight(mattress) / 10, Numbers * 2} };
                             dictPolyurethaneForPerimetr.Add(xLenght, tempDict);
                             dictPolyurethaneForPerimetr.Add(yLenght, tempDict);
                         }

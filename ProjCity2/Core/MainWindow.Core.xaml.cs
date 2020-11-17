@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 using EntityModels;
-using ProjCity2.Objects;
 
 namespace ProjCity2
 {
     public partial class MainWindow
     {
         private WordApp wordApp;
-
         private List<MattressObjectV2> globalTypesList;
 
         #region Fields of Main Order: 3D-Dictionaries (Order Id str/( Composition str/( Size str/ Numbers)))
@@ -74,6 +72,9 @@ namespace ProjCity2
         #region Methods.
         private void AddMattressObject()
         {
+            if (txtOrderId.Text.Length == 0 | txtDateOfOrder.Text.Length == 0)
+                throw new Exception("Поля кода или даты заказа не должны быть пусты.");
+
             int tempNumbers = 1;
             if (txtNumbers.Text.Length != 0)
                 tempNumbers = Convert.ToInt32(txtNumbers.Text);
@@ -82,7 +83,6 @@ namespace ProjCity2
                 txtNumbers.Clear();
                 throw new Exception("Недопустимое значение (Ноль).");
             }
-                
 
             int? tempLenght = null, tempWidth = null;
             if (txtCustomLenght.Text.Length != 0 & txtCustomWidth.Text.Length != 0)
@@ -776,9 +776,12 @@ namespace ProjCity2
             txtCustomLenght.Clear();
             txtCustomWidth.Clear();
             txtNumbers.Clear();
+            txtOrderId.Clear();
+            txtDateOfOrder.Clear();
 
             listBoxMattressList.SelectedItem = null;
             cmbSizes.SelectedItem = null;
+            cmbTables.SelectedItem = null;
         }
         #endregion
     }
