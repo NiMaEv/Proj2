@@ -1,0 +1,63 @@
+﻿<Window x:Class="ProjCity2.EditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjCity2"
+        mc:Ignorable="d"
+        Title="EditWindow" Height="640" Width="450">
+    <StackPanel>
+        <Label Content="Текущий оъект" FontSize="20"/>
+        <StackPanel Margin="15,0">
+            <Label Name="lbOrderInfo" Content="Заказ: " FontSize="17"/>
+            <Label Name="lbTableName" Content="Стол: " FontSize="17"/>
+            <Label Name="lbMattressName" Content="Наименование: " FontSize="17"/>
+            <Label Name="lbSize" Content="Размер: " FontSize="17"/>
+            <Label Name="lbNumbers" Content="Количество: " FontSize="17"/>
+        </StackPanel>
+        <Separator/>
+        <Label Content="Новый объект" FontSize="20"/>
+        <StackPanel Margin="15,0">
+            <Label Content="Заказ: " FontSize="17"/>
+            <DockPanel Margin="10,0">
+                <Label Content="Выбрать: " FontSize="17"/>
+                <ComboBox Name="cmbOrders" HorizontalAlignment="Left" Width="170" Height="22" SelectionChanged="cmbOrders_SelectionChanged"/>
+            </DockPanel>
+            <DockPanel Margin="10,0">
+                <Label Content="Новый: " FontSize="17"/>
+                <TextBox x:Name="txtOrderId" HorizontalAlignment="Left" Width="150" Height="22" TextChanged="txtOrderIdOrtxtDateOfOrder_TextChanged"/>
+                <TextBox x:Name="txtDateOfOrder" HorizontalAlignment="Left" Margin="10,0" Width="120" Height="22" TextChanged="txtOrderIdOrtxtDateOfOrder_TextChanged"/>
+            </DockPanel>
+            <DockPanel>
+                <Label Content="Стол: " FontSize="17"/>
+                <ComboBox Name="cmbTables" HorizontalAlignment="Left" Width="135" Height="22"/>
+            </DockPanel>
+            <Label Content="Размер: " FontSize="17"/>
+            <StackPanel Margin="10,0">
+                <DockPanel>
+                    <Label Content="Выбрать: " FontSize="17"/>
+                    <ComboBox Name="cmbSizes" HorizontalAlignment="Left" Width="135" Height="22" SelectionChanged="cmbSizes_SelectionChanged"/>
+                </DockPanel>
+                <StackPanel>
+                    <Label Content="Новый:" FontSize="17"/>
+                    <DockPanel Margin="10,0">
+                        <Label Content="Длинна: " FontSize="17"/>
+                        <TextBox x:Name="txtCustomLenght" HorizontalAlignment="Left" Width="100" Height="22" TextChanged="txtCustomLenghtOrtxtCustomWidth_TextChanged"/>
+                    </DockPanel>
+                    <DockPanel Margin="10,0">
+                        <Label Content="Ширина: " FontSize="17"/>
+                        <TextBox x:Name="txtCustomWidth" HorizontalAlignment="Left" Width="100" Height="22" TextChanged="txtCustomLenghtOrtxtCustomWidth_TextChanged"/>
+                    </DockPanel>
+                </StackPanel>
+                <DockPanel>
+                    <Label Content="Количество: " FontSize="17"/>
+                    <TextBox x:Name="txtNumbers" HorizontalAlignment="Left" Width="100" Height="22"/>
+                </DockPanel>
+            </StackPanel>
+        </StackPanel>
+        <DockPanel Margin="10,0">
+            <Button x:Name="btnCancel" Content="Отмена" HorizontalAlignment="Left" Width="210" Height="27" FontSize="17" Background="White" Click="btnCancel_Click"/>
+            <Button x:Name="btnAccept" Content="Принять" HorizontalAlignment="Right" Width="210" Height="27" FontSize="17" Background="White" Click="btnAccept_Click"/>
+        </DockPanel>
+    </StackPanel>
+</Window>

@@ -70,43 +70,57 @@ namespace ProjCity2
         }
 
         #region Methods.
+
+        #region Core Methods.
         private void AddMattressObject()
         {
-            if (txtOrderId.Text.Length == 0 | txtDateOfOrder.Text.Length == 0)
+            if ((txtOrderId.Text.Length == 0 | txtDateOfOrder.Text.Length == 0) | (txtOrderId.Text.Length == 0 & txtDateOfOrder.Text.Length == 0))
                 throw new Exception("Поля кода или даты заказа не должны быть пусты.");
+            if (cmbTables.SelectedItem == null)
+                throw new Exception("Не выбран стол сборки.");
+            if(listBoxMattressList.SelectedItem == null)
+                throw new Exception("Не выбран матрас.");
+            string tempTableName = cmbTables.SelectedItem.ToString();
 
             int tempNumbers = 1;
             if (txtNumbers.Text.Length != 0)
                 tempNumbers = Convert.ToInt32(txtNumbers.Text);
-            if (tempNumbers == 0)
-            {
-                txtNumbers.Clear();
-                throw new Exception("Недопустимое значение (Ноль).");
-            }
 
-            int? tempLenght = null, tempWidth = null;
-            if (txtCustomLenght.Text.Length != 0 & txtCustomWidth.Text.Length != 0)
+            int tempLenght = 0, tempWidth = 0;
+            if (cmbSizes.SelectedItem == null | (txtCustomLenght.Text.Length == 0 & txtCustomWidth.Text.Length == 0))
             {
-                tempLenght = Convert.ToInt32(txtCustomLenght.Text);
-                tempWidth = Convert.ToInt32(txtCustomWidth.Text);
+                if ((txtCustomLenght.Text.Length == 0 | txtCustomWidth.Text.Length == 0) & cmbSizes.SelectedItem == null)
+                    throw new Exception("Не указана длинна или ширина матраса.");
+                if (cmbSizes.SelectedItem != null)
+                {
+                    Sizes tempSize = (Sizes)cmbSizes.SelectedItem;
+                    tempLenght = tempSize.lenght;
+                    tempWidth = tempSize.width;
+                }
+                if (txtCustomLenght.Text.Length != 0 & txtCustomWidth.Text.Length != 0)
+                {
+                    tempLenght = Convert.ToInt32(txtCustomLenght.Text);
+                    tempWidth = Convert.ToInt32(txtCustomWidth.Text);
+                } 
             }
+            else
+                throw new Exception("Отсутствуют данные о размере.");
 
             if (globalTypesList == null)
                 globalTypesList = new List<MattressObjectV2>();
 
-            MattressObjectV2 tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, (Sizes)cmbSizes.SelectedItem, tempNumbers);
+            MattressObjectV2 tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, tempTableName, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, tempNumbers);
 
             if (globalTypesList.Contains(tempMattressObject))
             {
                 tempNumbers += globalTypesList.Find(mattress => mattress.Equals(tempMattressObject)).Numbers;
                 globalTypesList.Remove(tempMattressObject);
-                tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, (Tables)cmbTables.SelectedItem, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, (Sizes)cmbSizes.SelectedItem, tempNumbers);
+                listBoxTypesList.Items.Remove(tempMattressObject);
+                tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, tempTableName, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, tempNumbers);
             }
 
             globalTypesList.Add(tempMattressObject);
-
-            listBoxTypesList.Items.Clear();
-            globalTypesList.ForEach(mattress => listBoxTypesList.Items.Add(mattress));
+            listBoxTypesList.Items.Add(tempMattressObject);
         }
 
         private void CreateDocument()
@@ -783,6 +797,36 @@ namespace ProjCity2
             cmbSizes.SelectedItem = null;
             cmbTables.SelectedItem = null;
         }
+        #endregion
+
+        #region Methds For Edit Objects.
+        public List<string> GetOrdersList()
+        {
+            List<string> listForReturn = new List<string>();
+            foreach (var obj in globalTypesList)
+                if (!listForReturn.Contains(obj.OrderInfo))
+                    listForReturn.Add(obj.OrderInfo);
+            return listForReturn;
+        }
+
+        public void RemoveGlobalTypesListObject(MattressObjectV2 objForRemove)
+        {
+            globalTypesList.Remove(objForRemove);
+            listBoxTypesList.Items.Remove(objForRemove);
+        }
+
+        public void AddObjectInGlobalTypesList(MattressObjectV2 objForAdding)
+        {
+            if(globalTypesList.Contains(objForAdding))
+            {
+                globalTypesList.Remove(objForAdding);
+                listBoxTypesList.Items.Remove(objForAdding);
+            }
+            globalTypesList.Add(objForAdding);
+            listBoxTypesList.Items.Add(objForAdding);
+        }
+        #endregion
+
         #endregion
     }
 }

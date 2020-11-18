@@ -39,34 +39,26 @@ namespace ProjCity2
         private Dictionary<string, Dictionary<string, int>> dictNotStegCut;
         #endregion
 
-        public MattressObjectV2(string orderInfo, Tables table, Mattresses mattress, int? customLenght, int? customWidth, Sizes size, int numbers)
+        public MattressObjectV2(string orderInfo, string tableName, Mattresses mattress, int lenght, int width, int numbers)
         {
             #region Initialize of Fields.
-            OrderInfo = orderInfo;
-            if (table == null)
-                throw new Exception("Не выбран стол сборки.");
-            TableName = table.tableName;
-            if (mattress == null)
-                throw new Exception("Не выбран матрас.");
+            OrderInfo = orderInfo;     
+            TableName = tableName;
             Name = mattress.mattressName;
             Mattresses = mattress;
 
-            if ((customLenght == null | customWidth == null) & size == null)
-                throw new Exception("Данные о размере не верны.");
-            if (size == null)
-            {
-                lenght = (int)customLenght;
-                width = (int)customWidth;
-            }
-            else
-            {
-                lenght = size.lenght;
-                width = size.width;
-            }
+            if (lenght < 1 | width < 1)
+                throw new Exception("Недопустимый размер.");
+            this.lenght = lenght;
+            this.width = width;
 
             SizeForBlocks = SizeForComponents = Size;
 
-            Numbers = numbers;
+            if (numbers > 0)
+                Numbers = numbers;
+            else
+                throw new Exception("Количество: недопустимое значение.");
+
             #endregion
 
             using (PgContext context = new PgContext())
@@ -453,6 +445,9 @@ namespace ProjCity2
         public Dictionary<string, Dictionary<string, int>> GetNotStegCutDictionary() => CopyDictionary(dictNotStegCut);
         public Dictionary<string, Dictionary<string, int>> GetBurletDictionary() => CopyDictionary(dictBurlet);
         #endregion
+
+        public int GetLenght() => lenght;
+        public int GetWidth() => width;
 
         #region Base Methods.
         public override string ToString() => $"{Name}\nЗаказ: {OrderInfo} \nСтол:{TableName}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";

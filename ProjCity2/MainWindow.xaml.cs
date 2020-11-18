@@ -32,10 +32,7 @@ namespace ProjCity2
             txtCustomWidth.Clear();
         }
 
-        private void LenghtOrWidth_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            cmbSizes.SelectedItem = null;
-        }
+        private void LenghtOrWidth_TextChanged(object sender, TextChangedEventArgs e) => cmbSizes.SelectedItem = null;
 
         private void cmbSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
