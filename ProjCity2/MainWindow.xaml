@@ -7,8 +7,7 @@
         mc:Ignorable="d"
        Title="MH Project"
         WindowStartupLocation="CenterScreen" Height="750" Width="1500"
-        WindowState="Maximized"
-        Closing="Window_Closing">
+        WindowState="Maximized">
     <DockPanel>
         <Grid Width="200" Background="#FF353535" DockPanel.Dock="Left">
             <StackPanel VerticalAlignment="Top">

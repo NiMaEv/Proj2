@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +19,6 @@ namespace ProjCity2
 {
     public partial class MainWindow : Window
     {
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            MessageBoxResult result = MessageBox.Show("Вы уверены, что хотите выйти?", "Выход.", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result != MessageBoxResult.Yes)
-                e.Cancel = true;
-        }
-
         #region Events Of Input.
         private void cmbSizes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -96,14 +90,24 @@ namespace ProjCity2
         #region Events Of Function Buttons.
         private void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-            EditWindow editWindow = new EditWindow(this, (MattressObjectV2)listBoxTypesList.SelectedItem);
-            editWindow.Show();
+            if (listBoxTypesList.SelectedItem != null)
+            {
+                EditWindow editWindow = new EditWindow(this, (MattressObjectV2)listBoxTypesList.SelectedItem);
+                editWindow.Show();
+            }
+            else
+                MessageBox.Show("Не выбран объект для изменения.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            globalTypesList.Remove((MattressObjectV2)listBoxTypesList.SelectedItem);
-            listBoxTypesList.Items.Remove(listBoxTypesList.SelectedItem);
+            if (listBoxTypesList.SelectedItem != null)
+            {
+                globalTypesList.Remove((MattressObjectV2)listBoxTypesList.SelectedItem);
+                listBoxTypesList.Items.Remove(listBoxTypesList.SelectedItem);
+            }
+            else
+                MessageBox.Show("Не выбран объект для удаления.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void btnPrint_Click(object sender, RoutedEventArgs e)

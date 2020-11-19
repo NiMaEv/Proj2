@@ -74,34 +74,37 @@ namespace ProjCity2
         #region Core Methods.
         private void AddMattressObject()
         {
-            if ((txtOrderId.Text.Length == 0 | txtDateOfOrder.Text.Length == 0) | (txtOrderId.Text.Length == 0 & txtDateOfOrder.Text.Length == 0))
+            if (!(txtOrderId.Text.Length > 0 & txtDateOfOrder.Text.Length > 0))
                 throw new Exception("Поля кода или даты заказа не должны быть пусты.");
             if (cmbTables.SelectedItem == null)
                 throw new Exception("Не выбран стол сборки.");
             if(listBoxMattressList.SelectedItem == null)
                 throw new Exception("Не выбран матрас.");
-            string tempTableName = cmbTables.SelectedItem.ToString();
+            string tableName = cmbTables.SelectedItem.ToString();
 
-            int tempNumbers = 1;
+            int numbers = 1;
             if (txtNumbers.Text.Length != 0)
-                tempNumbers = Convert.ToInt32(txtNumbers.Text);
+                numbers = Convert.ToInt32(txtNumbers.Text);
 
-            int tempLenght = 0, tempWidth = 0;
-            if (cmbSizes.SelectedItem == null | (txtCustomLenght.Text.Length == 0 & txtCustomWidth.Text.Length == 0))
-            {
-                if ((txtCustomLenght.Text.Length == 0 | txtCustomWidth.Text.Length == 0) & cmbSizes.SelectedItem == null)
-                    throw new Exception("Не указана длинна или ширина матраса.");
+            int lenght, width;
+            if (!(cmbSizes.SelectedItem == null & (txtCustomLenght.Text.Length == 0 & txtCustomWidth.Text.Length == 0)))
+            {       
                 if (cmbSizes.SelectedItem != null)
                 {
                     Sizes tempSize = (Sizes)cmbSizes.SelectedItem;
-                    tempLenght = tempSize.lenght;
-                    tempWidth = tempSize.width;
+                    lenght = tempSize.lenght;
+                    width = tempSize.width;
                 }
-                if (txtCustomLenght.Text.Length != 0 & txtCustomWidth.Text.Length != 0)
+                else
                 {
-                    tempLenght = Convert.ToInt32(txtCustomLenght.Text);
-                    tempWidth = Convert.ToInt32(txtCustomWidth.Text);
-                } 
+                    if (txtCustomLenght.Text.Length != 0 & txtCustomWidth.Text.Length != 0)
+                    {
+                        lenght = Convert.ToInt32(txtCustomLenght.Text);
+                        width = Convert.ToInt32(txtCustomWidth.Text);
+                    }
+                    else
+                        throw new Exception("Не указана длинна или ширина матраса.");
+                }  
             }
             else
                 throw new Exception("Отсутствуют данные о размере.");
@@ -109,14 +112,14 @@ namespace ProjCity2
             if (globalTypesList == null)
                 globalTypesList = new List<MattressObjectV2>();
 
-            MattressObjectV2 tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, tempTableName, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, tempNumbers);
+            MattressObjectV2 tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, tableName, (Mattresses)listBoxMattressList.SelectedItem, lenght, width, numbers);
 
             if (globalTypesList.Contains(tempMattressObject))
             {
-                tempNumbers += globalTypesList.Find(mattress => mattress.Equals(tempMattressObject)).Numbers;
+                numbers += globalTypesList.Find(mattress => mattress.Equals(tempMattressObject)).Numbers;
                 globalTypesList.Remove(tempMattressObject);
                 listBoxTypesList.Items.Remove(tempMattressObject);
-                tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, tempTableName, (Mattresses)listBoxMattressList.SelectedItem, tempLenght, tempWidth, tempNumbers);
+                tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, tableName, (Mattresses)listBoxMattressList.SelectedItem, lenght, width, numbers);
             }
 
             globalTypesList.Add(tempMattressObject);
@@ -268,7 +271,7 @@ namespace ProjCity2
 
                     if (!globalPolyurethaneForPerimetrsDictionary3D.ContainsKey(obj.OrderInfo))
                     {
-                        globalPolyurethaneForPerimetrsDictionary3D.Add(obj.OrderInfo, obj.GetPolyurethaneForPerimetrDictionary()); //obj.GetPolyurethaneForPerimetrDictionary();
+                        globalPolyurethaneForPerimetrsDictionary3D.Add(obj.OrderInfo, obj.GetPolyurethaneForPerimetrDictionary());
 
                         globalPerimetrsMaterialsList3D.Add(obj.OrderInfo, new List<string> { });
                         foreach (var dict in tempPolyurethaneForPerimetrDict)
@@ -306,7 +309,7 @@ namespace ProjCity2
 
                     if (!globalPolyurethaneForPerimetrsDictionary4D.ContainsKey(obj.OrderInfo))
                     {
-                        globalPolyurethaneForPerimetrsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetPolyurethaneForPerimetrDictionary()} }); //obj.GetPolyurethaneForPerimetrDictionary();
+                        globalPolyurethaneForPerimetrsDictionary4D.Add(obj.OrderInfo, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { obj.TableName, obj.GetPolyurethaneForPerimetrDictionary()} });
 
                         globalPerimetrsMaterialsList4D.Add(obj.OrderInfo, new Dictionary<string, List<string>> { { obj.TableName, new List<string> { } } });
                         foreach (var dict in tempPolyurethaneForPerimetrDict)
@@ -318,7 +321,7 @@ namespace ProjCity2
                     {
                         if (!globalPolyurethaneForPerimetrsDictionary4D[obj.OrderInfo].ContainsKey(obj.TableName))
                         {
-                            globalPolyurethaneForPerimetrsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetPolyurethaneForPerimetrDictionary()); //obj.GetPolyurethaneForPerimetrDictionary();
+                            globalPolyurethaneForPerimetrsDictionary4D[obj.OrderInfo].Add(obj.TableName, obj.GetPolyurethaneForPerimetrDictionary());
 
                             globalPerimetrsMaterialsList4D[obj.OrderInfo].Add(obj.TableName, new List<string> { });
                             foreach (var dict in tempPolyurethaneForPerimetrDict)
