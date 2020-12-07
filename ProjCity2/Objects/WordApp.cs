@@ -7,7 +7,7 @@ using Microsoft.Office.Interop.Word;
 
 namespace ProjCity2
 {
-    public class WordApp
+    public sealed class WordApp
     {
         private Application wordApp;
         private DocumentObjectV2 documentForPrint;

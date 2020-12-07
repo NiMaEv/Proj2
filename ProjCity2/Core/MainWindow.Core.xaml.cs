@@ -116,7 +116,7 @@ namespace ProjCity2
 
             if (globalTypesList.Contains(tempMattressObject))
             {
-                numbers += globalTypesList.Find(mattress => mattress.Equals(tempMattressObject)).Numbers;
+                numbers += globalTypesList.Find(mattress => mattress == tempMattressObject).Numbers;
                 globalTypesList.Remove(tempMattressObject);
                 listBoxTypesList.Items.Remove(tempMattressObject);
                 tempMattressObject = new MattressObjectV2(txtOrderId.Text + " : " + txtDateOfOrder.Text, tableName, (Mattresses)listBoxMattressList.SelectedItem, lenght, width, numbers);

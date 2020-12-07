@@ -9,7 +9,7 @@ using EntityModels;
 
 namespace ProjCity2
 {
-    public class MattressObjectV2
+    public sealed class MattressObjectV2
     {
         public string OrderInfo { get; } //Attribut 
         public string TableName { get; } //Attribut
@@ -160,6 +160,7 @@ namespace ProjCity2
                 }
                 #endregion
 
+                // composition + (MattressName) 
                 #region Inserting in Dictionaries of Cuts.
                 Cuts mainCut = context.Cuts.Find(mattress.cutId);
                 if (mainCut.topSideCompositionId == null & mainCut.botSideCompositionId == null & mainCut.cutCase == null)
@@ -239,6 +240,8 @@ namespace ProjCity2
                         DistributeDictionary(dictNotStegCut);
                         dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut, Size);
                         break;
+                    default:
+                        throw new Exception($"Неверный формат записи:Cuts/sectorName. cutId({mainCut.cutId})");
                 }
                 #endregion
 
@@ -246,6 +249,7 @@ namespace ProjCity2
                 if (mattress.burletId != null)
                 {
                     Burlets burlet = context.Burlets.Find(mattress.burletId);
+                    // + perimetr composition. + (MattressName)
                     dictBurlet = new Dictionary<string, Dictionary<string, int>>();
                     dictBurlet.Add(burlet.composition, new Dictionary<string, int>() { { Size, Numbers } });
                 }
@@ -452,13 +456,13 @@ namespace ProjCity2
         #region Base Methods.
         public override string ToString() => $"{Name}\nЗаказ: {OrderInfo} \nСтол:{TableName}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";
 
-        public override bool Equals(object obj) => obj.GetHashCode().Equals(this.GetHashCode()) ? true : false;
+        public override bool Equals(object obj) => obj == null ? false : GetHashCode() == obj.GetHashCode();
+
+        public static bool operator ==(MattressObjectV2 mtrsObj1, MattressObjectV2 mtrsObj2) => mtrsObj1.Equals(mtrsObj2);
+        public static bool operator !=(MattressObjectV2 mtrsObj1, MattressObjectV2 mtrsObj2) => !mtrsObj1.Equals(mtrsObj2);
 
         public override int GetHashCode() => (OrderInfo.GetHashCode() * TableName.GetHashCode() * Name.GetHashCode() * Size.GetHashCode()) / 10000;
         #endregion
-
         #endregion
     }
 }
-
-

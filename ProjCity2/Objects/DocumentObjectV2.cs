@@ -7,7 +7,7 @@ using Microsoft.Office.Interop.Word;
 
 namespace ProjCity2
 {
-    public class DocumentObjectV2
+    public sealed class DocumentObjectV2
     {
         public Document document { get; }
 

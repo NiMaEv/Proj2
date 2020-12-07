@@ -10,77 +10,64 @@ namespace EntityModels
     {
         public override string ToString()
         {
-            string tempStr = null;
+            string statusStr = null;
 
             using (PgContext context = new PgContext())
             {
-                tempStr += $"{mattressName}\n";
-                tempStr += $"Линия: {context.Series.Find(seriesId).seriesName}\n";
+                statusStr += $"{mattressName}\n";
+                statusStr += $"Линия: {context.Series.Find(seriesId).seriesName}\n";
 
-                if (context.MtrsCompositions.Find(compositionId).blockId != null)
+                MtrsCompositions composition = context.MtrsCompositions.Find(compositionId);
+                statusStr += "Состав: ";
+                if (composition.blockId != null)
+                    statusStr += $"Блок: {context.Blocks.Find(composition.blockId).blockName}";
+                if (composition.additionalBlockId != null)
+                    statusStr += $", {context.Blocks.Find(composition.additionalBlockId).blockName}";
+                if (composition.generalComposition != null)
+                    statusStr += $"\n{composition.generalComposition};";
+                if (composition.topSideCompositionId != null & composition.botSideCompositionId != null)
                 {
-                    tempStr += $"Состав: Блок {context.Blocks.Find(context.MtrsCompositions.Find(compositionId).blockId).blockName}";
-                    if (context.MtrsCompositions.Find(compositionId).additionalBlockId != null)
-                        tempStr += $" + {context.Blocks.Find(context.MtrsCompositions.Find(compositionId).additionalBlockId).blockName}";
-                    tempStr += "\n";
-                }
-                else
-                    tempStr += "Состав: ";
-
-                if (context.MtrsCompositions.Find(compositionId).topSideCompositionId != null && context.MtrsCompositions.Find(compositionId).botSideCompositionId != null)
-                {
-                    if (context.MtrsCompositions.Find(compositionId).topSideCompositionId == context.MtrsCompositions.Find(compositionId).botSideCompositionId)
-                    {
-                        if (context.MtrsCompositions.Find(compositionId).generalComposition != null)
-                            tempStr += $"Блок: {context.MtrsCompositions.Find(compositionId).generalComposition}\n";
-                        tempStr += $"2 стороны: {context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(compositionId).topSideCompositionId).composition}\n";
-                    }
+                    if (composition.topSideCompositionId == composition.botSideCompositionId)
+                        statusStr += $"\n2 стороны: {context.MtrsCompositionSides.Find(composition.topSideCompositionId).composition}";
                     else
-                    {
-                        tempStr += $"1 сторона: {context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(compositionId).topSideCompositionId).composition}\n";
-                        if (context.MtrsCompositions.Find(compositionId).generalComposition != null)
-                            tempStr += $"{context.MtrsCompositions.Find(compositionId).generalComposition}\n";
-                        tempStr += $"2 сторона: {context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(compositionId).botSideCompositionId).composition}\n";
-                    }
+                        statusStr += $"\n1 сторона: {context.MtrsCompositionSides.Find(composition.topSideCompositionId).composition}" +
+                            $"\n2 сторона: {context.MtrsCompositionSides.Find(composition.botSideCompositionId).composition}";
                 }
-                else
-                    tempStr += $"{context.MtrsCompositions.Find(compositionId).generalComposition}\n";
 
-                if (context.Cuts.Find(cutId).desciption != null)
-                    tempStr += $"Крой({context.Cuts.Find(cutId).desciption}): ";
-                else
-                    tempStr += "Крой: ";
-
-                if (context.Cuts.Find(cutId).cutCase != null)
-                    tempStr += $"1.{context.Cuts.Find(cutId).cutCase} 2.";
-
-                if (context.Cuts.Find(cutId).topSideCompositionId == context.Cuts.Find(cutId).botSideCompositionId)
-                    tempStr += $"2 стороны: {context.CutCompositionSides.Find(context.Cuts.Find(cutId).topSideCompositionId).composition}\n";
-                else
-                    tempStr += $"1 сторона: {context.CutCompositionSides.Find(context.Cuts.Find(cutId).topSideCompositionId).composition}\n2 сторона: {context.CutCompositionSides.Find(context.Cuts.Find(cutId).botSideCompositionId).composition}\n";
+                Cuts cut = context.Cuts.Find(cutId);
+                statusStr += "\nКрой: ";
+                if (cut.cutCase != null)
+                    statusStr += $"Чехол: {cut.cutCase}";
+                if (cut.topSideCompositionId != null & cut.botSideCompositionId != null)
+                {
+                    if (cut.topSideCompositionId == cut.botSideCompositionId)
+                        statusStr += $"2 стороны: {context.CutCompositionSides.Find(cut.topSideCompositionId).composition}";
+                    else
+                        statusStr += $"1 сторона: {context.CutCompositionSides.Find(cut.topSideCompositionId).composition}" +
+                            $"\n2 сторона: {context.CutCompositionSides.Find(cut.botSideCompositionId).composition}";
+                }
 
                 if (burletId != null)
                 {
-                    tempStr += $"Бурлет: {context.Burlets.Find(burletId).composition} ";
-                    if (context.Burlets.Find(burletId).description != null)
-                        tempStr += $"({context.Burlets.Find(burletId).description})\n";
-                    else
-                        tempStr += "\n";
+                    Burlets burlet = context.Burlets.Find(burletId);
+                    statusStr += $"\nБурлет: {burlet.composition}";
+                    if (burlet.description != null)
+                        statusStr += $" ({burlet.description})";
                 }
 
                 if (perimetrId != null)
                 {
-                    tempStr += "Периметр: ";
-                    if (context.Perimetrs.Find(perimetrId).reinforcmentMattressMaterialName != null)
-                        tempStr += $"{context.Perimetrs.Find(perimetrId).reinforcmentMattressMaterialName}";
-                    if (context.Perimetrs.Find(perimetrId).reinforcmentBlockMaterialName != null)
-                        tempStr += $"{context.Perimetrs.Find(perimetrId).reinforcmentBlockMaterialName}";
-                    tempStr += $"/{context.Perimetrs.Find(perimetrId).composition}";
+                    statusStr += "\nПериметр: ";
+                    Perimetrs perimetr = context.Perimetrs.Find(perimetrId);
+                    statusStr += perimetr.reinforcmentMattressMaterialName;
+                    statusStr += perimetr.reinforcmentBlockMaterialName;
+                    if (perimetr.composition != null)
+                        statusStr += $"/{perimetr.composition}";
                 }
-                tempStr += $"\n*********************************************************************************************************************************************************************";
-
-                return tempStr;
             }
+            statusStr += "\n*********************************************************************************************************************************************************************";
+
+            return statusStr;
         }
     }
 }
