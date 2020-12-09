@@ -16,6 +16,53 @@ namespace ProjCity2
         private object tableDefaultBehavior = WdDefaultTableBehavior.wdWord9TableBehavior;
         private object tableAutoFitBehavior = WdAutoFitBehavior.wdAutoFitWindow;
 
+        #region Creating Main Order Document.
+        public DocumentObjectV2(Application wordApp, List<string> globalOrdersList,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalPolyurethaneSheetsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalPolyurethaneForPerimetrsDictionary3D,
+            Dictionary<string, List<string>> globalPerimetrsMaterialsList3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalMainCompositionsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBlocksDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalUltrCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalNotStegCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBurletsDictionary3D)
+        {
+            docObj = System.Reflection.Missing.Value;
+            document = wordApp.Documents.Add(ref docObj, ref docObj, ref docObj, ref docObj);
+
+            foreach (string orderId in globalOrdersList)
+            {
+                if (globalPolyurethaneSheetsDictionary3D.ContainsKey(orderId))
+                {
+                    if (globalOrdersList.First().Equals(orderId))
+                        CreatePage(orderId, "Листы ППУ", globalPolyurethaneSheetsDictionary3D[orderId], false);
+                    else
+                        CreatePage(orderId, "Листы ППУ", globalPolyurethaneForPerimetrsDictionary3D[orderId], true);
+                }
+                if (globalPolyurethaneForPerimetrsDictionary3D.ContainsKey(orderId) & globalPerimetrsMaterialsList3D.ContainsKey(orderId))
+                    if (globalPolyurethaneForPerimetrsDictionary3D[orderId].Count != 0 & globalPerimetrsMaterialsList3D[orderId].Count != 0)
+                        CreatePage(orderId, globalPerimetrsMaterialsList3D[orderId], globalPolyurethaneForPerimetrsDictionary3D[orderId]);
+                if (globalMainCompositionsDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Составы", globalMainCompositionsDictionary3D[orderId], true);
+                if (globalBlocksDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Пружинные блоки", globalBlocksDictionary3D[orderId], true);
+                if (globalUltrCutsDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Крой(Ультразвук)", globalUltrCutsDictionary3D[orderId], true);
+                if (globalV16CutsDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Крой(V16)", globalV16CutsDictionary3D[orderId], true);
+                if (globalKaterCutsDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Крой(Катерман)", globalKaterCutsDictionary3D[orderId], true);
+                if (globalNotStegCutsDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Крой(Не стегается)", globalNotStegCutsDictionary3D[orderId], true);
+                if (globalBurletsDictionary3D.ContainsKey(orderId))
+                    CreatePage(orderId, "Бурлеты", globalBurletsDictionary3D[orderId], true);
+            }
+        }
+        #endregion
+
+        #region Creating Total Order Document.
         public DocumentObjectV2(Application wordApp,
             List<string> globalOrdersList,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalPolyurethaneSheetsDictionary3D,
@@ -106,6 +153,7 @@ namespace ProjCity2
                             CreatePage(dict.Key + "\n" + item.Key, "Бурлеты", globalBurletsDictioneary4D[dict.Key][item.Key], true);
                 }
         }
+        #endregion
 
         private void CreatePage(string key, string sectionName, Dictionary<string, Dictionary<string, int>> mainDictionary, bool breakPage)
         {

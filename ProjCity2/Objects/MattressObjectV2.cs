@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using EntityModels;
+using DictionaryExtensions;
 
 namespace ProjCity2
 {
@@ -346,7 +347,7 @@ namespace ProjCity2
         private Dictionary<string, Dictionary<string, int>> DictionaryClear(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, Dictionary<string, int>> dictionaryOfItemForDelete, string size)
         {
             Dictionary<string, Dictionary<string, int>> returnedDictionary = new Dictionary<string, Dictionary<string, int>>();
-            Dictionary<string, Dictionary<string, int>> tempDictionary = CopyDictionary(currentDictionary);
+            Dictionary<string, Dictionary<string, int>> tempDictionary = currentDictionary.CopyDictionary();
 
             List<string> itemsList = new List<string>();
             string tempStr = null;
@@ -424,30 +425,42 @@ namespace ProjCity2
         }
 
         #region Methods of Gets Dictionaryies.
-        private Dictionary<string, Dictionary<string, int>> CopyDictionary(Dictionary<string, Dictionary<string, int>> dictionaryForCopy)
-        {
-            Dictionary<string, Dictionary<string, int>> tempDictionary = new Dictionary<string, Dictionary<string, int>>();
-            if (dictionaryForCopy != null)
-                foreach (var dict in dictionaryForCopy)
-                {
-                    Dictionary<string, int> tempInnerDictionary = new Dictionary<string, int>();
-                    foreach (var item in dict.Value)
-                        tempInnerDictionary.Add(item.Key, item.Value);
+        //private Dictionary<string, Dictionary<string, int>> CopyDictionary(Dictionary<string, Dictionary<string, int>> dictionaryForCopy)
+        //{
+        //    Dictionary<string, Dictionary<string, int>> tempDictionary = new Dictionary<string, Dictionary<string, int>>();
+        //    if (dictionaryForCopy != null)
+        //        foreach (var dict in dictionaryForCopy)
+        //        {
+        //            Dictionary<string, int> tempInnerDictionary = new Dictionary<string, int>();
+        //            foreach (var item in dict.Value)
+        //                tempInnerDictionary.Add(item.Key, item.Value);
 
-                    tempDictionary.Add(dict.Key, tempInnerDictionary);
-                }
-            return tempDictionary;
-        }
+        //            tempDictionary.Add(dict.Key, tempInnerDictionary);
+        //        }
+        //    return tempDictionary;
+        //}
 
-        public Dictionary<string, Dictionary<string, int>> GetPolyurethaneSheetsDictionary() => CopyDictionary(dictPolyurethaneSheet);
-        public Dictionary<string, Dictionary<string, int>> GetPolyurethaneForPerimetrDictionary() => CopyDictionary(dictPolyurethaneForPerimetr);
-        public Dictionary<string, Dictionary<string, int>> GetMainCompositionDictionary() => CopyDictionary(dictMainComposition);
-        public Dictionary<string, Dictionary<string, int>> GetBlocksDictionary() => CopyDictionary(dictBlocks);
-        public Dictionary<string, Dictionary<string, int>> GetUltrCutDictionary() => CopyDictionary(dictUltrCut);
-        public Dictionary<string, Dictionary<string, int>> GetV16CutDictionary() => CopyDictionary(dictV16Cut);
-        public Dictionary<string, Dictionary<string, int>> GetKaterCutDictionary() => CopyDictionary(dictKaterCut);
-        public Dictionary<string, Dictionary<string, int>> GetNotStegCutDictionary() => CopyDictionary(dictNotStegCut);
-        public Dictionary<string, Dictionary<string, int>> GetBurletDictionary() => CopyDictionary(dictBurlet);
+        public Dictionary<string, Dictionary<string, int>> GetPolyurethaneSheetsDictionary() => dictPolyurethaneSheet.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetPolyurethaneForPerimetrDictionary() => dictPolyurethaneForPerimetr.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetMainCompositionDictionary() => dictMainComposition.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetBlocksDictionary() => dictBlocks.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetUltrCutDictionary() => dictUltrCut.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetV16CutDictionary() => dictV16Cut.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetKaterCutDictionary() => dictKaterCut.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetNotStegCutDictionary() => dictNotStegCut.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetBurletDictionary() => dictBurlet.CopyDictionary();
+
+        #region Methods of Gets Counts
+        public int GetCountOfPolyurethaneSheetDictionary() => dictPolyurethaneSheet == null ? 0 : dictPolyurethaneSheet.Count;
+        public int GetCountOfPolyurethaneForPerimetrDictionary() => dictPolyurethaneForPerimetr == null ? 0 : dictPolyurethaneForPerimetr.Count;
+        public int GetCountOfMainCompositionDictionary() => dictMainComposition == null ? 0 : dictMainComposition.Count;
+        public int GetCountOfBlockDictionary() => dictBlocks == null ? 0 : dictBlocks.Count;
+        public int GetCountOfUltrCutDictionary() => dictUltrCut == null ? 0 : dictUltrCut.Count;
+        public int GetCountOfV16CutDictionary() => dictV16Cut == null ? 0 : dictV16Cut.Count;
+        public int GetCountOfKaterCutDictionary() => dictKaterCut == null ? 0 : dictKaterCut.Count;
+        public int GetCountOfNotStegCutDictionry() => dictNotStegCut == null ? 0 : dictNotStegCut.Count;
+        public int GetCountOfBurletDictionary() => dictBurlet == null ? 0 : dictBurlet.Count;
+        #endregion
         #endregion
 
         public int GetLenght() => lenght;

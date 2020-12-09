@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 using EntityModels;
+using DictionaryExtensions;
 
 namespace ProjCity2
 {
@@ -126,7 +127,7 @@ namespace ProjCity2
             listBoxTypesList.Items.Add(tempMattressObject);
         }
 
-        private void CreateDocument()
+        private void CreateTotalOrderDocument()
         {
             #region Initialized Dictionaries.
             if (globalOrdersList == null)
@@ -786,6 +787,68 @@ namespace ProjCity2
 
             globalBurletsDictionary3D.Clear();
             globalBurletsDictionary4D.Clear();
+            #endregion
+
+            listBoxTypesList.Items.Clear();
+
+            txtCustomLenght.Clear();
+            txtCustomWidth.Clear();
+            txtNumbers.Clear();
+            txtOrderId.Clear();
+            txtDateOfOrder.Clear();
+
+            listBoxMattressList.SelectedItem = null;
+            cmbSizes.SelectedItem = null;
+            cmbTables.SelectedItem = null;
+        }
+        
+        private void CreateMainOrderDocument()
+        {
+            if (globalOrdersList == null)
+                globalOrdersList = new List<string>();
+
+            foreach(var obj in globalTypesList)
+            {
+                if (!globalOrdersList.Contains(obj.OrderInfo))
+                    globalOrdersList.Add(obj.OrderInfo);
+
+                if (obj.GetCountOfPolyurethaneSheetDictionary() != 0)
+                    globalPolyurethaneSheetsDictionary3D.Unite(obj.OrderInfo, obj.GetPolyurethaneSheetsDictionary());
+                //Perimetr
+                if (obj.GetCountOfMainCompositionDictionary() != 0)
+                    globalMainCompositionsDictionary3D.Unite(obj.OrderInfo, obj.GetMainCompositionDictionary());
+                if (obj.GetCountOfBlockDictionary() != 0)
+                    globalBlocksDictionary3D.Unite(obj.OrderInfo, obj.GetBlocksDictionary());
+                #region Inserting Cuts Dictionaries.
+                if (obj.GetCountOfUltrCutDictionary() != 0)
+                    globalUltrCutsDictionary3D.Unite(obj.OrderInfo, obj.GetUltrCutDictionary());
+                if (obj.GetCountOfV16CutDictionary() != 0)
+                    globalV16CutsDictionary3D.Unite(obj.OrderInfo, obj.GetV16CutDictionary());
+                if (obj.GetCountOfKaterCutDictionary() != 0)
+                    globalKaterCutsDictionary3D.Unite(obj.OrderInfo, obj.GetKaterCutDictionary());
+                if (obj.GetCountOfNotStegCutDictionry() != 0)
+                    globalNotStegCutsDictionary3D.Unite(obj.OrderInfo, obj.GetNotStegCutDictionary());
+                #endregion
+                if (obj.GetCountOfBurletDictionary() != 0)
+                    globalBurletsDictionary3D.Unite(obj.OrderInfo, obj.GetBurletDictionary());
+            }
+            wordApp = new WordApp();
+            wordApp.AddDocument(globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D, globalPerimetrsMaterialsList3D,
+                globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D,
+                globalNotStegCutsDictionary3D, globalBurletsDictionary3D);
+
+            #region Dictionaries Clearing.
+            globalTypesList.Clear();
+            globalPolyurethaneSheetsDictionary3D.Clear();
+            globalPolyurethaneForPerimetrsDictionary3D.Clear();
+            globalMainCompositionsDictionary3D.Clear();
+            #region Cuts Dictionaries.
+            globalUltrCutsDictionary3D.Clear();
+            globalV16CutsDictionary3D.Clear();
+            globalKaterCutsDictionary3D.Clear();
+            globalNotStegCutsDictionary3D.Clear();
+            #endregion
+            globalBurletsDictionary3D.Clear();
             #endregion
 
             listBoxTypesList.Items.Clear();

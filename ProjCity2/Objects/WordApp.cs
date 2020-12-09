@@ -29,6 +29,23 @@ namespace ProjCity2
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalNotStegCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBurletsDictionary3D)
+        {
+            documentForPrint = new DocumentObjectV2(wordApp, globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D,
+                globalPerimetrsMaterialsList3D, globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D,
+                globalNotStegCutsDictionary3D, globalBurletsDictionary3D);
+        }
+
+        public void AddDocument(List<string> globalOrdersList,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalPolyurethaneSheetsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalPolyurethaneForPerimetrsDictionary3D,
+            Dictionary<string, List<string>> globalPerimetrsMaterialsList3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalMainCompositionsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBlocksDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalUltrCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalNotStegCutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBurletsDictionary3D,
 
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalMattressesDictionary4D,
