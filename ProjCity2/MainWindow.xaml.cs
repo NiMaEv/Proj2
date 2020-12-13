@@ -46,7 +46,7 @@ namespace ProjCity2
         {
             try
             {
-                CreateDocument();
+                CreateTotalOrderDocument();
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace ProjCity2
         {
             try
             {
-                CreateDocument();
+                CreateTotalOrderDocument();
                 wordApp.Print();
             }
             catch (Exception ex)

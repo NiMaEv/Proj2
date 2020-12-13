@@ -121,7 +121,8 @@ namespace ProjCity2
                 if (GetPolyurethaneSheetsDictionary(tempCompositionStr).Count != 0)
                 {
                     dictPolyurethaneSheet = new Dictionary<string, Dictionary<string, int>>();
-                    UnitDictionaries(dictPolyurethaneSheet, GetPolyurethaneSheetsDictionary(tempCompositionStr), SizeForComponents);
+                    //UnitDictionaries(dictPolyurethaneSheet, GetPolyurethaneSheetsDictionary(tempCompositionStr), SizeForComponents);
+                    dictPolyurethaneSheet.Unite(SizeForComponents, GetPolyurethaneSheetsDictionary(tempCompositionStr), Numbers);
                 }
                 #endregion
 
@@ -191,7 +192,8 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictUltrCut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictUltrCut, Size);
+                        //dictMainComposition = DictionaryClear(dictMainComposition, dictUltrCut, Size);
+                        dictMainComposition.RemoveMatches(dictUltrCut, Size);
                         break;
                     case "V-16":
                         dictV16Cut = new Dictionary<string, Dictionary<string, int>>();
@@ -207,7 +209,8 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictV16Cut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictV16Cut, Size);
+                        //dictMainComposition = DictionaryClear(dictMainComposition, dictV16Cut, Size);
+                        dictMainComposition.RemoveMatches(dictV16Cut, Size);
                         break;
                     case "Катерман":
                         dictKaterCut = new Dictionary<string, Dictionary<string, int>>();
@@ -223,7 +226,8 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictKaterCut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictKaterCut, Size);
+                        //dictMainComposition = DictionaryClear(dictMainComposition, dictKaterCut, Size);
+                        dictMainComposition.RemoveMatches(dictKaterCut, Size);
                         break;
                     case "Не стегается":
                         dictNotStegCut = new Dictionary<string, Dictionary<string, int>>();
@@ -239,7 +243,8 @@ namespace ProjCity2
                         }
                         //Case (Cuts/cutCase).
                         DistributeDictionary(dictNotStegCut);
-                        dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut, Size);
+                        //dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut, Size);
+                        dictMainComposition.RemoveMatches(dictNotStegCut, Size);
                         break;
                     default:
                         throw new Exception($"Неверный формат записи:Cuts/sectorName. cutId({mainCut.cutId})");
@@ -257,7 +262,8 @@ namespace ProjCity2
                 #endregion
 
                 if (dictPolyurethaneSheet != null)
-                    dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet, SizeForComponents);
+                    dictMainComposition.RemoveMatches(dictPolyurethaneSheet, SizeForComponents);
+                    //dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet, SizeForComponents);
             }
         }
 
@@ -292,6 +298,7 @@ namespace ProjCity2
             return tempDictionary;
         }
 
+        //-
         private void UnitDictionaries(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, int> additionalDictionary, string size)
         {
             foreach(var item in additionalDictionary)
@@ -343,7 +350,8 @@ namespace ProjCity2
 
             return height;
         }
-
+        
+        //-
         private Dictionary<string, Dictionary<string, int>> DictionaryClear(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, Dictionary<string, int>> dictionaryOfItemForDelete, string size)
         {
             Dictionary<string, Dictionary<string, int>> returnedDictionary = new Dictionary<string, Dictionary<string, int>>();
@@ -425,21 +433,6 @@ namespace ProjCity2
         }
 
         #region Methods of Gets Dictionaryies.
-        //private Dictionary<string, Dictionary<string, int>> CopyDictionary(Dictionary<string, Dictionary<string, int>> dictionaryForCopy)
-        //{
-        //    Dictionary<string, Dictionary<string, int>> tempDictionary = new Dictionary<string, Dictionary<string, int>>();
-        //    if (dictionaryForCopy != null)
-        //        foreach (var dict in dictionaryForCopy)
-        //        {
-        //            Dictionary<string, int> tempInnerDictionary = new Dictionary<string, int>();
-        //            foreach (var item in dict.Value)
-        //                tempInnerDictionary.Add(item.Key, item.Value);
-
-        //            tempDictionary.Add(dict.Key, tempInnerDictionary);
-        //        }
-        //    return tempDictionary;
-        //}
-
         public Dictionary<string, Dictionary<string, int>> GetPolyurethaneSheetsDictionary() => dictPolyurethaneSheet.CopyDictionary();
         public Dictionary<string, Dictionary<string, int>> GetPolyurethaneForPerimetrDictionary() => dictPolyurethaneForPerimetr.CopyDictionary();
         public Dictionary<string, Dictionary<string, int>> GetMainCompositionDictionary() => dictMainComposition.CopyDictionary();
@@ -449,8 +442,7 @@ namespace ProjCity2
         public Dictionary<string, Dictionary<string, int>> GetKaterCutDictionary() => dictKaterCut.CopyDictionary();
         public Dictionary<string, Dictionary<string, int>> GetNotStegCutDictionary() => dictNotStegCut.CopyDictionary();
         public Dictionary<string, Dictionary<string, int>> GetBurletDictionary() => dictBurlet.CopyDictionary();
-
-        #region Methods of Gets Counts
+        #region Methods of Gets Counts.
         public int GetCountOfPolyurethaneSheetDictionary() => dictPolyurethaneSheet == null ? 0 : dictPolyurethaneSheet.Count;
         public int GetCountOfPolyurethaneForPerimetrDictionary() => dictPolyurethaneForPerimetr == null ? 0 : dictPolyurethaneForPerimetr.Count;
         public int GetCountOfMainCompositionDictionary() => dictMainComposition == null ? 0 : dictMainComposition.Count;

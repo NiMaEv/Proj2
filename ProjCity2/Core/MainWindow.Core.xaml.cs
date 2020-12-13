@@ -129,7 +129,7 @@ namespace ProjCity2
 
         private void CreateTotalOrderDocument()
         {
-            #region Initialized Dictionaries.
+            #region Initializing Dictionaries.
             if (globalOrdersList == null)
                 globalOrdersList = new List<string>();
 
@@ -804,6 +804,42 @@ namespace ProjCity2
         
         private void CreateMainOrderDocument()
         {
+            #region Initializing Dictionaries.
+            if (globalOrdersList == null)
+                globalOrdersList = new List<string>();
+
+            if (globalPolyurethaneSheetsDictionary3D == null)
+                globalPolyurethaneSheetsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            if (globalPolyurethaneForPerimetrsDictionary3D == null)
+                globalPolyurethaneForPerimetrsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            if (globalPerimetrsMaterialsList3D == null)
+                globalPerimetrsMaterialsList3D = new Dictionary<string, List<string>>();
+
+            if (globalMainCompositionsDictionary3D == null)
+                globalMainCompositionsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            if (globalBlocksDictionary3D == null)
+                globalBlocksDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            #region Cuts.
+            if (globalUltrCutsDictionary3D == null)
+                globalUltrCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            if (globalV16CutsDictionary3D == null)
+                globalV16CutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            if (globalKaterCutsDictionary3D == null)
+                globalKaterCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            if (globalNotStegCutsDictionary3D == null)
+                globalNotStegCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            #endregion
+
+            if (globalBurletsDictionary3D == null)
+                globalBurletsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            #endregion
+
             if (globalOrdersList == null)
                 globalOrdersList = new List<string>();
 
@@ -814,12 +850,56 @@ namespace ProjCity2
 
                 if (obj.GetCountOfPolyurethaneSheetDictionary() != 0)
                     globalPolyurethaneSheetsDictionary3D.Unite(obj.OrderInfo, obj.GetPolyurethaneSheetsDictionary());
-                //Perimetr
+                #region Inserting Perimetr Dictionary
+                if (obj.GetCountOfPolyurethaneForPerimetrDictionary() != 0)
+                {
+                    Dictionary<string, Dictionary<string, int>> tempPolyurethaneForPerimetrDict = obj.GetPolyurethaneForPerimetrDictionary();
+
+                    if (!globalPolyurethaneForPerimetrsDictionary3D.ContainsKey(obj.OrderInfo))
+                    {
+                        globalPolyurethaneForPerimetrsDictionary3D.Add(obj.OrderInfo, obj.GetPolyurethaneForPerimetrDictionary());
+
+                        globalPerimetrsMaterialsList3D.Add(obj.OrderInfo, new List<string> { });
+                        foreach (var dict in tempPolyurethaneForPerimetrDict)
+                            foreach (var item in dict.Value)
+                                if (!globalPerimetrsMaterialsList3D[obj.OrderInfo].Contains(item.Key))
+                                    globalPerimetrsMaterialsList3D[obj.OrderInfo].Add(item.Key);
+                    }
+                    else
+                    {
+                        foreach (var dict in tempPolyurethaneForPerimetrDict)
+                        {
+                            if (!globalPolyurethaneForPerimetrsDictionary3D[obj.OrderInfo].ContainsKey(dict.Key))
+                            {
+                                globalPolyurethaneForPerimetrsDictionary3D[obj.OrderInfo].Add(dict.Key, dict.Value.CopyDictionary());
+
+                                foreach (var item in dict.Value)
+                                    if (!globalPerimetrsMaterialsList3D[obj.OrderInfo].Contains(item.Key))
+                                        globalPerimetrsMaterialsList3D[obj.OrderInfo].Add(item.Key);
+                            }
+                            else
+                            {
+                                foreach (var item in dict.Value)
+                                {
+                                    if (!globalPerimetrsMaterialsList3D[obj.OrderInfo].Contains(item.Key))
+                                        globalPerimetrsMaterialsList3D[obj.OrderInfo].Add(item.Key);
+
+                                    if (!globalPolyurethaneForPerimetrsDictionary3D[obj.OrderInfo][dict.Key].ContainsKey(item.Key))
+                                        globalPolyurethaneForPerimetrsDictionary3D[obj.OrderInfo][dict.Key].Add(item.Key, item.Value);
+                                    else
+                                        globalPolyurethaneForPerimetrsDictionary3D[obj.OrderInfo][dict.Key][item.Key] += item.Value;
+                                }
+                            }
+                        }
+                    }
+                }
+                #endregion
                 if (obj.GetCountOfMainCompositionDictionary() != 0)
                     globalMainCompositionsDictionary3D.Unite(obj.OrderInfo, obj.GetMainCompositionDictionary());
                 if (obj.GetCountOfBlockDictionary() != 0)
                     globalBlocksDictionary3D.Unite(obj.OrderInfo, obj.GetBlocksDictionary());
                 #region Inserting Cuts Dictionaries.
+
                 if (obj.GetCountOfUltrCutDictionary() != 0)
                     globalUltrCutsDictionary3D.Unite(obj.OrderInfo, obj.GetUltrCutDictionary());
                 if (obj.GetCountOfV16CutDictionary() != 0)
@@ -828,6 +908,7 @@ namespace ProjCity2
                     globalKaterCutsDictionary3D.Unite(obj.OrderInfo, obj.GetKaterCutDictionary());
                 if (obj.GetCountOfNotStegCutDictionry() != 0)
                     globalNotStegCutsDictionary3D.Unite(obj.OrderInfo, obj.GetNotStegCutDictionary());
+
                 #endregion
                 if (obj.GetCountOfBurletDictionary() != 0)
                     globalBurletsDictionary3D.Unite(obj.OrderInfo, obj.GetBurletDictionary());
@@ -843,10 +924,12 @@ namespace ProjCity2
             globalPolyurethaneForPerimetrsDictionary3D.Clear();
             globalMainCompositionsDictionary3D.Clear();
             #region Cuts Dictionaries.
+
             globalUltrCutsDictionary3D.Clear();
             globalV16CutsDictionary3D.Clear();
             globalKaterCutsDictionary3D.Clear();
             globalNotStegCutsDictionary3D.Clear();
+
             #endregion
             globalBurletsDictionary3D.Clear();
             #endregion

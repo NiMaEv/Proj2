@@ -29,6 +29,23 @@ namespace DictionaryExtensions
         #endregion
 
         #region Methods Of Unite Dictionaries.
+        public static void Unite(this Dictionary<string, Dictionary<string, int>> currentDictionary,
+            string secondaryKey, Dictionary<string, int> additionalDictionary, int amount)
+        {
+            foreach(var item in additionalDictionary)
+            {
+                if (!currentDictionary.ContainsKey(item.Key))
+                    currentDictionary.Add(item.Key, new Dictionary<string, int> { { secondaryKey, item.Value } });
+                else
+                {
+                    if (!currentDictionary[item.Key].ContainsKey(secondaryKey))
+                        currentDictionary[item.Key].Add(secondaryKey, amount * 2);
+                    else
+                        currentDictionary[item.Key][secondaryKey] += item.Value;
+                }
+            }
+        }
+
         public static void Unite(this Dictionary<string, Dictionary<string, Dictionary<string, int>>> currentDictionary,
             string mainKey, Dictionary<string, Dictionary<string, int>> additionalDictionary)
         {
@@ -96,16 +113,22 @@ namespace DictionaryExtensions
                 StringBuilder sb = new StringBuilder(itemCD.Key);
                 foreach (var itemTD in targetDictionary)
                     sb.Replace(itemTD.Key, "");
-
-                sb.Replace("//", "/");
-                if (!currentDictionary.ContainsKey(sb.ToString()))
-                    currentDictionary.Add(sb.ToString(), itemCD.Value);
-                else
-                    currentDictionary[sb.ToString()][secondaryKey] += itemCD.Value[secondaryKey];
-
+                while (sb[0] == '/')
+                    sb.Remove(0, 1);
+                while (sb.ToString().Contains("//") | sb.ToString().Contains("/."))
+                {
+                    sb.Replace("//", "/");
+                    sb.Replace("/.", ".");
+                }
+                if (sb.Length > 2)
+                {
+                    if (!currentDictionary.ContainsKey(sb.ToString()))
+                        currentDictionary.Add(sb.ToString(), itemCD.Value);
+                    else
+                        currentDictionary[sb.ToString()][secondaryKey] += itemCD.Value[secondaryKey];
+                }
                 sb.Clear();
             } 
         }
-        //...
     }
 }
