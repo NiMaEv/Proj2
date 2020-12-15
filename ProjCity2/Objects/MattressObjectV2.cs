@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using EntityModels;
 using DictionaryExtensions;
+using DictionaryExtensions.Special;
 
 namespace ProjCity2
 {
@@ -111,18 +112,17 @@ namespace ProjCity2
                 #endregion
 
                 #region Inserting in dictPolyurethaneSheet.
-                string tempCompositionStr = null;
+                string mainCompositionStr = null;
                 if (mainComposition.generalComposition != null)
-                    tempCompositionStr += context.MtrsCompositions.Find(mainComposition.compositionId).generalComposition;
+                    mainCompositionStr += context.MtrsCompositions.Find(mainComposition.compositionId).generalComposition;
                 if (mainComposition.topSideCompositionId != null)
-                    tempCompositionStr += context.MtrsCompositionSides.Find(mainComposition.topSideCompositionId).composition;
+                    mainCompositionStr += context.MtrsCompositionSides.Find(mainComposition.topSideCompositionId).composition;
                 if (mainComposition.botSideCompositionId != null)
-                    tempCompositionStr += context.MtrsCompositionSides.Find(mainComposition.botSideCompositionId).composition;
-                if (GetPolyurethaneSheetsDictionary(tempCompositionStr).Count != 0)
+                    mainCompositionStr += context.MtrsCompositionSides.Find(mainComposition.botSideCompositionId).composition;
+                if (mainCompositionStr.GetDictionary("ППУ", Numbers).Count != 0)
                 {
                     dictPolyurethaneSheet = new Dictionary<string, Dictionary<string, int>>();
-                    //UnitDictionaries(dictPolyurethaneSheet, GetPolyurethaneSheetsDictionary(tempCompositionStr), SizeForComponents);
-                    dictPolyurethaneSheet.Unite(SizeForComponents, GetPolyurethaneSheetsDictionary(tempCompositionStr), Numbers);
+                    dictPolyurethaneSheet.Unite(SizeForComponents, mainCompositionStr.GetDictionary("ППУ", Numbers), Numbers);
                 }
                 #endregion
 
@@ -175,75 +175,35 @@ namespace ProjCity2
                     compositionOfTopSideCut = context.CutCompositionSides.Find(mainCut.topSideCompositionId);
                     compositionOfBotSideCut = context.CutCompositionSides.Find(mainCut.botSideCompositionId);
                 }
-
+                
                 switch (mainCut.sectorName)
                 {
                     case "Ультразвук":
                         dictUltrCut = new Dictionary<string, Dictionary<string, int>>();
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                        {
-                            if(mainCut.topSideCompositionId == mainCut.botSideCompositionId)
-                                dictUltrCut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
-                            else
-                            {
-                                dictUltrCut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                                dictUltrCut.Add(compositionOfBotSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                            }    
-                        }
+                            dictUltrCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
                         //Case (Cuts/cutCase).
-                        DistributeDictionary(dictUltrCut);
-                        //dictMainComposition = DictionaryClear(dictMainComposition, dictUltrCut, Size);
                         dictMainComposition.RemoveMatches(dictUltrCut, Size);
                         break;
                     case "V-16":
                         dictV16Cut = new Dictionary<string, Dictionary<string, int>>();
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                        {
-                            if (mainCut.topSideCompositionId == mainCut.botSideCompositionId)
-                                dictV16Cut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
-                            else
-                            {
-                                dictV16Cut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                                dictV16Cut.Add(compositionOfBotSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                            }
-                        }
+                            dictV16Cut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
                         //Case (Cuts/cutCase).
-                        DistributeDictionary(dictV16Cut);
-                        //dictMainComposition = DictionaryClear(dictMainComposition, dictV16Cut, Size);
                         dictMainComposition.RemoveMatches(dictV16Cut, Size);
                         break;
                     case "Катерман":
                         dictKaterCut = new Dictionary<string, Dictionary<string, int>>();
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                        {
-                            if (mainCut.topSideCompositionId == mainCut.botSideCompositionId)
-                                dictKaterCut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
-                            else
-                            {
-                                dictKaterCut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                                dictKaterCut.Add(compositionOfBotSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                            }
-                        }
+                            dictKaterCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
                         //Case (Cuts/cutCase).
-                        DistributeDictionary(dictKaterCut);
-                        //dictMainComposition = DictionaryClear(dictMainComposition, dictKaterCut, Size);
                         dictMainComposition.RemoveMatches(dictKaterCut, Size);
                         break;
                     case "Не стегается":
                         dictNotStegCut = new Dictionary<string, Dictionary<string, int>>();
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                        {
-                            if (mainCut.topSideCompositionId == mainCut.botSideCompositionId)
-                                dictNotStegCut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers * 2 } });
-                            else
-                            {
-                                dictNotStegCut.Add(compositionOfTopSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                                dictNotStegCut.Add(compositionOfBotSideCut.composition, new Dictionary<string, int>() { { Size, Numbers } });
-                            }
-                        }
+                            dictNotStegCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
                         //Case (Cuts/cutCase).
-                        DistributeDictionary(dictNotStegCut);
-                        //dictMainComposition = DictionaryClear(dictMainComposition, dictNotStegCut, Size);
                         dictMainComposition.RemoveMatches(dictNotStegCut, Size);
                         break;
                     default:
@@ -263,58 +223,10 @@ namespace ProjCity2
 
                 if (dictPolyurethaneSheet != null)
                     dictMainComposition.RemoveMatches(dictPolyurethaneSheet, SizeForComponents);
-                    //dictMainComposition = DictionaryClear(dictMainComposition, dictPolyurethaneSheet, SizeForComponents);
             }
         }
 
         #region Methods.
-        private Dictionary<string, int> GetPolyurethaneSheetsDictionary(string compositionStr)
-        {
-            Dictionary<string, int> tempDictionary = new Dictionary<string, int>();
-
-            using (PgContext context = new PgContext())
-            {
-                if (compositionStr != null)
-                {
-                    string tempStr = null;
-                    foreach (char i in compositionStr.ToArray())
-                    {
-                        if (i.ToString() != "/" && i.ToString() != ".")
-                            tempStr += i;
-                        else
-                        {
-                            if (context.Materials.Find(tempStr) != null && context.Materials.Find(tempStr).sectorName.Equals("ППУ"))
-                            {
-                                if (!tempDictionary.ContainsKey(tempStr))
-                                    tempDictionary.Add(tempStr, Numbers);
-                                else
-                                    tempDictionary[tempStr] += Numbers;
-                            }
-                            tempStr = null;
-                        }
-                    }
-                }
-            }
-            return tempDictionary;
-        }
-
-        //-
-        private void UnitDictionaries(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, int> additionalDictionary, string size)
-        {
-            foreach(var item in additionalDictionary)
-            {
-                if (!currentDictionary.ContainsKey(item.Key))
-                    currentDictionary.Add(item.Key, new Dictionary<string, int>() { { size, item.Value } });
-                else
-                {
-                    if (!currentDictionary[item.Key].ContainsKey(size))
-                        currentDictionary[item.Key].Add(size, Numbers * 2);
-                    else
-                        currentDictionary[item.Key][size] += item.Value;
-                }
-            }
-        }
-
         private int GetMattressHeight(Mattresses mattress)
         {
             int height = 0;
@@ -343,93 +255,12 @@ namespace ProjCity2
                     }
                 }
                 if (context.MtrsCompositions.Find(mattress.compositionId).blockId != null)
-                    height += (int)context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).blockId).blockHeight;
+                    height += context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).blockId).blockHeight;
                 if (context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId != null)
-                    height += (int)context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId).blockHeight;
+                    height += context.Blocks.Find(context.MtrsCompositions.Find(mattress.compositionId).additionalBlockId).blockHeight;
             }
 
             return height;
-        }
-        
-        //-
-        private Dictionary<string, Dictionary<string, int>> DictionaryClear(Dictionary<string, Dictionary<string, int>> currentDictionary, Dictionary<string, Dictionary<string, int>> dictionaryOfItemForDelete, string size)
-        {
-            Dictionary<string, Dictionary<string, int>> returnedDictionary = new Dictionary<string, Dictionary<string, int>>();
-            Dictionary<string, Dictionary<string, int>> tempDictionary = currentDictionary.CopyDictionary();
-
-            List<string> itemsList = new List<string>();
-            string tempStr = null;
-            string newStrOfComposition = null;
-
-            foreach(var item in tempDictionary)
-            {
-                foreach(char i in item.Key.ToArray())
-                {
-                    if (i.ToString() != "/" & i.ToString() != ".")
-                        tempStr += i;
-                    else
-                    {
-                        itemsList.Add(tempStr);
-                        tempStr = null;
-                    }
-                }
-
-                foreach (var item1 in dictionaryOfItemForDelete)
-                    while (itemsList.Contains(item1.Key))
-                        itemsList.Remove(item1.Key);
-
-                if(itemsList.Count == 0)
-                {
-                    tempDictionary.Remove(item.Key);
-                    break;
-                }
-
-                foreach (string str in itemsList)
-                    newStrOfComposition += str + "/";
-                itemsList.Clear();
-
-                char[] arr = newStrOfComposition.ToArray();
-                newStrOfComposition = null;
-
-                for (int i = 0; i <= arr.Length - 1; i++)
-                {
-                    if (i != arr.Length - 1)
-                        newStrOfComposition += arr[i];
-                    else
-                        newStrOfComposition += ".";
-                }
-
-                if (!returnedDictionary.ContainsKey(newStrOfComposition))
-                    returnedDictionary.Add(newStrOfComposition, item.Value);
-                else
-                    returnedDictionary[newStrOfComposition][size] += item.Value[size];
-
-                newStrOfComposition = null;
-            }
-            return returnedDictionary;
-        }
-
-        private void DistributeDictionary(Dictionary<string, Dictionary<string, int>> cutDict)
-        {
-            using (PgContext context = new PgContext())
-            {
-                foreach (var item in dictMainComposition)
-                    foreach (var itemIn in item.Value)
-                    {
-                        if (context.Materials.Find(item.Key) != null && context.Materials.Find(item.Key).sectorName.Equals("Крой"))
-                        {
-                            if (!cutDict.ContainsKey(item.Key))
-                                cutDict.Add(item.Key, item.Value);
-                            else
-                            {
-                                if (!cutDict[item.Key].ContainsKey(itemIn.Key))
-                                    cutDict[item.Key].Add(itemIn.Key, itemIn.Value);
-                                else
-                                    cutDict[item.Key][itemIn.Key] += itemIn.Value;
-                            }
-                        }
-                    }
-            }
         }
 
         #region Methods of Gets Dictionaryies.

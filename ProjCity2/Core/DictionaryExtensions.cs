@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EntityModels;
 
 namespace DictionaryExtensions
 {
-    public static class DictionaryExtensions
+    public static partial class DictionaryExtensions
     {
         #region Methods Of Copy Dictionaries.
         public static Dictionary<string, Dictionary<string, int>> CopyDictionary(this Dictionary<string, Dictionary<string, int>> currentDictionary)
@@ -129,6 +130,60 @@ namespace DictionaryExtensions
                 }
                 sb.Clear();
             } 
+        }
+    }
+}
+
+namespace DictionaryExtensions.Special
+{
+    public static partial class DictionaryExtensions
+    {
+        public static Dictionary<string, int> GetDictionary(this string compositionStr, string sectorNameStr, int number)
+        {
+            Dictionary<string, int> tempDictionary = new Dictionary<string, int>();
+
+            using (PgContext context = new PgContext())
+            {
+                if (compositionStr != null)
+                {
+                    string tempStr = null;
+                    foreach (char i in compositionStr.ToArray())
+                    {
+                        if (i.ToString() != "/" && i.ToString() != ".")
+                            tempStr += i;
+                        else
+                        {
+                            if (context.Materials.Find(tempStr) != null && context.Materials.Find(tempStr).sectorName.Equals(sectorNameStr))
+                            {
+                                if (!tempDictionary.ContainsKey(tempStr))
+                                    tempDictionary.Add(tempStr, number);
+                                else
+                                    tempDictionary[tempStr] += number;
+                            }
+                            tempStr = null;
+                        }
+                    }
+                }
+            }
+            return tempDictionary;
+        }
+
+        //Cuts Dictionary special.
+        public static void Insert(this Dictionary<string, Dictionary<string, int>> currentDictionary, string topCompositionStr, string botCompositionStr,
+            string mainCompositionStr, string size, int number)
+        {
+            if (topCompositionStr == botCompositionStr)
+                currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number * 2 } });
+            else
+            {
+                currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number } });
+                currentDictionary.Add(botCompositionStr, new Dictionary<string, int> { { size, number } });
+            }
+
+            Dictionary<string, int> tempDict = mainCompositionStr.GetDictionary("Крой", number);
+            if (tempDict.Count != 0)
+                foreach (var item in tempDict)
+                    currentDictionary.Add(item.Key, new Dictionary<string, int> { { size, number } });
         }
     }
 }
