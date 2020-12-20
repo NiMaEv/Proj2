@@ -172,13 +172,16 @@ namespace DictionaryExtensions.Special
         public static void Insert(this Dictionary<string, Dictionary<string, int>> currentDictionary, string topCompositionStr, string botCompositionStr,
             string mainCompositionStr, string size, int number)
         {
-            if (topCompositionStr == botCompositionStr)
-                currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number * 2 } });
-            else
+            if (topCompositionStr != null & botCompositionStr != null)
             {
-                currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number } });
-                currentDictionary.Add(botCompositionStr, new Dictionary<string, int> { { size, number } });
-            }
+                if (topCompositionStr == botCompositionStr)
+                    currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number * 2 } });
+                else
+                {
+                    currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number } });
+                    currentDictionary.Add(botCompositionStr, new Dictionary<string, int> { { size, number } });
+                }
+            }  
 
             Dictionary<string, int> tempDict = mainCompositionStr.GetDictionary("Крой", number);
             if (tempDict.Count != 0)

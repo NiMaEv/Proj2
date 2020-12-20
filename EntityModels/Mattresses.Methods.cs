@@ -24,7 +24,7 @@ namespace EntityModels
                 if (composition.additionalBlockId != null)
                     statusStr += $", {context.Blocks.Find(composition.additionalBlockId).blockName}";
                 if (composition.generalComposition != null)
-                    statusStr += $"\n{composition.generalComposition};";
+                    statusStr += $"\n{composition.generalComposition}";
                 if (composition.topSideCompositionId != null & composition.botSideCompositionId != null)
                 {
                     if (composition.topSideCompositionId == composition.botSideCompositionId)

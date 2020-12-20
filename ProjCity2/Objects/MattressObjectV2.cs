@@ -39,6 +39,11 @@ namespace ProjCity2
         private Dictionary<string, Dictionary<string, int>> dictKaterCut;
         private Dictionary<string, Dictionary<string, int>> dictV16Cut;
         private Dictionary<string, Dictionary<string, int>> dictNotStegCut;
+
+        private Dictionary<string, Dictionary<string, int>> dictUltrCover;
+        private Dictionary<string, Dictionary<string, int>> dictKaterCover;
+        private Dictionary<string, Dictionary<string, int>> dictV16Cover;
+        private Dictionary<string, Dictionary<string, int>> dictNotStegCover;
         #endregion
 
         public MattressObjectV2(string orderInfo, string tableName, Mattresses mattress, int lenght, int width, int numbers)
@@ -85,7 +90,7 @@ namespace ProjCity2
 
                             Blocks mainBlock = context.Blocks.Find(mainComposition.blockId);
                             Dictionary<string, int> tempDict = new Dictionary<string, int>() { { perimetr.reinforcmentBlockMaterialName +
-                                    "h=" + mainBlock.blockHeight / 10, Numbers * 2 } };
+                                    " h=" + mainBlock.blockHeight / 10, Numbers * 2 } };
                             dictPolyurethaneForPerimetr.Add(xLenght, tempDict);
                             dictPolyurethaneForPerimetr.Add(yLenght, tempDict);
 
@@ -93,9 +98,9 @@ namespace ProjCity2
                             {
                                 Blocks additionalBlock = context.Blocks.Find(mainComposition.additionalBlockId);
                                 dictPolyurethaneForPerimetr[xLenght].Add(perimetr.reinforcmentBlockMaterialName +
-                                    "h=" + additionalBlock.blockHeight / 10, Numbers * 2);
+                                    " h=" + additionalBlock.blockHeight / 10, Numbers * 2);
                                 dictPolyurethaneForPerimetr[yLenght].Add(perimetr.reinforcmentBlockMaterialName +
-                                    "h=" + additionalBlock.blockHeight / 10, Numbers * 2);
+                                    " h=" + additionalBlock.blockHeight / 10, Numbers * 2);
                             }
                         } 
                         if (perimetr.reinforcmentMattressMaterialName != null)
@@ -175,47 +180,66 @@ namespace ProjCity2
                     compositionOfTopSideCut = context.CutCompositionSides.Find(mainCut.topSideCompositionId);
                     compositionOfBotSideCut = context.CutCompositionSides.Find(mainCut.botSideCompositionId);
                 }
+                string compositionOfCover = null;
+                if (mainCut.cutCase != null)
+                    compositionOfCover = mainCut.cutCase;
                 
                 switch (mainCut.sectorName)
                 {
                     case "Ультразвук":
                         dictUltrCut = new Dictionary<string, Dictionary<string, int>>();
-                        if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                            dictUltrCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
-                        //Case (Cuts/cutCase).
+                        //if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
+                        dictUltrCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
+                        if (compositionOfCover != null)
+                        {
+                            dictUltrCover = new Dictionary<string, Dictionary<string, int>>();
+                            dictUltrCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                        }
                         dictMainComposition.RemoveMatches(dictUltrCut, Size);
                         break;
                     case "V-16":
                         dictV16Cut = new Dictionary<string, Dictionary<string, int>>();
-                        if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                            dictV16Cut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
-                        //Case (Cuts/cutCase).
+                        //if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
+                        dictV16Cut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
+                        if (compositionOfCover != null)
+                        {
+                            dictV16Cover = new Dictionary<string, Dictionary<string, int>>();
+                            dictV16Cover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                        }
                         dictMainComposition.RemoveMatches(dictV16Cut, Size);
                         break;
                     case "Катерман":
                         dictKaterCut = new Dictionary<string, Dictionary<string, int>>();
-                        if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                            dictKaterCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
-                        //Case (Cuts/cutCase).
+                        //if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
+                        dictKaterCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
+                        if (compositionOfCover != null)
+                        {
+                            dictKaterCover = new Dictionary<string, Dictionary<string, int>>();
+                            dictKaterCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                        }
                         dictMainComposition.RemoveMatches(dictKaterCut, Size);
                         break;
                     case "Не стегается":
                         dictNotStegCut = new Dictionary<string, Dictionary<string, int>>();
-                        if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
-                            dictNotStegCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
-                        //Case (Cuts/cutCase).
+                        //if (compositionOfTopSideCut != null & compositionOfBotSideCut != null)
+                        dictNotStegCut.Insert(compositionOfTopSideCut.composition, compositionOfBotSideCut.composition, mainCompositionStr, Size, Numbers);
+                        if (compositionOfCover != null)
+                        {
+                            dictNotStegCover = new Dictionary<string, Dictionary<string, int>>();
+                            dictNotStegCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                        }
                         dictMainComposition.RemoveMatches(dictNotStegCut, Size);
                         break;
                     default:
-                        throw new Exception($"Неверный формат записи:Cuts/sectorName. cutId({mainCut.cutId})");
+                        throw new Exception($"Неверный формат записи.\nCuts/sectorName. cutId({mainCut.cutId})");
                 }
                 #endregion
 
+                // + perimetr composition. + (MattressName)
                 #region Inserting in dictBurlet.
                 if (mattress.burletId != null)
                 {
-                    Burlets burlet = context.Burlets.Find(mattress.burletId);
-                    // + perimetr composition. + (MattressName)
+                    Burlets burlet = context.Burlets.Find(mattress.burletId);   
                     dictBurlet = new Dictionary<string, Dictionary<string, int>>();
                     dictBurlet.Add(burlet.composition, new Dictionary<string, int>() { { Size, Numbers } });
                 }
@@ -273,6 +297,10 @@ namespace ProjCity2
         public Dictionary<string, Dictionary<string, int>> GetKaterCutDictionary() => dictKaterCut.CopyDictionary();
         public Dictionary<string, Dictionary<string, int>> GetNotStegCutDictionary() => dictNotStegCut.CopyDictionary();
         public Dictionary<string, Dictionary<string, int>> GetBurletDictionary() => dictBurlet.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetUltrCoverDictionary() => dictUltrCover.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetV16CoverDictionary() => dictV16Cover.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetKaterCoverDictionary() => dictKaterCover.CopyDictionary();
+        public Dictionary<string, Dictionary<string, int>> GetNotStegCoverDictionary() => dictNotStegCover.CopyDictionary();
         #region Methods of Gets Counts.
         public int GetCountOfPolyurethaneSheetDictionary() => dictPolyurethaneSheet == null ? 0 : dictPolyurethaneSheet.Count;
         public int GetCountOfPolyurethaneForPerimetrDictionary() => dictPolyurethaneForPerimetr == null ? 0 : dictPolyurethaneForPerimetr.Count;
@@ -283,6 +311,10 @@ namespace ProjCity2
         public int GetCountOfKaterCutDictionary() => dictKaterCut == null ? 0 : dictKaterCut.Count;
         public int GetCountOfNotStegCutDictionry() => dictNotStegCut == null ? 0 : dictNotStegCut.Count;
         public int GetCountOfBurletDictionary() => dictBurlet == null ? 0 : dictBurlet.Count;
+        public int GetCountOfUltrCoverDictionary() => dictUltrCover == null ? 0 : dictUltrCover.Count;
+        public int GetCountOfV16CoverDictionary() => dictV16Cover == null ? 0 : dictV16Cover.Count;
+        public int GetCountOfKaterCoverDictionary() => dictKaterCover == null ? 0 : dictKaterCover.Count;
+        public int GetCountOfNotStegCoverDictionary() => dictNotStegCover == null ? 0 : dictNotStegCover.Count;
         #endregion
         #endregion
 
