@@ -87,63 +87,35 @@ namespace ProjCity2
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalKaterCutsDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalNotStegCutsDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalBurletsDictioneary4D)
+            : this(wordApp, globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D,
+                globalPerimetrsMaterialsList3D, globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D,
+                globalNotStegCutsDictionary3D, globalBurletsDictionary3D)
         {
-            docObj = System.Reflection.Missing.Value;
-            document = wordApp.Documents.Add(ref docObj, ref docObj, ref docObj, ref docObj);
-
-            foreach (string orderId in globalOrdersList)
-            {
-                if (globalPolyurethaneSheetsDictionary3D.ContainsKey(orderId))
-                {
-                    if (globalOrdersList.First().Equals(orderId))
-                        CreatePage(orderId, "Листы ППУ", globalPolyurethaneSheetsDictionary3D[orderId], false);
-                    else
-                        CreatePage(orderId, "Листы ППУ", globalPolyurethaneForPerimetrsDictionary3D[orderId], true);
-                }
-                if (globalPolyurethaneForPerimetrsDictionary3D.ContainsKey(orderId) & globalPerimetrsMaterialsList3D.ContainsKey(orderId))
-                    if (globalPolyurethaneForPerimetrsDictionary3D[orderId].Count != 0 & globalPerimetrsMaterialsList3D[orderId].Count != 0)
-                        CreatePage(orderId, globalPerimetrsMaterialsList3D[orderId], globalPolyurethaneForPerimetrsDictionary3D[orderId]);
-                if (globalMainCompositionsDictionary3D.ContainsKey(orderId))
-                    CreatePage(orderId, "Составы", globalMainCompositionsDictionary3D[orderId], true);
-                if (globalBlocksDictionary3D.ContainsKey(orderId))
-                    CreatePage(orderId, "Пружинные блоки", globalBlocksDictionary3D[orderId], true);
-                if (globalUltrCutsDictionary3D.ContainsKey(orderId))
-                    CreatePage(orderId, "Крой(Ультразвук)", globalUltrCutsDictionary3D[orderId], true);
-                if (globalV16CutsDictionary3D.ContainsKey(orderId))
-                    CreatePage(orderId, "Крой(V16)", globalV16CutsDictionary3D[orderId], true);
-                if (globalKaterCutsDictionary3D.ContainsKey(orderId))
-                    CreatePage(orderId, "Крой(Катерман)", globalKaterCutsDictionary3D[orderId], true);
-                if (globalNotStegCutsDictionary3D.ContainsKey(orderId))
-                    CreatePage(orderId, "Крой(Не стегается)", globalNotStegCutsDictionary3D[orderId], true);
-                if (globalBurletsDictionary3D.ContainsKey(orderId))
-                    CreatePage(orderId, "Бурлеты", globalBurletsDictionary3D[orderId], true);
-            }
-
             foreach (var dict in globalMattressesDictionary4D)
-                foreach(var item in dict.Value)
+                foreach (var item in dict.Value)
                 {
                     CreatePage(dict.Key + "\n" + item.Key, "Матрасы", globalMattressesDictionary4D[dict.Key][item.Key], true);
                     if (globalPolyurethaneSheetsDictionary4D.ContainsKey(dict.Key))
-                        if(globalPolyurethaneSheetsDictionary4D[dict.Key].ContainsKey(item.Key))
+                        if (globalPolyurethaneSheetsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Листы ППУ", globalPolyurethaneSheetsDictionary4D[dict.Key][item.Key], true);
                     if (globalPolyurethaneForPerimetrsDictionary4D.ContainsKey(dict.Key) & globalPerimetrsMaterialsList4D.ContainsKey(dict.Key))
                         if (globalPolyurethaneForPerimetrsDictionary4D[dict.Key].ContainsKey(item.Key) & globalPerimetrsMaterialsList4D[dict.Key].ContainsKey(item.Key))
                             if (globalPolyurethaneForPerimetrsDictionary4D[dict.Key][item.Key].Count != 0 & globalPerimetrsMaterialsList4D[dict.Key][item.Key].Count != 0)
                                 CreatePage(dict.Key + "\n" + item.Key, globalPerimetrsMaterialsList4D[dict.Key][item.Key], globalPolyurethaneForPerimetrsDictionary4D[dict.Key][item.Key]);
                     if (globalMainCompositionsDictionary4D.ContainsKey(dict.Key))
-                        if(globalMainCompositionsDictionary4D[dict.Key].ContainsKey(item.Key))
+                        if (globalMainCompositionsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Составы", globalMainCompositionsDictionary4D[dict.Key][item.Key], true);
                     if (globalBlocksDictionary4D.ContainsKey(dict.Key))
                         if (globalBlocksDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Пружинные блоки", globalBlocksDictionary4D[dict.Key][item.Key], true);
                     if (globalUltrCutsDictionary4D.ContainsKey(dict.Key))
-                        if(globalUltrCutsDictionary4D[dict.Key].ContainsKey(item.Key))
+                        if (globalUltrCutsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Крой(Ультразвук)", globalUltrCutsDictionary4D[dict.Key][item.Key], true);
                     if (globalV16CutsDictionary4D.ContainsKey(dict.Key))
-                        if(globalV16CutsDictionary4D[dict.Key].ContainsKey(item.Key))
+                        if (globalV16CutsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Крой(V16)", globalV16CutsDictionary4D[dict.Key][item.Key], true);
                     if (globalKaterCutsDictionary4D.ContainsKey(dict.Key))
-                        if(globalKaterCutsDictionary4D[dict.Key].ContainsKey(item.Key))
+                        if (globalKaterCutsDictionary4D[dict.Key].ContainsKey(item.Key))
                             CreatePage(dict.Key + "\n" + item.Key, "Крой(Катерман)", globalKaterCutsDictionary4D[dict.Key][item.Key], true);
                     if (globalNotStegCutsDictionary4D.ContainsKey(dict.Key))
                         if (globalNotStegCutsDictionary4D[dict.Key].ContainsKey(item.Key))

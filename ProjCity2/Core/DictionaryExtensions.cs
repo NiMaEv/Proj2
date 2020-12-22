@@ -31,7 +31,7 @@ namespace DictionaryExtensions
 
         #region Methods Of Unite Dictionaries.
         public static void Unite(this Dictionary<string, Dictionary<string, int>> currentDictionary,
-            string secondaryKey, Dictionary<string, int> additionalDictionary, int amount)
+            string secondaryKey, Dictionary<string, int> additionalDictionary)
         {
             foreach(var item in additionalDictionary)
             {
@@ -40,7 +40,7 @@ namespace DictionaryExtensions
                 else
                 {
                     if (!currentDictionary[item.Key].ContainsKey(secondaryKey))
-                        currentDictionary[item.Key].Add(secondaryKey, amount * 2);
+                        currentDictionary[item.Key].Add(secondaryKey, item.Value);
                     else
                         currentDictionary[item.Key][secondaryKey] += item.Value;
                 }
@@ -168,9 +168,16 @@ namespace DictionaryExtensions.Special
             return tempDictionary;
         }
 
+        public static void Update(this Dictionary<string, Dictionary<string, int>> currentDictionary, int exValue, int newValue)
+        {
+            foreach (var item in currentDictionary)
+                foreach (var innerItem in item.Value)
+                    currentDictionary[item.Key][innerItem.Key] = innerItem.Value / exValue * newValue;
+        }
+
         //Cuts Dictionary special.
         public static void Insert(this Dictionary<string, Dictionary<string, int>> currentDictionary, string topCompositionStr, string botCompositionStr,
-            string mainCompositionStr, string size, int number)
+            string mainCompositionStr, string size, int number) // + Mattress Name(mattressName)
         {
             if (topCompositionStr != null & botCompositionStr != null)
             {
@@ -178,15 +185,15 @@ namespace DictionaryExtensions.Special
                     currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number * 2 } });
                 else
                 {
-                    currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number } });
-                    currentDictionary.Add(botCompositionStr, new Dictionary<string, int> { { size, number } });
+                    currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number } }); //topCompositionStr + $" ({mattressName})"
+                    currentDictionary.Add(botCompositionStr, new Dictionary<string, int> { { size, number } }); //botCompositionStr + $" ({mattressName})"
                 }
             }  
 
             Dictionary<string, int> tempDict = mainCompositionStr.GetDictionary("Крой", number);
             if (tempDict.Count != 0)
                 foreach (var item in tempDict)
-                    currentDictionary.Add(item.Key, new Dictionary<string, int> { { size, number } });
+                    currentDictionary.Add(item.Key, new Dictionary<string, int> { { size, item.Value } });
         }
     }
 }

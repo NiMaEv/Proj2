@@ -13,6 +13,7 @@ namespace ProjCity2
 {
     public partial class MainWindow
     {
+        private Action CreateDocument;
         private WordApp wordApp;
         private List<MattressObjectV2> globalTypesList;
 
@@ -78,6 +79,36 @@ namespace ProjCity2
                 foreach (Tables table in context.Tables)
                     cmbTables.Items.Add(table);
             }
+
+            #region Initializing Dictionaries.
+            globalOrdersList = new List<string>();
+
+            globalPolyurethaneSheetsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            globalPolyurethaneForPerimetrsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalPerimetrsMaterialsList3D = new Dictionary<string, List<string>>();
+
+            globalMainCompositionsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalBlocksDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+
+            #region Cuts.
+            globalUltrCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalV16CutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalKaterCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalNotStegCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            #endregion
+
+            #region Covers.
+            globalUltrCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalV16CoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalKaterCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            globalNotStegCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            #endregion
+
+            globalBurletsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
+            #endregion
+
+            CreateDocument = CreateTotalOrderDocument;
         }
 
         #region Methods.
@@ -87,11 +118,13 @@ namespace ProjCity2
         {
             if (!(txtOrderId.Text.Length > 0 & txtDateOfOrder.Text.Length > 0))
                 throw new Exception("Поля кода или даты заказа не должны быть пусты.");
-            if (cmbTables.SelectedItem == null)
-                throw new Exception("Не выбран стол сборки.");
+            //if (cmbTables.SelectedItem == null)
+            //    throw new Exception("Не выбран стол сборки.");
             if(listBoxMattressList.SelectedItem == null)
                 throw new Exception("Не выбран матрас.");
-            string tableName = cmbTables.SelectedItem.ToString();
+            string tableName = null;
+            if (cmbTables.SelectedItem != null)
+                tableName = cmbTables.SelectedItem.ToString();
 
             int numbers = 1;
             if (txtNumbers.Text.Length != 0)
@@ -140,83 +173,44 @@ namespace ProjCity2
         private void CreateTotalOrderDocument()
         {
             #region Initializing Dictionaries.
-            if (globalOrdersList == null)
-                globalOrdersList = new List<string>();
-
             if (globalMattressesDictionary4D == null)
                 globalMattressesDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
 
-            if (globalPolyurethaneSheetsDictionary3D == null)
-                globalPolyurethaneSheetsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalPolyurethaneSheetsDictionary4D == null)
                 globalPolyurethaneSheetsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
 
-            if (globalPolyurethaneForPerimetrsDictionary3D == null)
-                globalPolyurethaneForPerimetrsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalPolyurethaneForPerimetrsDictionary4D == null)
                 globalPolyurethaneForPerimetrsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalPerimetrsMaterialsList3D == null)
-                globalPerimetrsMaterialsList3D = new Dictionary<string, List<string>>();
             if (globalPerimetrsMaterialsList4D == null)
                 globalPerimetrsMaterialsList4D = new Dictionary<string, Dictionary<string, List<string>>>();
 
-            if (globalMainCompositionsDictionary3D == null)
-                globalMainCompositionsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalMainCompositionsDictionary4D == null)
                 globalMainCompositionsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalBlocksDictionary3D == null)
-                globalBlocksDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalBlocksDictionary4D == null)
                 globalBlocksDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
 
             #region Initailizing Cuts Dictionaries.
-            if (globalUltrCutsDictionary3D == null)
-                globalUltrCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalUltrCutsDictionary4D == null)
                 globalUltrCutsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalV16CutsDictionary3D == null)
-                globalV16CutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalV16CutsDictionary4D == null)
                 globalV16CutsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalKaterCutsDictionary3D == null)
-                globalKaterCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalKaterCutsDictionary4D == null)
                 globalKaterCutsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalNotStegCutsDictionary3D == null)
-                globalNotStegCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalNotStegCutsDictionary4D == null)
                 globalNotStegCutsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
             #endregion
 
             #region Initializing Covers Dictionaries.
-            if (globalUltrCoversDictionary3D == null)
-                globalUltrCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalUltrCoversDictionary4D == null)
                 globalUltrCoversDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalV16CoversDictionary3D == null)
-                globalV16CoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalV16CoversDictionary4D == null)
                 globalV16CoversDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalKaterCoversDictionary3D == null)
-                globalKaterCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalKaterCoversDictionary4D == null)
                 globalKaterCoversDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
-
-            if (globalNotStegCoversDictionary3D == null)
-                globalNotStegCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalNotStegCoversDictionary4D == null)
                 globalNotStegCoversDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
             #endregion
 
-            if (globalBurletsDictionary3D == null)
-                globalBurletsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
             if (globalBurletsDictionary4D == null)
                 globalBurletsDictionary4D = new Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>>();
             #endregion
@@ -386,7 +380,29 @@ namespace ProjCity2
                 #endregion
 
                 #region Covers Dictionaries.
-                //...
+                if (obj.GetCountOfUltrCoverDictionary() != 0)
+                {
+                    globalUltrCoversDictionary3D.Unite(obj.OrderInfo, obj.GetUltrCoverDictionary());
+                    globalUltrCoversDictionary4D.Unite(obj.OrderInfo, obj.TableName, obj.GetUltrCoverDictionary());
+                }
+
+                if (obj.GetCountOfV16CoverDictionary() != 0)
+                {
+                    globalV16CoversDictionary3D.Unite(obj.OrderInfo, obj.GetV16CoverDictionary());
+                    globalV16CoversDictionary4D.Unite(obj.OrderInfo, obj.TableName, obj.GetV16CoverDictionary());
+                }
+
+                if (obj.GetCountOfKaterCoverDictionary() != 0)
+                {
+                    globalKaterCoversDictionary3D.Unite(obj.OrderInfo, obj.GetKaterCoverDictionary());
+                    globalKaterCoversDictionary4D.Unite(obj.OrderInfo, obj.TableName, obj.GetKaterCoverDictionary());
+                }
+
+                if (obj.GetCountOfNotStegCoverDictionary() != 0)
+                {
+                    globalNotStegCoversDictionary3D.Unite(obj.OrderInfo, obj.GetNotStegCoverDictionary());
+                    globalNotStegCoversDictionary4D.Unite(obj.OrderInfo, obj.TableName, obj.GetNotStegCoverDictionary());
+                }
                 #endregion
 
                 if (obj.GetCountOfBurletDictionary() != 0)
@@ -429,6 +445,20 @@ namespace ProjCity2
             globalNotStegCutsDictionary4D.Clear();
             #endregion
 
+            #region Covers Dictionaries.
+            globalUltrCoversDictionary3D.Clear();
+            globalUltrCoversDictionary4D.Clear();
+
+            globalV16CoversDictionary3D.Clear();
+            globalV16CoversDictionary4D.Clear();
+
+            globalKaterCoversDictionary3D.Clear();
+            globalKaterCoversDictionary4D.Clear();
+
+            globalNotStegCoversDictionary3D.Clear();
+            globalNotStegCoversDictionary4D.Clear();
+            #endregion
+
             globalBurletsDictionary3D.Clear();
             globalBurletsDictionary4D.Clear();
             #endregion
@@ -447,60 +477,7 @@ namespace ProjCity2
         }
         
         private void CreateMainOrderDocument()
-        {
-            #region Initializing Dictionaries.
-            if (globalOrdersList == null)
-                globalOrdersList = new List<string>();
-
-            if (globalPolyurethaneSheetsDictionary3D == null)
-                globalPolyurethaneSheetsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalPolyurethaneForPerimetrsDictionary3D == null)
-                globalPolyurethaneForPerimetrsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-            if (globalPerimetrsMaterialsList3D == null)
-                globalPerimetrsMaterialsList3D = new Dictionary<string, List<string>>();
-
-            if (globalMainCompositionsDictionary3D == null)
-                globalMainCompositionsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalBlocksDictionary3D == null)
-                globalBlocksDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            #region Cuts.
-            if (globalUltrCutsDictionary3D == null)
-                globalUltrCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalV16CutsDictionary3D == null)
-                globalV16CutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalKaterCutsDictionary3D == null)
-                globalKaterCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalNotStegCutsDictionary3D == null)
-                globalNotStegCutsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-            #endregion
-
-            #region Covers.
-            if (globalUltrCoversDictionary3D == null)
-                globalUltrCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalV16CoversDictionary3D == null)
-                globalV16CoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalKaterCoversDictionary3D == null)
-                globalKaterCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-
-            if (globalNotStegCoversDictionary3D == null)
-                globalNotStegCoversDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-            #endregion
-
-            if (globalBurletsDictionary3D == null)
-                globalBurletsDictionary3D = new Dictionary<string, Dictionary<string, Dictionary<string, int>>>();
-            #endregion
-
-            if (globalOrdersList == null)
-                globalOrdersList = new List<string>();
-
+        { 
             foreach(var obj in globalTypesList)
             {
                 if (!globalOrdersList.Contains(obj.OrderInfo))
@@ -618,7 +595,10 @@ namespace ProjCity2
 
             listBoxMattressList.SelectedItem = null;
             cmbSizes.SelectedItem = null;
-            cmbTables.SelectedItem = null;
+
+            cmbTables.IsEnabled = true;
+            CreateDocument = CreateTotalOrderDocument;
+            
         }
         #endregion
 

@@ -46,7 +46,7 @@ namespace ProjCity2
         {
             try
             {
-                CreateTotalOrderDocument();
+                CreateDocument();
             }
             catch (Exception ex)
             {
@@ -73,10 +73,12 @@ namespace ProjCity2
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if(cmbTables.SelectedItem == null)
             {
-                AddMattressObject();
+                cmbTables.IsEnabled = false;
+                CreateDocument = CreateMainOrderDocument;
             }
+            try { AddMattressObject(); }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -114,7 +116,7 @@ namespace ProjCity2
         {
             try
             {
-                CreateTotalOrderDocument();
+                CreateDocument();
                 wordApp.Print();
             }
             catch (Exception ex)

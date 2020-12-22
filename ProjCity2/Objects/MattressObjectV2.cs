@@ -23,7 +23,6 @@ namespace ProjCity2
         private string SizeForComponents { get; }
         private string SizeForBlocks { get; }
         public int Numbers { get; }
-
         public Mattresses Mattresses { get; }
 
         #region Dictionaryies.
@@ -49,8 +48,9 @@ namespace ProjCity2
         public MattressObjectV2(string orderInfo, string tableName, Mattresses mattress, int lenght, int width, int numbers)
         {
             #region Initialize of Fields.
-            OrderInfo = orderInfo;     
-            TableName = tableName;
+            OrderInfo = orderInfo;
+            if (tableName != null)
+                TableName = tableName;
             Name = mattress.mattressName;
             Mattresses = mattress;
 
@@ -127,7 +127,7 @@ namespace ProjCity2
                 if (mainCompositionStr.GetDictionary("ППУ", Numbers).Count != 0)
                 {
                     dictPolyurethaneSheet = new Dictionary<string, Dictionary<string, int>>();
-                    dictPolyurethaneSheet.Unite(SizeForComponents, mainCompositionStr.GetDictionary("ППУ", Numbers), Numbers);
+                    dictPolyurethaneSheet.Unite(SizeForComponents, mainCompositionStr.GetDictionary("ППУ", Numbers));
                 }
                 #endregion
 
@@ -193,7 +193,7 @@ namespace ProjCity2
                         if (compositionOfCover != null)
                         {
                             dictUltrCover = new Dictionary<string, Dictionary<string, int>>();
-                            dictUltrCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                            dictUltrCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } }); // compositionOfCover + $" ({Name})"
                         }
                         dictMainComposition.RemoveMatches(dictUltrCut, Size);
                         break;
@@ -204,7 +204,7 @@ namespace ProjCity2
                         if (compositionOfCover != null)
                         {
                             dictV16Cover = new Dictionary<string, Dictionary<string, int>>();
-                            dictV16Cover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                            dictV16Cover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } }); // compositionOfCover + $" ({Name})"
                         }
                         dictMainComposition.RemoveMatches(dictV16Cut, Size);
                         break;
@@ -215,7 +215,7 @@ namespace ProjCity2
                         if (compositionOfCover != null)
                         {
                             dictKaterCover = new Dictionary<string, Dictionary<string, int>>();
-                            dictKaterCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                            dictKaterCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } }); // compositionOfCover + $" ({Name})"
                         }
                         dictMainComposition.RemoveMatches(dictKaterCut, Size);
                         break;
@@ -226,7 +226,7 @@ namespace ProjCity2
                         if (compositionOfCover != null)
                         {
                             dictNotStegCover = new Dictionary<string, Dictionary<string, int>>();
-                            dictNotStegCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } });
+                            dictNotStegCover.Add(compositionOfCover, new Dictionary<string, int> { { Size, Numbers } }); // compositionOfCover + $" ({Name})"
                         }
                         dictMainComposition.RemoveMatches(dictNotStegCut, Size);
                         break;
@@ -241,7 +241,7 @@ namespace ProjCity2
                 {
                     Burlets burlet = context.Burlets.Find(mattress.burletId);   
                     dictBurlet = new Dictionary<string, Dictionary<string, int>>();
-                    dictBurlet.Add(burlet.composition, new Dictionary<string, int>() { { Size, Numbers } });
+                    dictBurlet.Add(burlet.composition, new Dictionary<string, int>() { { Size, Numbers } }); // burlet.composition + $" ({Name})"
                 }
                 #endregion
 
@@ -322,14 +322,16 @@ namespace ProjCity2
         public int GetWidth() => width;
 
         #region Base Methods.
-        public override string ToString() => $"{Name}\nЗаказ: {OrderInfo} \nСтол:{TableName}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";
+        public override string ToString() => TableName != null ? $"{Name}\nЗаказ: {OrderInfo} \nСтол:{TableName}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************"
+            : $"{Name}\nЗаказ: {OrderInfo}\nРазмер: {Size}\nКоличество: {Numbers}\n***************************************************";
 
         public override bool Equals(object obj) => obj == null ? false : GetHashCode() == obj.GetHashCode();
 
         public static bool operator ==(MattressObjectV2 mtrsObj1, MattressObjectV2 mtrsObj2) => mtrsObj1.Equals(mtrsObj2);
         public static bool operator !=(MattressObjectV2 mtrsObj1, MattressObjectV2 mtrsObj2) => !mtrsObj1.Equals(mtrsObj2);
 
-        public override int GetHashCode() => (OrderInfo.GetHashCode() * TableName.GetHashCode() * Name.GetHashCode() * Size.GetHashCode()) / 10000;
+        public override int GetHashCode() => TableName != null ? OrderInfo.GetHashCode() * TableName.GetHashCode() * Name.GetHashCode() * Size.GetHashCode()
+            : OrderInfo.GetHashCode() * Name.GetHashCode() * Size.GetHashCode();
         #endregion
         #endregion
     }
