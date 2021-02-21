@@ -23,6 +23,9 @@ namespace EntityModels
 
         public int? botSideCompositionId { get; set; }
 
+        [StringLength(300)]
+        public string cutCase { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Toppers> Toppers { get; set; }
     }

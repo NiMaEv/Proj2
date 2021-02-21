@@ -20,9 +20,6 @@ namespace EntityModels
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int topperId { get; set; }
 
-        [StringLength(500)]
-        public string topperName { get; set; }
-
         public int? compositionId { get; set; }
 
         public int? cutId { get; set; }

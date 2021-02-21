@@ -48,24 +48,24 @@ namespace DictionaryExtensions
         }
 
         public static void Unite(this Dictionary<string, Dictionary<string, Dictionary<string, int>>> currentDictionary,
-            string mainKey, Dictionary<string, Dictionary<string, int>> additionalDictionary)
+            string primaryKey, Dictionary<string, Dictionary<string, int>> additionalDictionary)
         {
-            if (!currentDictionary.ContainsKey(mainKey))
-                currentDictionary.Add(mainKey, additionalDictionary.CopyDictionary());
+            if (!currentDictionary.ContainsKey(primaryKey))
+                currentDictionary.Add(primaryKey, additionalDictionary.CopyDictionary());
             else
             {
                 foreach (var item in additionalDictionary)
                 {
-                    if (!currentDictionary[mainKey].ContainsKey(item.Key))
-                        currentDictionary[mainKey].Add(item.Key, item.Value.CopyDictionary());
+                    if (!currentDictionary[primaryKey].ContainsKey(item.Key))
+                        currentDictionary[primaryKey].Add(item.Key, item.Value.CopyDictionary());
                     else
                     {
                         foreach(var innerItem in item.Value)
                         {
-                            if (!currentDictionary[mainKey][item.Key].ContainsKey(innerItem.Key))
-                                currentDictionary[mainKey][item.Key].Add(innerItem.Key, innerItem.Value);
+                            if (!currentDictionary[primaryKey][item.Key].ContainsKey(innerItem.Key))
+                                currentDictionary[primaryKey][item.Key].Add(innerItem.Key, innerItem.Value);
                             else
-                                currentDictionary[mainKey][item.Key][innerItem.Key] += innerItem.Value;
+                                currentDictionary[primaryKey][item.Key][innerItem.Key] += innerItem.Value;
                         }
                     }
                 }         
@@ -73,28 +73,28 @@ namespace DictionaryExtensions
         }
 
         public static void Unite(this Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> currentDictionary,
-            string mainKey, string secondaryKey, Dictionary<string, Dictionary<string, int>> additionalDictionary)
+            string primaryKey, string secondaryKey, Dictionary<string, Dictionary<string, int>> additionalDictionary)
         {
-            if (!currentDictionary.ContainsKey(mainKey))
-                currentDictionary.Add(mainKey, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { secondaryKey, additionalDictionary.CopyDictionary() } });
+            if (!currentDictionary.ContainsKey(primaryKey))
+                currentDictionary.Add(primaryKey, new Dictionary<string, Dictionary<string, Dictionary<string, int>>> { { secondaryKey, additionalDictionary.CopyDictionary() } });
             else
             {
-                if (!currentDictionary[mainKey].ContainsKey(secondaryKey))
-                    currentDictionary[mainKey].Add(secondaryKey, additionalDictionary.CopyDictionary());
+                if (!currentDictionary[primaryKey].ContainsKey(secondaryKey))
+                    currentDictionary[primaryKey].Add(secondaryKey, additionalDictionary.CopyDictionary());
                 else
                 {
                     foreach(var item in additionalDictionary)
                     {
-                        if (!currentDictionary[mainKey][secondaryKey].ContainsKey(item.Key))
-                            currentDictionary[mainKey][secondaryKey].Add(item.Key, item.Value.CopyDictionary());
+                        if (!currentDictionary[primaryKey][secondaryKey].ContainsKey(item.Key))
+                            currentDictionary[primaryKey][secondaryKey].Add(item.Key, item.Value.CopyDictionary());
                         else
                         {
                             foreach (var innerItem in item.Value)
                             {
-                                if (!currentDictionary[mainKey][secondaryKey][item.Key].ContainsKey(innerItem.Key))
-                                    currentDictionary[mainKey][secondaryKey][item.Key].Add(innerItem.Key, innerItem.Value);
+                                if (!currentDictionary[primaryKey][secondaryKey][item.Key].ContainsKey(innerItem.Key))
+                                    currentDictionary[primaryKey][secondaryKey][item.Key].Add(innerItem.Key, innerItem.Value);
                                 else
-                                    currentDictionary[mainKey][secondaryKey][item.Key][innerItem.Key] += innerItem.Value;
+                                    currentDictionary[primaryKey][secondaryKey][item.Key][innerItem.Key] += innerItem.Value;
                             }  
                         }
                     }
@@ -138,29 +138,59 @@ namespace DictionaryExtensions.Special
 {
     public static partial class DictionaryExtensions
     {
-        public static Dictionary<string, int> GetDictionary(this string compositionStr, string sectorNameStr, int number)
+        //public static Dictionary<string, int> GetDictionary(this string compositionStr, string sectorNameStr, int number)
+        //{
+        //    Dictionary<string, int> tempDictionary = new Dictionary<string, int>();
+
+        //    using (PgContext context = new PgContext())
+        //    {
+        //        if (compositionStr != null)
+        //        {
+        //            string tempStr = null;
+        //            foreach (char i in compositionStr.ToArray())
+        //            {
+        //                if (i.ToString() != "/" && i.ToString() != ".")
+        //                    tempStr += i;
+        //                else
+        //                {
+        //                    if (context.Materials.Find(tempStr) != null && context.Materials.Find(tempStr).sectorName.Equals(sectorNameStr))
+        //                    {
+        //                        if (!tempDictionary.ContainsKey(tempStr))
+        //                            tempDictionary.Add(tempStr, number);
+        //                        else
+        //                            tempDictionary[tempStr] += number;
+        //                    }
+        //                    tempStr = null;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return tempDictionary;
+        //}
+
+        public static Dictionary<string, int> GetDictionary(this string compositionStr, string sectorNameStr, int number) //???
         {
             Dictionary<string, int> tempDictionary = new Dictionary<string, int>();
 
-            using (PgContext context = new PgContext())
+            using(PgContext context = new PgContext())
             {
                 if (compositionStr != null)
                 {
-                    string tempStr = null;
-                    foreach (char i in compositionStr.ToArray())
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var i in compositionStr.ToArray())
                     {
-                        if (i.ToString() != "/" && i.ToString() != ".")
-                            tempStr += i;
+                        if (i != '/' & i != '.')
+                            sb.Append(i);
                         else
                         {
-                            if (context.Materials.Find(tempStr) != null && context.Materials.Find(tempStr).sectorName.Equals(sectorNameStr))
+                            if (context.Materials.Find(sb.ToString()) != null & context.Materials.Find(sb.ToString()).sectorName.Equals(sectorNameStr))
                             {
-                                if (!tempDictionary.ContainsKey(tempStr))
-                                    tempDictionary.Add(tempStr, number);
+                                if (!tempDictionary.ContainsKey(sb.ToString()))
+                                    tempDictionary.Add(sb.ToString(), number);
                                 else
-                                    tempDictionary[tempStr] += number;
+                                    tempDictionary[sb.ToString()] += number;
                             }
-                            tempStr = null;
+                            sb.Clear();
                         }
                     }
                 }
@@ -170,30 +200,51 @@ namespace DictionaryExtensions.Special
 
         public static void Update(this Dictionary<string, Dictionary<string, int>> currentDictionary, int exValue, int newValue)
         {
-            foreach (var item in currentDictionary)
+            Dictionary<string, Dictionary<string, int>> tempDict = currentDictionary.CopyDictionary();
+            currentDictionary.Clear();
+            foreach(var item in tempDict)
+            {
+                if (!currentDictionary.ContainsKey(item.Key))
+                    currentDictionary.Add(item.Key, new Dictionary<string, int>());
                 foreach (var innerItem in item.Value)
-                    currentDictionary[item.Key][innerItem.Key] = innerItem.Value / exValue * newValue;
+                {
+                    if (!currentDictionary[item.Key].ContainsKey(innerItem.Key))
+                        currentDictionary[item.Key].Add(innerItem.Key, innerItem.Value / exValue * newValue);
+                    else
+                        currentDictionary[item.Key][innerItem.Key] += innerItem.Value / exValue * newValue;
+                }
+            }
         }
 
-        //Cuts Dictionary special.
-        public static void Insert(this Dictionary<string, Dictionary<string, int>> currentDictionary, string topCompositionStr, string botCompositionStr,
-            string mainCompositionStr, string size, int number) // + Mattress Name(mattressName)
+        public static void InsertCut(this Dictionary<string, Dictionary<string, int>> currentDictionary, string compositionStr, string size, int number)
         {
-            if (topCompositionStr != null & botCompositionStr != null)
+            if (!currentDictionary.ContainsKey(compositionStr))
+                currentDictionary.Add(compositionStr, new Dictionary<string, int> { { size, number } });
+            else
             {
-                if (topCompositionStr == botCompositionStr)
-                    currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number * 2 } });
+                if (!currentDictionary[compositionStr].ContainsKey(size))
+                    currentDictionary[compositionStr].Add(size, number);
                 else
-                {
-                    currentDictionary.Add(topCompositionStr, new Dictionary<string, int> { { size, number } }); //topCompositionStr + $" ({mattressName})"
-                    currentDictionary.Add(botCompositionStr, new Dictionary<string, int> { { size, number } }); //botCompositionStr + $" ({mattressName})"
-                }
-            }  
+                    currentDictionary[compositionStr][size] += number;
+            } 
+        }
 
-            Dictionary<string, int> tempDict = mainCompositionStr.GetDictionary("Крой", number);
-            if (tempDict.Count != 0)
+        public static void InsertComponents(this Dictionary<string, Dictionary<string, int>> currentDictionary, string compositionStr, string size, int number)
+        {
+            Dictionary<string, int> tempDict = compositionStr.GetDictionary("Крой", number);
+            if (tempDict.Count > 0)
                 foreach (var item in tempDict)
-                    currentDictionary.Add(item.Key, new Dictionary<string, int> { { size, item.Value } });
+                {
+                    if (!currentDictionary.ContainsKey(item.Key))
+                        currentDictionary.Add(item.Key, new Dictionary<string, int> { { size, item.Value } });
+                    else
+                    {
+                        if (!currentDictionary[compositionStr].ContainsKey(size))
+                            currentDictionary[compositionStr].Add(size, item.Value);
+                        else
+                            currentDictionary[compositionStr][size] += item.Value;
+                    }
+                }
         }
     }
 }

@@ -47,6 +47,28 @@ namespace EntityModels
                             $"\n2 сторона: {context.CutCompositionSides.Find(cut.botSideCompositionId).composition}";
                 }
 
+                if (topperId != null)
+                {
+                    Toppers topper = context.Toppers.Find(topperId);
+                    statusStr += "/nТоппер:"; // -(?)
+                    if (topper.compositionId != null)
+                    {
+                        statusStr += $"Состав топпера: {context.TopperCompositions.Find(topper.compositionId).composition}";
+                        if (context.TopperCompositions.Find(topper.compositionId).description != null)
+                            statusStr += $" ({context.TopperCompositions.Find(topper.compositionId).description})";
+                    }  
+                    TopperCuts topperCut = context.TopperCuts.Find(topper.cutId);
+                    if (topperCut.topSideCompositionId != null & topperCut.botSideCompositionId != null)
+                    {
+                        statusStr += "/nКрой топпера: ";
+                        if (topperCut.topSideCompositionId == topperCut.botSideCompositionId)
+                            statusStr += $"2 стороны: {context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition}";
+                        else
+                            statusStr += $"1 сторона: {context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition}" +
+                                $"\n2 сторона: {context.TopperCutCompositiont.Find(topperCut.botSideCompositionId).composition}";
+                    }
+                }
+
                 if (burletId != null)
                 {
                     Burlets burlet = context.Burlets.Find(burletId);

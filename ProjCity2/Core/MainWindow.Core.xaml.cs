@@ -416,8 +416,10 @@ namespace ProjCity2
 
             wordApp.AddDocument(globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D, globalPerimetrsMaterialsList3D,
                 globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D, globalNotStegCutsDictionary3D,
+                globalUltrCoversDictionary3D, globalV16CoversDictionary3D, globalKaterCoversDictionary3D, globalNotStegCoversDictionary3D,
                 globalBurletsDictionary3D, globalMattressesDictionary4D, globalPolyurethaneSheetsDictionary4D, globalPolyurethaneForPerimetrsDictionary4D, globalPerimetrsMaterialsList4D,
-                globalMainCompositionsDictionary4D, globalBlocksDictionary4D, globalUltrCutsDictionary4D, globalV16CutsDictionary4D, globalKaterCutsDictionary4D, globalNotStegCutsDictionary4D, globalBurletsDictionary4D);
+                globalMainCompositionsDictionary4D, globalBlocksDictionary4D, globalUltrCutsDictionary4D, globalV16CutsDictionary4D, globalKaterCutsDictionary4D, globalNotStegCutsDictionary4D,
+                globalUltrCoversDictionary4D, globalV16CoversDictionary4D, globalKaterCoversDictionary4D, globalNotStegCoversDictionary4D, globalBurletsDictionary4D);
 
             #region Dictionaries Clearing.
             globalTypesList.Clear();
@@ -430,6 +432,9 @@ namespace ProjCity2
 
             globalMainCompositionsDictionary3D.Clear();
             globalMainCompositionsDictionary4D.Clear();
+
+            globalBlocksDictionary3D.Clear();
+            globalBlocksDictionary4D.Clear();
 
             #region Cuts Dictionaries.
             globalUltrCutsDictionary3D.Clear();
@@ -561,13 +566,14 @@ namespace ProjCity2
             wordApp = new WordApp();
             wordApp.AddDocument(globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D, globalPerimetrsMaterialsList3D,
                 globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D,
-                globalNotStegCutsDictionary3D, globalBurletsDictionary3D);
+                globalNotStegCutsDictionary3D, globalUltrCoversDictionary3D, globalV16CoversDictionary3D, globalKaterCoversDictionary3D, globalNotStegCoversDictionary3D, globalBurletsDictionary3D);
 
             #region Dictionaries Clearing.
             globalTypesList.Clear();
             globalPolyurethaneSheetsDictionary3D.Clear();
             globalPolyurethaneForPerimetrsDictionary3D.Clear();
             globalMainCompositionsDictionary3D.Clear();
+            globalBlocksDictionary3D.Clear();
             #region Cuts Dictionaries.
 
             globalUltrCutsDictionary3D.Clear();

@@ -29,11 +29,15 @@ namespace ProjCity2
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalNotStegCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalUltrCoversDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CoversDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCoversDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalNotStegCoversDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBurletsDictionary3D)
         {
             documentForPrint = new DocumentObjectV2(wordApp, globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D,
                 globalPerimetrsMaterialsList3D, globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D,
-                globalNotStegCutsDictionary3D, globalBurletsDictionary3D);
+                globalNotStegCutsDictionary3D, globalUltrCoversDictionary3D, globalV16CoversDictionary3D, globalKaterCoversDictionary3D, globalNotStegCoversDictionary3D, globalBurletsDictionary3D);
         }
 
         public void AddDocument(List<string> globalOrdersList,
@@ -46,6 +50,10 @@ namespace ProjCity2
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCutsDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalNotStegCutsDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalUltrCoversDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalV16CoversDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalKaterCoversDictionary3D,
+            Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalNotStegCoversDictionary3D,
             Dictionary<string, Dictionary<string, Dictionary<string, int>>> globalBurletsDictionary3D,
 
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalMattressesDictionary4D,
@@ -58,13 +66,18 @@ namespace ProjCity2
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalV16CutsDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalKaterCutsDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalNotStegCutsDictionary4D,
+            Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalUltrCoversDictionary4D,
+            Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalV16CoversDictionary4D,
+            Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalKaterCoversDictionary4D,
+            Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalNotStegCoversDictionary4D,
             Dictionary<string, Dictionary<string, Dictionary<string, Dictionary<string, int>>>> globalBurletsDictioneary4D)
         {
             documentForPrint = new DocumentObjectV2(wordApp, globalOrdersList, globalPolyurethaneSheetsDictionary3D, globalPolyurethaneForPerimetrsDictionary3D,
                 globalPerimetrsMaterialsList3D, globalMainCompositionsDictionary3D, globalBlocksDictionary3D, globalUltrCutsDictionary3D, globalV16CutsDictionary3D, globalKaterCutsDictionary3D,
-                globalNotStegCutsDictionary3D, globalBurletsDictionary3D, globalMattressesDictionary4D, globalPolyurethaneSheetsDictionary4D, globalPolyurethaneForPerimetrsDictionary4D,
+                globalNotStegCutsDictionary3D, globalUltrCoversDictionary3D, globalV16CoversDictionary3D, globalKaterCoversDictionary3D, globalNotStegCoversDictionary3D,
+                globalBurletsDictionary3D, globalMattressesDictionary4D, globalPolyurethaneSheetsDictionary4D, globalPolyurethaneForPerimetrsDictionary4D,
                 globalPerimetrsMaterialsList4D, globalMainCompositionsDictionary4D, globalBlocksDictionary4D, globalUltrCutsDictionary4D, globalV16CutsDictionary4D, globalKaterCutsDictionary4D,
-                globalNotStegCutsDictionary4D, globalBurletsDictioneary4D);
+                globalNotStegCutsDictionary4D, globalUltrCoversDictionary4D, globalV16CoversDictionary4D, globalKaterCoversDictionary4D, globalNotStegCoversDictionary4D, globalBurletsDictioneary4D);
         }
 
         public void Print()

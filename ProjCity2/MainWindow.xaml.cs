@@ -110,6 +110,11 @@ namespace ProjCity2
             }
             else
                 MessageBox.Show("Не выбран объект для удаления.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (listBoxTypesList.Items.Count == 0)
+            {
+                CreateDocument = CreateTotalOrderDocument;
+                cmbTables.IsEnabled = true;
+            }
         }
 
         private void btnPrint_Click(object sender, RoutedEventArgs e)
