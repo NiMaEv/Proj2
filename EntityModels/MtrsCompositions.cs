@@ -19,9 +19,9 @@ namespace EntityModels
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int compositionId { get; set; }
 
-        public int? topSideCompositionId { get; set; }
+        //public int? topSideCompositionId { get; set; }
 
-        public int? botSideCompositionId { get; set; }
+        //public int? botSideCompositionId { get; set; }
 
         [StringLength(700)]
         public string generalComposition { get; set; }
@@ -37,8 +37,8 @@ namespace EntityModels
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mattresses> Mattresses { get; set; }
 
-        public virtual MtrsCompositionSides MtrsCompositionSides { get; set; }
+        //public virtual MtrsCompositionSides MtrsCompositionSides { get; set; }
 
-        public virtual MtrsCompositionSides MtrsCompositionSides1 { get; set; }
+        //public virtual MtrsCompositionSides MtrsCompositionSides1 { get; set; }
     }
 }

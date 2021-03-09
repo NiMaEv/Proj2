@@ -8,7 +8,7 @@ namespace EntityModels
     public partial class PgContext : DbContext
     {
         public PgContext()
-            : base("name=PgContext")
+            : base("name=testDB")//name=PgContext
         {
         }
 
@@ -19,7 +19,7 @@ namespace EntityModels
         public virtual DbSet<Materials> Materials { get; set; }
         public virtual DbSet<Mattresses> Mattresses { get; set; }
         public virtual DbSet<MtrsCompositions> MtrsCompositions { get; set; }
-        public virtual DbSet<MtrsCompositionSides> MtrsCompositionSides { get; set; }
+        //public virtual DbSet<MtrsCompositionSides> MtrsCompositionSides { get; set; }
         public virtual DbSet<Perimetrs> Perimetrs { get; set; }
         public virtual DbSet<Series> Series { get; set; }
         public virtual DbSet<Sizes> Sizes { get; set; }
@@ -61,15 +61,15 @@ namespace EntityModels
                 .WithRequired(e => e.MtrsCompositions)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<MtrsCompositionSides>()
-                .HasMany(e => e.MtrsCompositions)
-                .WithOptional(e => e.MtrsCompositionSides)
-                .HasForeignKey(e => e.botSideCompositionId);
+            //modelBuilder.Entity<MtrsCompositionSides>()
+            //    .HasMany(e => e.MtrsCompositions)
+            //    .WithOptional(e => e.MtrsCompositionSides)
+            //    .HasForeignKey(e => e.botSideCompositionId);
 
-            modelBuilder.Entity<MtrsCompositionSides>()
-                .HasMany(e => e.MtrsCompositions1)
-                .WithOptional(e => e.MtrsCompositionSides1)
-                .HasForeignKey(e => e.topSideCompositionId);
+            //modelBuilder.Entity<MtrsCompositionSides>()
+            //    .HasMany(e => e.MtrsCompositions1)
+            //    .WithOptional(e => e.MtrsCompositionSides1)
+            //    .HasForeignKey(e => e.topSideCompositionId);
         }
     }
 }

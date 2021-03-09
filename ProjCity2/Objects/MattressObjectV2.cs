@@ -71,8 +71,15 @@ namespace ProjCity2
             using (PgContext context = new PgContext())
             {
                 MtrsCompositions mainComposition = context.MtrsCompositions.Find(mattress.compositionId);
-                if (mainComposition.topSideCompositionId == null & mainComposition.botSideCompositionId == null & mainComposition.generalComposition == null)
+                string mainCompositionStr = mainComposition.generalComposition;
+
+                Perimetrs perimetr = null;
+
+                //if (mainComposition.topSideCompositionId == null & mainComposition.botSideCompositionId == null & mainComposition.generalComposition == null)
+                //    throw new Exception($"Неверный формат записи.\nMtrsCompositions/compositionId({mainComposition.compositionId}).");
+                if (mainCompositionStr == null)
                     throw new Exception($"Неверный формат записи.\nMtrsCompositions/compositionId({mainComposition.compositionId}).");
+
                 dictMainComposition = new Dictionary<string, Dictionary<string, int>>();
 
                 // ???
@@ -88,12 +95,15 @@ namespace ProjCity2
                     if (topper.cutId != null)
                     {
                         TopperCuts topperCut = context.TopperCuts.Find(topper.cutId);
-                        if (topperCut.topSideCompositionId == topperCut.botSideCompositionId)
-                            topperCompositionOfTopSideCut = topperCompositionOfBotSideCut = context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition;
-                        else
+                        if (topperCut.topSideCompositionId != null & topperCut.botSideCompositionId != null)
                         {
-                            topperCompositionOfTopSideCut = context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition;
-                            topperCompositionOfBotSideCut = context.TopperCutCompositiont.Find(topperCut.botSideCompositionId).composition;
+                            if (topperCut.topSideCompositionId == topperCut.botSideCompositionId)
+                                topperCompositionOfTopSideCut = topperCompositionOfBotSideCut = context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition;
+                            else
+                            {
+                                topperCompositionOfTopSideCut = context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition;
+                                topperCompositionOfBotSideCut = context.TopperCutCompositiont.Find(topperCut.botSideCompositionId).composition;
+                            }
                         }
                         if (topperCut.cutCase != null)
                             topperCompositionOfCover = topperCut.cutCase;
@@ -103,7 +113,7 @@ namespace ProjCity2
                 #region Inserting in dictPolyurethaneForPerimetr.
                 if (mattress.perimetrId != null)
                 {
-                    Perimetrs perimetr = context.Perimetrs.Find(mattress.perimetrId);
+                    perimetr = context.Perimetrs.Find(mattress.perimetrId);
                     if (perimetr.reinforcmentBlockMaterialName != null | perimetr.reinforcmentMattressMaterialName != null)
                     {
                         string xLenght = $"{lenght}";
@@ -114,10 +124,12 @@ namespace ProjCity2
                             SizeForBlocks = $"{lenght - perimetr.reinforcmentMaterialWidth * 2}*{width - perimetr.reinforcmentMaterialWidth * 2}";
 
                             Blocks mainBlock = context.Blocks.Find(mainComposition.blockId);
-                            Dictionary<string, int> tempDict = new Dictionary<string, int>() { { perimetr.reinforcmentBlockMaterialName +
-                                    " h=" + mainBlock.blockHeight / 10, Numbers * 2 } };
-                            dictPolyurethaneForPerimetr.Add(xLenght, tempDict);
-                            dictPolyurethaneForPerimetr.Add(yLenght, tempDict);
+                            //Dictionary<string, int> tempDict = new Dictionary<string, int> { { perimetr.reinforcmentBlockMaterialName +
+                            //        " h=" + mainBlock.blockHeight / 10, Numbers * 2 } };
+                            dictPolyurethaneForPerimetr.Add(xLenght, new Dictionary<string, int> { { perimetr.reinforcmentBlockMaterialName +
+                                " h=" + mainBlock.blockHeight / 10, Numbers * 2 } }) ; //tempDict
+                            dictPolyurethaneForPerimetr.Add(yLenght, new Dictionary<string, int> { { perimetr.reinforcmentBlockMaterialName +
+                                " h=" + mainBlock.blockHeight / 10, Numbers * 2} }) ; //tempDict
 
                             if (mainComposition.additionalBlockId != null)
                             {
@@ -132,24 +144,27 @@ namespace ProjCity2
                         {
                             SizeForBlocks = SizeForComponents = $"{lenght - perimetr.reinforcmentMaterialWidth * 2}*{width - perimetr.reinforcmentMaterialWidth * 2}";
 
-                            Dictionary<string, int> tempDict = new Dictionary<string, int>() { { perimetr.reinforcmentMattressMaterialName +
-                                    " h=" + GetMattressHeight(mattress) / 10, Numbers * 2} };
-                            dictPolyurethaneForPerimetr.Add(xLenght, tempDict);
-                            dictPolyurethaneForPerimetr.Add(yLenght, tempDict);
+                            //Dictionary<string, int> tempDict = new Dictionary<string, int>() { { perimetr.reinforcmentMattressMaterialName +
+                            //        " h=" + GetMattressHeight(mattress) / 10, Numbers * 2} };
+                            dictPolyurethaneForPerimetr.Add(xLenght, new Dictionary<string, int> { { perimetr.reinforcmentMattressMaterialName +
+                                    " h=" + GetMattressHeight(mattress) / 10, Numbers * 2} }); //tempDict
+                            dictPolyurethaneForPerimetr.Add(yLenght, new Dictionary<string, int> { { perimetr.reinforcmentMattressMaterialName +
+                                    " h=" + GetMattressHeight(mattress) / 10, Numbers * 2} }); //tempDict
                         }
                     }
                 }
                 #endregion
 
                 #region Inserting in dictPolyurethaneSheet.
-                string mainCompositionStr = null;
-                if (mainComposition.generalComposition != null)
-                    mainCompositionStr += context.MtrsCompositions.Find(mainComposition.compositionId).generalComposition;
-                if (mainComposition.topSideCompositionId != null)
-                    mainCompositionStr += context.MtrsCompositionSides.Find(mainComposition.topSideCompositionId).composition;
-                if (mainComposition.botSideCompositionId != null)
-                    mainCompositionStr += context.MtrsCompositionSides.Find(mainComposition.botSideCompositionId).composition;
-                if (mainCompositionStr.GetDictionary("ППУ", Numbers).Count != 0)
+                //string mainCompositionStr = null;
+                //if (mainComposition.generalComposition != null)
+                //    mainCompositionStr += context.MtrsCompositions.Find(mainComposition.compositionId).generalComposition;
+
+                //if (mainComposition.topSideCompositionId != null)
+                //    mainCompositionStr += context.MtrsCompositionSides.Find(mainComposition.topSideCompositionId).composition;
+                //if (mainComposition.botSideCompositionId != null)
+                //    mainCompositionStr += context.MtrsCompositionSides.Find(mainComposition.botSideCompositionId).composition;
+                if (mainCompositionStr.Contains("ППУ"))//mainCompositionStr.GetDictionary("ППУ", Numbers).Count != 0
                 {
                     dictPolyurethaneSheet = new Dictionary<string, Dictionary<string, int>>();
                     dictPolyurethaneSheet.Unite(SizeForComponents, mainCompositionStr.GetDictionary("ППУ", Numbers));
@@ -159,22 +174,22 @@ namespace ProjCity2
                 #endregion
 
                 #region Inserting in dictMainComposition.
-                if (mainComposition.topSideCompositionId != null & mainComposition.botSideCompositionId != null)
-                {
-                    MtrsCompositionSides compositionOfTopSide = context.MtrsCompositionSides.Find(mainComposition.topSideCompositionId);
-                    if(mainComposition.topSideCompositionId == mainComposition.botSideCompositionId)
-                    {
-                        dictMainComposition.Add(compositionOfTopSide.composition, new Dictionary<string, int> { { SizeForComponents, Numbers * 2 } });
-                    }
-                    else
-                    {
-                        MtrsCompositionSides compositionOfBotSide = context.MtrsCompositionSides.Find(mainComposition.botSideCompositionId);
-                        dictMainComposition.Add(compositionOfTopSide.composition, new Dictionary<string, int> { { SizeForComponents, Numbers } });
-                        dictMainComposition.Add(compositionOfBotSide.composition, new Dictionary<string, int> { { SizeForComponents, Numbers } });
-                    }
-                }
-                if (mainComposition.generalComposition != null)
-                    dictMainComposition.Add(mainComposition.generalComposition, new Dictionary<string, int> { { SizeForComponents, Numbers } });
+                //if (mainComposition.topSideCompositionId != null & mainComposition.botSideCompositionId != null)
+                //{
+                //    MtrsCompositionSides compositionOfTopSide = context.MtrsCompositionSides.Find(mainComposition.topSideCompositionId);
+                //    if(mainComposition.topSideCompositionId == mainComposition.botSideCompositionId)
+                //    {
+                //        dictMainComposition.Add(compositionOfTopSide.composition, new Dictionary<string, int> { { SizeForComponents, Numbers * 2 } });
+                //    }
+                //    else
+                //    {
+                //        MtrsCompositionSides compositionOfBotSide = context.MtrsCompositionSides.Find(mainComposition.botSideCompositionId);
+                //        dictMainComposition.Add(compositionOfTopSide.composition, new Dictionary<string, int> { { SizeForComponents, Numbers } });
+                //        dictMainComposition.Add(compositionOfBotSide.composition, new Dictionary<string, int> { { SizeForComponents, Numbers } });
+                //    }
+                //}
+                //if (mainComposition.generalComposition != null)
+                dictMainComposition.Add(mainComposition.generalComposition, new Dictionary<string, int> { { SizeForComponents, Numbers } });
                 if (topperComposition != null) // ???
                     dictMainComposition.Add(topperComposition, new Dictionary<string, int> { { Size, Numbers } });
                 #endregion
@@ -194,7 +209,7 @@ namespace ProjCity2
                 }
                 #endregion
 
-                // composition + (MattressName) 
+                // composition + (MattressName) +++
                 #region Inserting in Dictionaries of Cuts.
                 Cuts mainCut = context.Cuts.Find(mattress.cutId);
                 if (mainCut.topSideCompositionId == null & mainCut.botSideCompositionId == null & mainCut.cutCase == null)
@@ -218,22 +233,22 @@ namespace ProjCity2
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (compositionOfTopSideCut == compositionOfBotSideCut)
-                                dictUltrCut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers * 2);
+                                dictUltrCut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictUltrCut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers);
-                                dictUltrCut.InsertCut(compositionOfBotSideCut.composition, Size, numbers);
+                                dictUltrCut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers); //+
+                                dictUltrCut.InsertCut(compositionOfBotSideCut.composition + $" ({Name})", Size, numbers); //+
                             }
                         }
                         dictUltrCut.InsertComponents(mainCompositionStr, Size, Numbers);
                         if (topperCompositionOfTopSideCut != null & topperCompositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (topperCompositionOfTopSideCut == topperCompositionOfBotSideCut)
-                                dictUltrCut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers * 2);
+                                dictUltrCut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictUltrCut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers);
-                                dictUltrCut.InsertCut(topperCompositionOfBotSideCut, Size, Numbers);
+                                dictUltrCut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers); //+
+                                dictUltrCut.InsertCut(topperCompositionOfBotSideCut + $" ({Name})", Size, Numbers); //+
                             }
                         }
                         if (topperComposition != null)
@@ -242,9 +257,9 @@ namespace ProjCity2
                         {
                             dictUltrCover = new Dictionary<string, Dictionary<string, int>>();
                             if (compositionOfCover != null)
-                                dictUltrCover.InsertCut(compositionOfCover, Size, Numbers);
+                                dictUltrCover.InsertCut(compositionOfCover + $" ({Name})", Size, Numbers); //+
                             if (topperCompositionOfCover != null)
-                                dictUltrCover.InsertCut(topperCompositionOfCover, Size, Numbers);
+                                dictUltrCover.InsertCut(topperCompositionOfCover + $" ({Name})", Size, Numbers); //+
                         }
                         dictMainComposition.RemoveMatches(dictUltrCut, Size);
                         break;
@@ -253,22 +268,22 @@ namespace ProjCity2
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (compositionOfTopSideCut == compositionOfBotSideCut)
-                                dictV16Cut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers * 2);
+                                dictV16Cut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictV16Cut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers);
-                                dictV16Cut.InsertCut(compositionOfBotSideCut.composition, Size, numbers);
+                                dictV16Cut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers); //+
+                                dictV16Cut.InsertCut(compositionOfBotSideCut.composition + $" ({Name})", Size, numbers); //+
                             }
                         }
                         dictV16Cut.InsertComponents(mainCompositionStr, Size, Numbers);
                         if (topperCompositionOfTopSideCut != null & topperCompositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (topperCompositionOfTopSideCut == topperCompositionOfBotSideCut)
-                                dictV16Cut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers * 2);
+                                dictV16Cut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictV16Cut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers);
-                                dictV16Cut.InsertCut(topperCompositionOfBotSideCut, Size, Numbers);
+                                dictV16Cut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers); //+
+                                dictV16Cut.InsertCut(topperCompositionOfBotSideCut + $" ({Name})", Size, Numbers); //+
                             }
                         }
                         if (topperComposition != null)
@@ -277,9 +292,9 @@ namespace ProjCity2
                         {
                             dictV16Cover = new Dictionary<string, Dictionary<string, int>>();
                             if (compositionOfCover != null)
-                                dictV16Cover.InsertCut(compositionOfCover, Size, Numbers);
+                                dictV16Cover.InsertCut(compositionOfCover + $" ({Name})", Size, Numbers); //+
                             if (topperCompositionOfCover != null)
-                                dictV16Cover.InsertCut(topperCompositionOfCover, Size, Numbers);
+                                dictV16Cover.InsertCut(topperCompositionOfCover + $" ({Name})", Size, Numbers); //+
                         }
                         dictMainComposition.RemoveMatches(dictV16Cut, Size);
                         break;
@@ -288,22 +303,22 @@ namespace ProjCity2
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (compositionOfTopSideCut == compositionOfBotSideCut)
-                                dictKaterCut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers * 2);
+                                dictKaterCut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictKaterCut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers);
-                                dictKaterCut.InsertCut(compositionOfBotSideCut.composition, Size, numbers);
+                                dictKaterCut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers); //+
+                                dictKaterCut.InsertCut(compositionOfBotSideCut.composition + $" ({Name})", Size, numbers); //+
                             }
                         }
                         dictKaterCut.InsertComponents(mainCompositionStr, Size, Numbers);
                         if (topperCompositionOfTopSideCut != null & topperCompositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (topperCompositionOfTopSideCut == topperCompositionOfBotSideCut)
-                                dictKaterCut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers * 2);
+                                dictKaterCut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictKaterCut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers);
-                                dictKaterCut.InsertCut(topperCompositionOfBotSideCut, Size, Numbers);
+                                dictKaterCut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers); //+
+                                dictKaterCut.InsertCut(topperCompositionOfBotSideCut + $" ({Name})", Size, Numbers); //+
                             }
                         }
                         if (topperComposition != null)
@@ -312,9 +327,9 @@ namespace ProjCity2
                         {
                             dictKaterCover = new Dictionary<string, Dictionary<string, int>>();
                             if (compositionOfCover != null)
-                                dictKaterCover.InsertCut(compositionOfCover, Size, Numbers);
+                                dictKaterCover.InsertCut(compositionOfCover + $" ({Name})", Size, Numbers); //+
                             if (topperCompositionOfCover != null)
-                                dictKaterCover.InsertCut(topperCompositionOfCover, Size, Numbers);
+                                dictKaterCover.InsertCut(topperCompositionOfCover + $" ({Name})", Size, Numbers); //+
                         }
                         dictMainComposition.RemoveMatches(dictKaterCut, Size);
                         break;
@@ -323,22 +338,22 @@ namespace ProjCity2
                         if (compositionOfTopSideCut != null & compositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (compositionOfTopSideCut == compositionOfBotSideCut)
-                                dictNotStegCut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers * 2);
+                                dictNotStegCut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictNotStegCut.InsertCut(compositionOfTopSideCut.composition, Size, Numbers);
-                                dictNotStegCut.InsertCut(compositionOfBotSideCut.composition, Size, numbers);
+                                dictNotStegCut.InsertCut(compositionOfTopSideCut.composition + $" ({Name})", Size, Numbers); //+
+                                dictNotStegCut.InsertCut(compositionOfBotSideCut.composition + $" ({Name})", Size, numbers); //+
                             }
                         }
                         dictNotStegCut.InsertComponents(mainCompositionStr, Size, Numbers);
                         if (topperCompositionOfTopSideCut != null & topperCompositionOfBotSideCut != null) //Composition + $" ({Name})"
                         {
                             if (topperCompositionOfTopSideCut == topperCompositionOfBotSideCut)
-                                dictNotStegCut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers * 2);
+                                dictNotStegCut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers * 2); //+
                             else
                             {
-                                dictNotStegCut.InsertCut(topperCompositionOfTopSideCut, Size, Numbers);
-                                dictNotStegCut.InsertCut(topperCompositionOfBotSideCut, Size, Numbers);
+                                dictNotStegCut.InsertCut(topperCompositionOfTopSideCut + $" ({Name})", Size, Numbers); //+
+                                dictNotStegCut.InsertCut(topperCompositionOfBotSideCut + $" ({Name})", Size, Numbers); //+
                             }
                         }
                         if (topperComposition != null)
@@ -347,9 +362,9 @@ namespace ProjCity2
                         {
                             dictNotStegCover = new Dictionary<string, Dictionary<string, int>>();
                             if (compositionOfCover != null)
-                                dictNotStegCover.InsertCut(compositionOfCover, Size, Numbers);
+                                dictNotStegCover.InsertCut(compositionOfCover + $" ({Name})", Size, Numbers); //+
                             if (topperCompositionOfCover != null)
-                                dictNotStegCover.InsertCut(topperCompositionOfCover, Size, Numbers);
+                                dictNotStegCover.InsertCut(topperCompositionOfCover + $" ({Name})", Size, Numbers); //+
                         }
                         dictMainComposition.RemoveMatches(dictNotStegCut, Size);
                         break;
@@ -358,13 +373,23 @@ namespace ProjCity2
                 }
                 #endregion //
 
-                // + perimetr composition. + (MattressName)
+                // + perimetr composition. + (MattressName) +++
                 #region Inserting in dictBurlet.
                 if (mattress.burletId != null)
                 {
                     Burlets burlet = context.Burlets.Find(mattress.burletId);   
                     dictBurlet = new Dictionary<string, Dictionary<string, int>>();
-                    dictBurlet.Add(burlet.composition, new Dictionary<string, int> { { Size, Numbers } }); // burlet.composition + $" ({Name})"
+                    StringBuilder sb = new StringBuilder(burlet.composition);
+                    if (perimetr != null)
+                        if (perimetr.composition != null)
+                        {
+                            sb[sb.Length - 1] = '/';
+                            sb.Append(perimetr.composition);
+                        }
+                    if (burlet.description != null)
+                        sb.Append($" ({burlet.description})");
+                    sb.Append($" ({Name})");
+                    dictBurlet.Add(sb.ToString(), new Dictionary<string, int> { { Size, Numbers } }); //burlet.composition
                 }
                 #endregion
 
@@ -381,10 +406,10 @@ namespace ProjCity2
             using (PgContext context = new PgContext())
             {
                 string compositionStr = null;
-                if (context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId) != null)
-                    compositionStr += context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId).composition;
-                if (context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId) != null)
-                    compositionStr += context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId).composition;
+                //if (context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId) != null)
+                //    compositionStr += context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).topSideCompositionId).composition;
+                //if (context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId) != null)
+                //    compositionStr += context.MtrsCompositionSides.Find(context.MtrsCompositions.Find(mattress.compositionId).botSideCompositionId).composition;
                 if (context.MtrsCompositions.Find(mattress.compositionId).generalComposition != null)
                     compositionStr += context.MtrsCompositions.Find(mattress.compositionId).generalComposition;
 

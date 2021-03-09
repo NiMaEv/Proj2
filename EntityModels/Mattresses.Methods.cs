@@ -25,14 +25,14 @@ namespace EntityModels
                     statusStr += $", {context.Blocks.Find(composition.additionalBlockId).blockName}";
                 if (composition.generalComposition != null)
                     statusStr += $"\n{composition.generalComposition}";
-                if (composition.topSideCompositionId != null & composition.botSideCompositionId != null)
-                {
-                    if (composition.topSideCompositionId == composition.botSideCompositionId)
-                        statusStr += $"\n2 стороны: {context.MtrsCompositionSides.Find(composition.topSideCompositionId).composition}";
-                    else
-                        statusStr += $"\n1 сторона: {context.MtrsCompositionSides.Find(composition.topSideCompositionId).composition}" +
-                            $"\n2 сторона: {context.MtrsCompositionSides.Find(composition.botSideCompositionId).composition}";
-                }
+                //if (composition.topSideCompositionId != null & composition.botSideCompositionId != null)
+                //{
+                //    if (composition.topSideCompositionId == composition.botSideCompositionId)
+                //        statusStr += $"\n2 стороны: {context.MtrsCompositionSides.Find(composition.topSideCompositionId).composition}";
+                //    else
+                //        statusStr += $"\n1 сторона: {context.MtrsCompositionSides.Find(composition.topSideCompositionId).composition}" +
+                //            $"\n2 сторона: {context.MtrsCompositionSides.Find(composition.botSideCompositionId).composition}";
+                //}
 
                 Cuts cut = context.Cuts.Find(cutId);
                 statusStr += "\nКрой: ";
@@ -50,7 +50,7 @@ namespace EntityModels
                 if (topperId != null)
                 {
                     Toppers topper = context.Toppers.Find(topperId);
-                    statusStr += "/nТоппер:"; // -(?)
+                    statusStr += $"\nТоппер:"; // -(?)
                     if (topper.compositionId != null)
                     {
                         statusStr += $"Состав топпера: {context.TopperCompositions.Find(topper.compositionId).composition}";
@@ -60,13 +60,15 @@ namespace EntityModels
                     TopperCuts topperCut = context.TopperCuts.Find(topper.cutId);
                     if (topperCut.topSideCompositionId != null & topperCut.botSideCompositionId != null)
                     {
-                        statusStr += "/nКрой топпера: ";
+                        statusStr += "\nКрой топпера: ";
                         if (topperCut.topSideCompositionId == topperCut.botSideCompositionId)
                             statusStr += $"2 стороны: {context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition}";
                         else
                             statusStr += $"1 сторона: {context.TopperCutCompositiont.Find(topperCut.topSideCompositionId).composition}" +
                                 $"\n2 сторона: {context.TopperCutCompositiont.Find(topperCut.botSideCompositionId).composition}";
                     }
+                    if (topperCut.cutCase != null)
+                        statusStr += $"\nЧехол топпера: {topperCut.cutCase}";
                 }
 
                 if (burletId != null)
