@@ -70,14 +70,16 @@ namespace ProjCity2
 
             using (PgContext context = new PgContext())
             {
-                foreach (Mattresses mtrs in context.Mattresses)
+                foreach (Mattresses mtrs in context.Mattresses.OrderBy(m => m.mattressName)) 
                     listBoxMattressList.Items.Add(mtrs);
                 foreach (Sizes size in context.Sizes)
                     cmbSizes.Items.Add(size);
-                foreach (Series series in context.Series)
-                    cmbSeries.Items.Add(series);
-                foreach (Tables table in context.Tables)
-                    cmbTables.Items.Add(table);
+
+                if (context.Tables.Count() != 0)
+                    foreach (Tables table in context.Tables)
+                        cmbTables.Items.Add(table);
+                else
+                    cmbTables.IsEnabled = false;
             }
 
             #region Initializing Dictionaries.
@@ -168,6 +170,8 @@ namespace ProjCity2
 
             globalTypesList.Add(tempMattressObject);
             listBoxTypesList.Items.Add(tempMattressObject);
+
+            txtNumbers.Clear();
         }
 
         private void CreateTotalOrderDocument()
@@ -475,6 +479,7 @@ namespace ProjCity2
             txtNumbers.Clear();
             txtOrderId.Clear();
             txtDateOfOrder.Clear();
+            txtSearcher.Clear();
 
             listBoxMattressList.SelectedItem = null;
             cmbSizes.SelectedItem = null;
@@ -598,13 +603,13 @@ namespace ProjCity2
             txtNumbers.Clear();
             txtOrderId.Clear();
             txtDateOfOrder.Clear();
+            txtSearcher.Clear();
 
             listBoxMattressList.SelectedItem = null;
             cmbSizes.SelectedItem = null;
 
             cmbTables.IsEnabled = true;
-            CreateDocument = CreateTotalOrderDocument;
-            
+            CreateDocument = CreateTotalOrderDocument; 
         }
         #endregion
 

@@ -38,6 +38,8 @@ namespace ProjCity2
             docObj = System.Reflection.Missing.Value;
             document = wordApp.Documents.Add(ref docObj, ref docObj, ref docObj, ref docObj);
 
+            document.Sections[1].Footers[(WdHeaderFooterIndex)1].PageNumbers.Add(1, true);
+
             breakPage = false;
 
             foreach (string orderId in globalOrdersList)
@@ -69,6 +71,8 @@ namespace ProjCity2
                 { CreatePage(orderId, "Чехлы(Не стегается)", globalNotStegCoversDictionary3D[orderId], breakPage); if (!breakPage) breakPage = true; }
                 if (globalBurletsDictionary3D.ContainsKey(orderId))
                 { CreatePage(orderId, "Бурлеты", globalBurletsDictionary3D[orderId], breakPage); if (!breakPage) breakPage = true; }
+
+                document.FormattingShowNumbering = true;
             }
         }
         #endregion
@@ -197,6 +201,36 @@ namespace ProjCity2
             }
         }
 
+        //private void CreatePage(string key, List<string> matherialsList, Dictionary<string, Dictionary<string, int>> mainDictionary, bool breakPage)
+        //{
+        //    Range startPageRange = document.Range(ref startEvrethingPage, ref startEvrethingPage);
+        //    startPageRange.Text = $"{key} : Периметр ППУ";
+        //    object tablePosition = startPageRange.End;
+
+        //    Range startTableRange = document.Range(ref tablePosition, ref tablePosition);
+        //    Table table = document.Tables.Add(startTableRange, matherialsList.Count + 1, mainDictionary.Count + 1, tableDefaultBehavior, tableAutoFitBehavior);
+        //    int rowPos = 2, columnPos = 2;
+        //    foreach (var item in mainDictionary)
+        //    {
+        //        table.Cell(1, columnPos).Range.Text = item.Key;
+        //        foreach (var str in matherialsList)
+        //        {
+        //            table.Cell(rowPos, 1).Range.Text = str;
+        //            if (item.Value.ContainsKey(str))
+        //                table.Cell(rowPos, columnPos).Range.Text = item.Value[str].ToString();
+        //            rowPos++;
+        //        }
+        //        rowPos = 2;
+        //        columnPos++;
+        //    }
+        //    if (breakPage) 
+        //    {
+        //        object endPage = table.Range.End;
+        //        Range endPageRange = document.Range(ref endPage, ref endPage);
+        //        endPageRange.InsertBreak(WdBreakType.wdPageBreak);
+        //    } 
+        //}
+
         private void CreatePage(string key, List<string> matherialsList, Dictionary<string, Dictionary<string, int>> mainDictionary, bool breakPage)
         {
             Range startPageRange = document.Range(ref startEvrethingPage, ref startEvrethingPage);
@@ -204,27 +238,27 @@ namespace ProjCity2
             object tablePosition = startPageRange.End;
 
             Range startTableRange = document.Range(ref tablePosition, ref tablePosition);
-            Table table = document.Tables.Add(startTableRange, matherialsList.Count + 1, mainDictionary.Count + 1, tableDefaultBehavior, tableAutoFitBehavior);
+            Table table = document.Tables.Add(startTableRange, mainDictionary.Count + 1, matherialsList.Count + 1, tableDefaultBehavior, tableAutoFitBehavior);
             int rowPos = 2, columnPos = 2;
             foreach (var item in mainDictionary)
             {
-                table.Cell(1, columnPos).Range.Text = item.Key;
+                table.Cell(rowPos, 1).Range.Text = item.Key;
                 foreach (var str in matherialsList)
                 {
-                    table.Cell(rowPos, 1).Range.Text = str;
+                    table.Cell(1, columnPos).Range.Text = str;
                     if (item.Value.ContainsKey(str))
                         table.Cell(rowPos, columnPos).Range.Text = item.Value[str].ToString();
-                    rowPos++;
+                    columnPos++;
                 }
-                rowPos = 2;
-                columnPos++;
+                columnPos = 2;
+                rowPos++;
             }
-            if (breakPage) 
+            if (breakPage)
             {
                 object endPage = table.Range.End;
                 Range endPageRange = document.Range(ref endPage, ref endPage);
                 endPageRange.InsertBreak(WdBreakType.wdPageBreak);
-            } 
+            }
         }
     }
 }

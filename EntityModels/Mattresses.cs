@@ -7,7 +7,7 @@ using System.Data.Entity.Spatial;
 namespace EntityModels
 {
     [Table("public.Mattresses")]
-    public partial class Mattresses
+    public partial class Mattresses : ICopying<Mattresses>
     {
         [Key]
         [StringLength(300)]
@@ -36,5 +36,8 @@ namespace EntityModels
         public virtual Series Series { get; set; }
 
         public virtual Toppers Toppers { get; set; }
+
+        public Mattresses GetCopy() => new Mattresses { mattressName = this.mattressName, seriesId = this.seriesId, topperId = this.topperId, compositionId = this.compositionId,
+            cutId = this.cutId, burletId = this.burletId, perimetrId = this.perimetrId} ;
     }
 }

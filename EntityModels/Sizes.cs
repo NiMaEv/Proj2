@@ -18,5 +18,9 @@ namespace EntityModels
         public int width { get; set; }
 
         public override string ToString() => $"{lenght}*{width}";
+
+        public override bool Equals(object obj) => GetHashCode() == obj.GetHashCode();
+
+        public override int GetHashCode() => sizeId.GetHashCode() * lenght.GetHashCode() * width.GetHashCode();
     }
 }

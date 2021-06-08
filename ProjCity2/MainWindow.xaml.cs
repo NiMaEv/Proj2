@@ -22,38 +22,40 @@ namespace ProjCity2
         #region Events Of Input.
         private void cmbSizes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Sizes temp = (Sizes)cmbSizes.SelectedItem;
             txtCustomLenght.Clear();
             txtCustomWidth.Clear();
+            cmbSizes.SelectedItem = temp;
         }
 
-        private void LenghtOrWidth_TextChanged(object sender, TextChangedEventArgs e) => cmbSizes.SelectedItem = null;
+        private void LenghtOrWidth_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string txt1 = txtCustomLenght.Text;
+            string txt2 = txtCustomWidth.Text;
+            cmbSizes.SelectedItem = null;
+            txtCustomLenght.Text = txt1;
+            txtCustomWidth.Text = txt2;
+            txtCustomLenght.Select(txtCustomLenght.Text.Length, 0);
+            txtCustomWidth.Select(txtCustomWidth.Text.Length, 0);
+        }
 
-        private void cmbSeries_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void txtSearcher_TextChanged(object sender, TextChangedEventArgs e)
         {
             listBoxMattressList.Items.Clear();
-            using (PgContext context = new PgContext())
-                foreach (Mattresses mtrs in context.Mattresses)
-                {
-                    Series selectedSeries = (Series)cmbSeries.SelectedItem;
-                    if (selectedSeries.seriesId.Equals(mtrs.seriesId))
-                        listBoxMattressList.Items.Add(mtrs);
-                }
+            if (txtSearcher.Text != null)
+            {
+                using (PgContext context = new PgContext())
+                    foreach (var item in context.Mattresses.Where(m => m.mattressName.StartsWith(txtSearcher.Text)).OrderBy(m => m.mattressName))
+                        listBoxMattressList.Items.Add(item);
+            }
+            else
+            {
+                using (PgContext context = new PgContext())
+                    foreach (var item in context.Mattresses.OrderBy(m => m.mattressName))
+                        listBoxMattressList.Items.Add(item);
+            }
         }
         #endregion
-
-        //Temp
-        private void btnCheck_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                CreateDocument();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        //Temp
 
         #region Events Of Adding.
         private void listBoxMattressList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -86,6 +88,7 @@ namespace ProjCity2
                 txtCustomWidth.Clear();
                 txtNumbers.Clear();
             }
+            listBoxTypesList.ScrollIntoView(listBoxTypesList.Items[listBoxTypesList.Items.Count - 1]);
         }
         #endregion
 
@@ -122,7 +125,7 @@ namespace ProjCity2
             try
             {
                 CreateDocument();
-                wordApp.Print();
+                //wordApp.Print();
             }
             catch (Exception ex)
             {
@@ -133,6 +136,6 @@ namespace ProjCity2
                 wordApp.CloseWord();
             }
         }
-        #endregion
+        #endregion    
     }
 }

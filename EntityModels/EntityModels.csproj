@@ -93,6 +93,7 @@
     <Compile Include="Burlets.cs" />
     <Compile Include="CutCompositionSides.cs" />
     <Compile Include="Cuts.cs" />
+    <Compile Include="IEntityExtensions.cs" />
     <Compile Include="Materials.cs" />
     <Compile Include="Mattresses.cs" />
     <Compile Include="Mattresses.Methods.cs" />
